@@ -1,7 +1,8 @@
-# 🐶 PayDog
+
+# 🐶 PayDog is under construction 
 
 **Micropayments with personality — built for creators, fans, and the future.**  
-PayDog is the beginning of a bold new idea: a peer-powered payment platform designed to make microtransactions fun, secure, and creator-first. This project marks the start of the works on PayDog — a vision by **Raymond Newton** to disrupt the fintech space with playful branding, open-source collaboration, and fan-driven innovation.
+PayDog is a peer-powered payment platform designed to make microtransactions fun, secure, and creator-first. Founded by **Raymond Newton**, this project blends playful branding, open-source collaboration, and fan-driven innovation to disrupt the fintech space with style.
 
 ---
 
@@ -9,6 +10,12 @@ PayDog is the beginning of a bold new idea: a peer-powered payment platform desi
 
 > “This idea is the start of the works on PayDog — a micropayment platform that puts creators and fans at the heart of every transaction.”  
 > — *Raymond Newton, Founder & Lead Developer*
+
+---
+
+## 🌍 Vision
+
+To empower creators and fans with a secure, stylish, and community-driven micropayment platform — where every transaction feels personal, and every contributor leaves a pawprint.
 
 ---
 
@@ -30,11 +37,20 @@ PayDog is the beginning of a bold new idea: a peer-powered payment platform desi
 
 ---
 
+## 🎨 Mascot Manifesto
+
+PayDog isn’t just a logo — it’s a personality.  
+Our mascot represents loyalty, creativity, and the playful spirit of creators everywhere.  
+Want to help evolve PayDog’s look or voice? Submit your ideas via Issues or PRs!
+
+---
+
 ## 🤝 Contributing
 
 We welcome all kinds of contributions — from bug fixes and feature ideas to branding tweaks and mascot redesigns.
 
 **Ways to help:**
+
 - Fork the repo and submit a pull request  
 - Suggest features via GitHub Issues  
 - Join the conversation and help shape PayDog’s future  
@@ -45,7 +61,13 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for full guidelines.
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [`LICENSE`](LICENSE) file for details.
+This project is licensed under the **AGPL-3.0 License** — see the [`LICENSE`](LICENSE) file for details.
+
+---
+
+## 🔗 Live Preview
+
+Coming soon via GitHub Pages...
 
 ---
 
