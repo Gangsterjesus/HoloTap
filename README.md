@@ -1,5 +1,5 @@
 
-# 🐶 PayDog
+# 🐶 PayDog is under construction 
 
 **Micropayments with personality — built for creators, fans, and the future.**  
 PayDog is a peer-powered payment platform designed to make microtransactions fun, secure, and creator-first. Founded by **Raymond Newton**, this project blends playful branding, open-source collaboration, and fan-driven innovation to disrupt the fintech space with style.
