@@ -75,6 +75,7 @@ Coming soon via GitHub Pages...
 
 PayDog is more than code — it’s a movement.  
 Let’s build a creator-first payment platform that’s secure, stylish, and community-powered.
+## this system will incorparate the BRICS system ##
 
 ---
 
