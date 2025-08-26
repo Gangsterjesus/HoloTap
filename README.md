@@ -13,6 +13,12 @@ PayDog is a peer-powered payment platform designed to make microtransactions fun
 
 ---
 
+
+🌐 Global Integration
+PayDog is exploring interoperability with emerging financial systems, including BRICS-aligned digital currency frameworks. This positions the platform for future scalability and global relevance.
+
+---
+
 ## 🌍 Vision
 
 To empower creators and fans with a secure, stylish, and community-driven micropayments platform — where every transaction feels personal, and every contributor leaves a pawprint.
