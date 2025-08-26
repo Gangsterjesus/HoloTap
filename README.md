@@ -1,5 +1,5 @@
 
-![PayDog Mascot Banner](./Assets/Branding/paydog-banner.png)
+# 🐶 **PayDog** — Micropayments with Personality
 
 
 
