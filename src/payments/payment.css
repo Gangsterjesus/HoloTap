@@ -1,0 +1,63 @@
+/* Root container */
+.paydog-payment {
+  padding: 2rem;
+  background-color: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Heading */
+.paydog-payment__title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* QR code wrapper */
+.paydog-payment__qr {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Badge styling */
+.paydog-payment__badge {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #ff3366;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Branding color preview */
+.paydog-payment__branding-color {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Form layout */
+.paydog-payment__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.paydog-payment__form input[type="text"],
+.paydog-payment__form input[type="number"],
+.paydog-payment__form input[type="color"] {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.paydog-payment__form label {
+  font-weight: 500;
+  color: #444;
+}

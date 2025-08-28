@@ -1,0 +1,13 @@
+
+// src/components/Gallery.jsx
+const images = import.meta.glob('../Assets/Images/*.png', { eager: true });
+
+export default function Gallery() {
+  return (
+    <div className="gallery">
+      {Object.entries(images).map(([path, module]) => (
+        <img key={path} src={module.default} alt={path.split('/').pop()} />
+      ))}
+    </div>
+  );
+}
