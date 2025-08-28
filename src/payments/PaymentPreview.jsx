@@ -1,32 +1,16 @@
 import React from 'react';
-import './paymentPreview.css'; // Optional: modular styles
 
-const PaymentPreview = ({ data, onEdit, onConfirm }) => {
-  if (!data) return null;
-
-  const { name, amount, reference } = data;
+const PaymentPreview = ({ recipient, amount, onConfirm }) => {
+  if (!recipient || !amount) return null;
 
   return (
-    <div className="payment-preview">
-      <h2>Preview Payment</h2>
-
-      <div className="preview-field">
-        <strong>Name:</strong> <span>{name}</span>
-      </div>
-
-      <div className="preview-field">
-        <strong>Amount:</strong> <span>£{parseFloat(amount).toFixed(2)}</span>
-      </div>
-
-      <div className="preview-field">
-        <strong>Reference:</strong> <span>{reference}</span>
-      </div>
-
-      <div className="preview-actions">
-        <button onClick={onEdit}>Edit</button>
-        <button onClick={onConfirm}>Confirm & Send</button>
-      </div>
-    </div>
+    <section className="creator-card badge-reveal">
+      <div className="creator-card__name">{recipient}</div>
+      <div className="creator-card__platform">Amount: £{amount}</div>
+      <button className="creator-card__button" onClick={onConfirm}>
+        Confirm & Generate QR
+      </button>
+    </section>
   );
 };
 
