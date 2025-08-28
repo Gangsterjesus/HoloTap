@@ -6,7 +6,7 @@
 
 ## 🌍 Vision
 
-To empower creators and fans with a secure, stylish, and community-driven micropayments platform — where every transaction leaves a pawprint.
+To empower creators and fans with a secure, stylish, and community-driven QRCode micropayments payment platform — where every transaction leaves a pawprint.
 
 ---
 
@@ -33,7 +33,7 @@ To empower creators and fans with a secure, stylish, and community-driven microp
 ## 🎨 Mascot Manifesto
 
 PayDog isn’t just a logo — it’s a personality.  
-Our mascot represents loyalty, creativity, and the playful spirit of creators everywhere.
+Our mascot represents loyalty, creativity, and the playful spirit for creators everywhere.
 
 Want to evolve PayDog’s look or voice?  
 Submit your ideas via [Issues](https://github.com/Gangsterjesus/Paydog-/issues) or [Pull Requests](https://github.com/Gangsterjesus/Paydog-/pulls)!
