@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HoloTap</title>
+  <meta name="description" content="HoloTap — holographic QR payments for creators and fans. Secure, scan-to-pay tech with mascot flair." />
+  <meta property="og:title" content="HoloTap" />
+  <meta property="og:description" content="Join the HoloTap movement — creator-first, scan-to-pay, and hologram-secure." />
+  <meta property="og:image" content="https://holotap.io/src/Assets/Images/holotap-mascot.jpeg" />
+  <meta property="og:url" content="https://holotap.io" />
+  <link rel="stylesheet" href="HoloTapStyle.css" />
+</head>
+<body>
+
+  <header>
+    <img src="./src/Assets/Images/holotap-logo.png" alt="HoloTap logo" class="logo" />
+    <h1>💠 HoloTap</h1>
+    <p>Scan the hologram. Skip the fraud. Creator-first payments with flair.</p>
+  </header>
+
+  <main>
+    <section id="mascot-highlight">
+      <img src="./src/Assets/Images/holotap-mascot.jpeg" alt="HoloTap mascot sticker with QR code" class="mascot-highlight" role="img" aria-label="HoloTap holographic mascot sticker" />
+    </section>
+
+    <section id="mascot-lore">
+      <h2>Meet Holo</h2>
+      <p><strong>Holo</strong> is our shimmering QR guardian — born from badge logic and scan-to-pay dreams. Every tap unlocks secure payments, contributor rewards, and a trail of holographic trust.</p>
+    </section>
+
+    <section id="features">
+      <h2>Features</h2>
+      <ul>
+        <li>Holographic QR payments</li>
+        <li>Microtransactions for creators</li>
+        <li>Contributor badges & hologram tiers</li>
+        <li>End-to-end encryption</li>
+        <li>Social media integrations (TikTok, Kick, etc.)</li>
+      </ul>
+    </section>
+
+    <section id="cta">
+      <h2>Get Started</h2>
+      <button onclick="startHoloTap()" aria-label="Launch HoloTap app">Launch App</button>
+      <button onclick="connectWallet()" aria-label="Connect your wallet">Connect Wallet</button>
+    </section>
+
+    <section id="creator-feed">
+      <h2>Featured Creators</h2>
+      <!-- Creator cards will be injected here by renderCreatorFeed() -->
+    </section>
+  </main>
+
+  <footer>
+    <p>Built by Raymond Newton · <a href="https://github.com/GangsterJesus/HoloTap" target="_blank" rel="noopener">GitHub</a></p>
+  </footer>
+
+  <script src="%PUBLIC_URL%/js/qrScanner.js"></script>
+</body>
+</html>
