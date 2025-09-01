@@ -1,7 +1,6 @@
-// paymentUtils.js
 
 /**
- * Formats a payment payload for QR code generation.
+ * Formats a HoloTap payment payload for holographic QR generation.
  * Includes recipient, amount, currency, timestamp, and optional metadata.
  */
 export function formatPaymentPayload({ recipient, amount, currency = 'GBP', metadata = {} }) {
@@ -15,8 +14,8 @@ export function formatPaymentPayload({ recipient, amount, currency = 'GBP', meta
 }
 
 /**
- * Generates a simple hash for anti-fraud or holographic sticker verification.
- * Replace with a proper cryptographic hash in production.
+ * Generates a basic verification hash for hologram sticker validation.
+ * Replace with a secure cryptographic hash in production.
  */
 export function generateVerificationHash(payload) {
   const base = `${payload.recipient}-${payload.amount}-${payload.timestamp}`;
@@ -24,7 +23,7 @@ export function generateVerificationHash(payload) {
 }
 
 /**
- * Validates basic payment input before QR generation.
+ * Validates HoloTap payment input before QR/hologram generation.
  */
 export function validatePaymentInput({ recipient, amount }) {
   if (!recipient || typeof recipient !== 'string') return 'Recipient is required';

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import PaymentPreview from './PaymentPreview'; // ✅ Import preview component
 
@@ -14,14 +15,14 @@ const PaymentForm = () => {
   };
 
   const handleConfirm = () => {
-    alert(`✅ Payment confirmed for £${amount} to ${recipient}`);
-    // QR logic will go here next
+    alert(`💠 HoloTap confirmed: £${amount} sent to ${recipient}`);
+    // HoloTap QR logic will go here next
   };
 
   return (
-    <section className="features">
-      <h2 className="features__title">Send a Payment</h2>
-      <form onSubmit={handleSubmit}>
+    <section className="holotap-payment">
+      <h2 className="holotap-payment__title">Send a Payment via HoloTap</h2>
+      <form className="holotap-payment__form" onSubmit={handleSubmit}>
         <div>
           <label>Recipient:</label>
           <input
@@ -40,7 +41,7 @@ const PaymentForm = () => {
             placeholder="e.g. 2.50"
           />
         </div>
-        <button className="cta__button" type="submit">Preview Payment</button>
+        <button className="cta__button" type="submit">Preview with HoloTap</button>
       </form>
 
       {submitted && (

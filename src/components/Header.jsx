@@ -1,16 +1,30 @@
-import React from 'react';
 
-const Header = () => (
-  <header className="header">
-    <h1 className="header__title">🐶 PayDog</h1>
-    <p className="header__tagline">Creator-first fintech with bite</p>
-    <img
-      src="/assets/paydog.jpeg"
-      alt="PayDog Mascot"
-      className="mascot"
-      id="paydog-mascot"
-    />
-  </header>
-);
+import React, { useState } from 'react';
+import mascotFallback from '../assets/images/mascot-fallback.png';
 
-export default Header;
+const MascotImage = ({ src, alt = 'HoloTap Mascot', className = 'mascot' }) => {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    setImgSrc(mascotFallback);
+    setHasError(true);
+    console.warn('⚠️ Mascot image failed to load. Fallback applied.');
+  };
+
+  return (
+    <>
+      <img
+        src={imgSrc}
+        alt={alt}
+        className={className}
+        onError={handleError}
+      />
+      {hasError && (
+        <p className="error-message">⚠️ Mascot image failed to load. Showing fallback.</p>
+      )}
+    </>
+  );
+};
+
+export default MascotImage;

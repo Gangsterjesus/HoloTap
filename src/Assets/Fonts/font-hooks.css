@@ -1,35 +1,36 @@
+
 /* src/Assets/Fonts/font-hooks.css */
 
-/* === PayDogSans: UI Typeface === */
+/* === HoloTapSans: UI Typeface === */
 @font-face {
-  font-family: 'PayDogSans';
-  src: url('./PayDogSans-Regular.woff2') format('woff2');
+  font-family: 'HoloTapSans';
+  src: url('./HoloTapSans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'PayDogSans';
-  src: url('./PayDogSans-Bold.woff2') format('woff2');
+  font-family: 'HoloTapSans';
+  src: url('./HoloTapSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* === PayDogMono: Code Typeface === */
+/* === HoloTapMono: Code Typeface === */
 @font-face {
-  font-family: 'PayDogMono';
-  src: url('./PayDogMono-Regular.woff2') format('woff2');
+  font-family: 'HoloTapMono';
+  src: url('./HoloTapMono-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* === PayDogFun: Display Typeface === */
+/* === HoloTapFun: Display Typeface === */
 @font-face {
-  font-family: 'PayDogFun';
-  src: url('./PayDogFun-Display.woff2') format('woff2');
+  font-family: 'HoloTapFun';
+  src: url('./HoloTapFun-Display.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -38,12 +39,12 @@
 /* === Font Tokens === */
 :root {
   /* UI fonts for general layout */
-  --font-ui: 'PayDogSans', 'Segoe UI', sans-serif;
-  --font-ui-bold: 'PayDogSans', 'Segoe UI', sans-serif;
+  --font-ui: 'HoloTapSans', 'Segoe UI', sans-serif;
+  --font-ui-bold: 'HoloTapSans', 'Segoe UI', sans-serif;
 
   /* Monospace fonts for code blocks and badges */
-  --font-code: 'PayDogMono', monospace;
+  --font-code: 'HoloTapMono', monospace;
 
   /* Display fonts for mascot captions and playful elements */
-  --font-fun: 'PayDogFun', cursive;
+  --font-fun: 'HoloTapFun', cursive;
 }
