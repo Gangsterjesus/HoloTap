@@ -1,0 +1,237 @@
+/* 🧩 QR Example Component Styles */
+
+.qr-example {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.qr-example__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.qr-example__header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.qr-example__header p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.qr-example__navigation {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.qr-example__nav-btn {
+  background: #e9ecef;
+  color: #495057;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.qr-example__nav-btn:hover {
+  background: #dee2e6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.qr-example__nav-btn.active {
+  background: linear-gradient(135deg, #0077cc, #005fa3);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 119, 204, 0.3);
+}
+
+.qr-example__content {
+  min-height: 500px;
+  margin-bottom: 2rem;
+}
+
+.qr-example__demo {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qr-example__demo h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Generator Examples */
+.qr-example__generators {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.qr-example__generator-item {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  transition: transform 0.3s ease;
+}
+
+.qr-example__generator-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.qr-example__generator-item h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* Scanner Examples */
+.qr-example__scanners {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.qr-example__scanner-item {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  transition: transform 0.3s ease;
+}
+
+.qr-example__scanner-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.qr-example__scanner-item h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* Info Section */
+.qr-example__info {
+  background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid #e1bee7;
+}
+
+.qr-example__info h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.qr-example__info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.qr-example__info li {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  color: #495057;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.qr-example__info li:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .qr-example {
+    padding: 1rem;
+    margin: 0 1rem;
+  }
+  
+  .qr-example__header h2 {
+    font-size: 2rem;
+  }
+  
+  .qr-example__navigation {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .qr-example__nav-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .qr-example__generators,
+  .qr-example__scanners {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .qr-example__generator-item,
+  .qr-example__scanner-item {
+    padding: 1rem;
+  }
+  
+  .qr-example__info {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .qr-example__header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .qr-example__header p {
+    font-size: 1rem;
+  }
+  
+  .qr-example__demo h3 {
+    font-size: 1.5rem;
+  }
+  
+  .qr-example__generator-item h4,
+  .qr-example__scanner-item h4 {
+    font-size: 1.1rem;
+  }
+}

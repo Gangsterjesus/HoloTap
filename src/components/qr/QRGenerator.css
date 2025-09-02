@@ -1,0 +1,147 @@
+/* 🧩 QR Generator Component Styles */
+
+.qr-generator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.qr-generator:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.qr-generator__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  border: 2px dashed #dee2e6;
+  transition: border-color 0.3s ease;
+}
+
+.qr-generator:hover .qr-generator__wrapper {
+  border-color: #0077cc;
+}
+
+.qr-generator__details {
+  text-align: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.qr-generator__title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.qr-generator__detail {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  color: #495057;
+  line-height: 1.4;
+}
+
+.qr-generator__detail strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.qr-generator__button {
+  background: linear-gradient(135deg, #0077cc, #005fa3);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 119, 204, 0.3);
+}
+
+.qr-generator__button:hover {
+  background: linear-gradient(135deg, #005fa3, #004080);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 119, 204, 0.4);
+}
+
+.qr-generator__button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 119, 204, 0.3);
+}
+
+/* Type-specific styling */
+.qr-generator[data-type="badge_tier"] {
+  border-left: 4px solid #ffc107;
+}
+
+.qr-generator[data-type="badge_tier"] .qr-generator__title {
+  color: #856404;
+}
+
+.qr-generator[data-type="contributor_shoutout"] {
+  border-left: 4px solid #28a745;
+}
+
+.qr-generator[data-type="contributor_shoutout"] .qr-generator__title {
+  color: #155724;
+}
+
+.qr-generator[data-type="holographic"] {
+  border-left: 4px solid #6f42c1;
+  background: linear-gradient(135deg, #f8f5ff, #ffffff);
+}
+
+.qr-generator[data-type="holographic"] .qr-generator__title {
+  color: #6f42c1;
+}
+
+.qr-generator[data-type="holographic"] .qr-generator__wrapper {
+  border: 2px dashed #6f42c1;
+  background: linear-gradient(135deg, #ffffff, #f8f5ff);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .qr-generator {
+    padding: 1rem;
+  }
+  
+  .qr-generator__title {
+    font-size: 1.1rem;
+  }
+  
+  .qr-generator__detail {
+    font-size: 0.9rem;
+  }
+  
+  .qr-generator__button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation for QR generation */
+@keyframes qrGenerate {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.qr-generator__wrapper svg {
+  animation: qrGenerate 0.5s ease-out;
+}
