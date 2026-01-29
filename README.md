@@ -1,12 +1,58 @@
-# React + Vite
+# HoloTap — TM470 Project and Personal Stripe‑Pay Alternative
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A creator‑focused web application built with React and Vite, developed as part of the Open University TM470 project and continued as a personal initiative to explore lightweight, open, and transparent alternatives to closed payment ecosystems like Stripe‑Pay.
 
-Currently, two official plugins are available:
+HoloTap combines modern frontend engineering with a modular, extensible architecture designed for experimentation, rapid iteration, and future integration with secure payment flows.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Modern **React + Vite** foundation  
+- Component‑driven UI architecture  
+- Modular CSS styling  
+- Routing‑ready (`react-router-dom`)  
+- Image assets included (HoloTap badge, React SVG, TSX image types)  
+- Clean, maintainable project structure suitable for academic assessment and real‑world development
+
+---
+
+## 📁 Project Structure
+
+
+---
+
+## 🛠️ Getting Started
+
+### Install dependencies
+
+
+### Run the development server
+
+
+App runs at:http://localhost:5173/
+
+
+### Build for production
+
+
+
+---
+
+## 🤝 Open Source Credits
+
+HoloTap is built on top of several open-source technologies:
+
+- React — MIT License
+- Vite — MIT License
+- React Router DOM — MIT License
+- ESLint — MIT License
+
+All third-party assets and libraries remain the property of their respective authors and are used under their open-source licenses.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+You are free to use, modify, distribute, and build upon this project, provided that the original copyright notice is included.
