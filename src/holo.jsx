@@ -1,5 +1,6 @@
 import { useState } from "react";
 import WelcomeBanner from "./components/WelcomeBanner.jsx";
+
 // Flows with clear names
 import HTRegistration from "./flows/HTRegistration.jsx";
 import HTReturningUser from "./flows/HTReturningUser.jsx";
@@ -8,11 +9,8 @@ import HTPaymentConfirmation from "./flows/HTPaymentConfirmation.jsx";
 import HTCreatorDashboard from "./flows/HTCreatorDashboard.jsx";
 import HTIdentityCard from "./flows/HTIdentityCard.jsx";
 
-
 // Components
-import Feature from "./components/Feature";
-
-
+import Feature from "./components/Feature.jsx";
 
 export default function Holo() {
   const [flow, setFlow] = useState(0);
@@ -38,32 +36,29 @@ export default function Holo() {
       </nav>
 
       {/* Landing Screen */}
-  
-{flow === 0 && (
-  <>
-    <WelcomeBanner />
+      {flow === 0 && (
+        <>
+          <WelcomeBanner />
+          <Feature />
 
-    <Feature />
+          <div className="cta">
+            <button className="cta__button" onClick={() => setFlow(1)}>
+              Start Registration (Flow 1)
+            </button>
+            <button className="cta__button" onClick={() => setFlow(2)}>
+              Returning User (Flow 2)
+            </button>
+          </div>
+        </>
+      )}
 
-    <div className="cta">
-      <button className="cta__button" onClick={() => setFlow(1)}>
-        Start Registration (Flow 1)
-      </button>
-      <button className="cta__button" onClick={() => setFlow(2)}>
-        Returning User (Flow 2)
-      </button>
+      {/* Flow Rendering */}
+      {flow === 1 && <HTRegistration setFlow={setFlow} />}
+      {flow === 2 && <HTReturningUser setFlow={setFlow} />}
+      {flow === 3 && <HTPayment setFlow={setFlow} />}
+      {flow === 4 && <HTPaymentConfirmation setFlow={setFlow} />}
+      {flow === 5 && <HTCreatorDashboard setFlow={setFlow} />}
+      {flow === 6 && <HTIdentityCard setFlow={setFlow} />}
     </div>
-  </>
-)}
-
-
-    {/* Flow Rendering */}
-    {flow === 1 && <HTRegistration />}
-    {flow === 2 && <HTReturningUser />}
-    {flow === 3 && <HTPayment />}
-    {flow === 4 && <HTPaymentConfirmation />}
-    {flow === 5 && <HTCreatorDashboard />}
-    {flow === 6 && <HTIdentityCard />}
-  </div>
-);
+  );
 }
