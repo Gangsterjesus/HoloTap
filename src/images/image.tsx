@@ -1,1 +1,1 @@
-import holoTapBadge from './HoloTap-badge.png';
+import holoTapBadge from "../assets/HoloTap-Badge.png";

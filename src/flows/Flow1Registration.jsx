@@ -1,6 +1,6 @@
 import { useState } from "react";
+import holoBadge from "../assets/HoloTap-Badge.png";
 import CountrySelector from "../components/CountrySelector.jsx";
-import hologram from "../assets/HoloTap-Badge.png";
 
 export default function HTRegistration() {
   const [country, setCountry] = useState("+44");
@@ -21,7 +21,7 @@ export default function HTRegistration() {
       {/* FLOW 0 — HOLOTAP BADGE */}
       <div style={{ textAlign: "center", marginBottom: 30 }}>
         <img
-          src={hologram}
+          src={holoBadge}
           alt="HoloTap hologram badge"
           style={{
             width: 180,
