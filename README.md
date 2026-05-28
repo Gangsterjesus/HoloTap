@@ -1,6 +1,6 @@
 # 💠 HoloTap — Scan‑to‑Pay for the Next Digital Economy
 
-HoloTap is a creator‑first QR‑code payment prototype designed for fast, secure, and frictionless micro‑transactions, and independent developers, HoloTap blends holographic QR logic with a modular open‑source architecture — paving the way for future digital‑asset payments.
+HoloTap is a creator‑first QR‑code payment prototype designed for fast, secure, and frictionless micro‑transactions. Built for fans, creators, and independent developers, HoloTap blends holographic QR logic with a modular open‑source architecture — paving the way for future digital‑asset payments.
 
 🌍 Vision
 To deliver a secure, modern QR‑code payment platform that evolves naturally into the next era of digital value — including NFTs, BRICS‑aligned digital currencies, and emerging asset‑to‑asset (A2A) payment systems.
