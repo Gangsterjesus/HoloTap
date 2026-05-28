@@ -1,8 +1,69 @@
-export default function HTIdentityCard() {
+// src/flows/Flow6IdentityCard.jsx
+
+import { useEffect, useState } from "react";
+import QRCode from "react-qr-code";
+import { getUser } from "../services/UserService";
+import { encryptPayload } from "../Utils/Token";
+
+export default function Flow6IdentityCard({ setFlow }) {
+  const [user, setUser] = useState(null);
+  const [identityQR, setIdentityQR] = useState(null);
+
+  useEffect(() => {
+    const u = getUser();
+    setUser(u);
+
+    if (u) {
+      // Build identity payload
+      const payload = {
+        userId: u.userId,
+        name: u.name,
+        mobile: u.mobile,
+        issuedAt: Date.now()
+      };
+
+      // Encrypt identity token
+      encryptPayload(payload).then((encrypted) => {
+        setIdentityQR(JSON.stringify(encrypted));
+      });
+    }
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="ht-container">
+        <h2>Flow 6 — Identity Card</h2>
+        <p>No user profile found.</p>
+        <button className="cta__button" onClick={() => setFlow(1)}>
+          Go to Registration
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="ht-container">
       <h2>Flow 6 — Identity Card</h2>
-      <p>This is the QR identity card / profile screen.</p>
+      <p>Your official HoloTap creator identity.</p>
+
+      <div className="ht-card" style={{ marginTop: 20, padding: 20 }}>
+        <h3>{user.name}</h3>
+        <p><strong>User ID:</strong> {user.userId}</p>
+        <p><strong>Mobile:</strong> {user.mobile}</p>
+
+        {identityQR && (
+          <div style={{ marginTop: 20 }}>
+            <h4>Identity QR</h4>
+            <QRCode value={identityQR} size={160} />
+          </div>
+        )}
+      </div>
+
+      <div style={{ marginTop: 20 }}>
+        <button className="cta__button" onClick={() => setFlow(5)}>
+          Back to Dashboard
+        </button>
+      </div>
     </div>
   );
 }
