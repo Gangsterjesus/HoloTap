@@ -1,9 +1,20 @@
 // src/flows/Flow9Logging.jsx
 
 import { useEffect, useState } from "react";
+import { getSession, touchSession } from "../Utils/Session";
 
 export default function Flow9Logging({ setFlow }) {
   const [logs, setLogs] = useState([]);
+useEffect(() => {
+  const session = getSession();
+  if (!session) {
+    alert("Your session has expired. Please log in again.");
+    setFlow(2);
+    return;
+  }
+
+  touchSession();
+}, [setFlow]);
 
   useEffect(() => {
     const storedLogs = JSON.parse(localStorage.getItem("ht_logs") || "[]");

@@ -1,68 +1,69 @@
 // src/flows/Flow7Processing.jsx
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { decryptPayload } from "../Utils/Token";
 
-export default function Flow7Processing({ setFlow }) {
-  const [status, setStatus] = useState("Processing payment...");
-  const [done, setDone] = useState(false);
+const LAST_TOKEN_KEY = "ht_last_qr_token";
 
+export default function Flow7Processing({ qrTokenObject, setFlow }) {
   useEffect(() => {
-    async function processPayment() {
+    async function processToken() {
       try {
-        // Retrieve encrypted QR token from localStorage
-        const encrypted = JSON.parse(localStorage.getItem("ht_last_qr_token"));
-
-        if (!encrypted) {
-          setStatus("No payment token found.");
-          setDone(true);
+        // Ensure token exists
+        if (!qrTokenObject) {
+          alert("No QR token found.");
+          setFlow(5);
           return;
         }
 
-        // Decrypt the payload
-        const payload = await decryptPayload(encrypted);
+        const currentTokenString = JSON.stringify(qrTokenObject);
+        const lastToken = localStorage.getItem(LAST_TOKEN_KEY);
 
-        // Simulate backend delay
-        setTimeout(() => {
-          // Save transaction to logs
-          const logs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
-          logs.push({
-            ...payload,
-            id: crypto.randomUUID(),
-            processedAt: Date.now()
-          });
-          localStorage.setItem("ht_logs", JSON.stringify(logs));
+        // Replay‑attack prevention
+        if (lastToken && lastToken === currentTokenString) {
+          alert("This QR code has already been used.");
+          setFlow(4);
+          return;
+        }
 
-          setStatus("Payment processed successfully.");
-          setDone(true);
-        }, 1500);
+        // Decrypt token
+        const payload = await decryptPayload(qrTokenObject);
 
-      } catch (err) {
-        console.error(err);
-        setStatus("Error processing payment.");
-        setDone(true);
+        // Build log entry
+        const logEntry = {
+          id: crypto.randomUUID(),
+          amount: payload.amount,
+          description: payload.description || "",
+          userId: payload.userId,
+          sessionId: payload.sessionId,
+          processedAt: Date.now()
+        };
+
+        // Save log
+        const rawLogs = localStorage.getItem("ht_logs");
+        const logs = rawLogs ? JSON.parse(rawLogs) : [];
+        logs.push(logEntry);
+        localStorage.setItem("ht_logs", JSON.stringify(logs));
+
+        // Save last token to prevent replay
+        localStorage.setItem(LAST_TOKEN_KEY, currentTokenString);
+
+        // Move to confirmation
+        setFlow(4);
+      } catch (error) {
+        console.error("Flow 7 error:", error);
+        alert("The payment token is invalid or expired.");
+        setFlow(5);
       }
     }
 
-    processPayment();
-  }, []);
-
-  const handleContinue = () => {
-    setFlow(4); // Go to Flow 4 — Confirmation
-  };
+    processToken();
+  }, [qrTokenObject, setFlow]);
 
   return (
     <div className="ht-container">
       <h2>Flow 7 — Processing</h2>
-      <p>{status}</p>
-
-      {!done && <p>⏳ Please wait...</p>}
-
-      {done && (
-        <button className="cta__button" onClick={handleContinue}>
-          Continue
-        </button>
-      )}
+      <p>Processing your payment…</p>
     </div>
   );
 }

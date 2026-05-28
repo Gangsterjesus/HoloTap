@@ -2,11 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { getUser } from "../services/UserService";
+import { getSession, touchSession } from "../Utils/Session";
 
 export default function Flow10AdminDashboard({ setFlow }) {
   const [creator, setCreator] = useState(null);
   const [logs, setLogs] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
+useEffect(() => {
+  const session = getSession();
+  if (!session) {
+    alert("Your session has expired. Please log in again.");
+    setFlow(2);
+    return;
+  }
+
+  touchSession();
+}, [setFlow]);
 
   useEffect(() => {
     const u = getUser();

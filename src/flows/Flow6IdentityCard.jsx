@@ -4,17 +4,30 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { getUser } from "../services/UserService";
 import { encryptPayload } from "../Utils/Token";
+import { getSession, touchSession } from "../Utils/Session";
 
 export default function Flow6IdentityCard({ setFlow }) {
   const [user, setUser] = useState(null);
   const [identityQR, setIdentityQR] = useState(null);
 
+  // 🔐 Session‑gate patch (Phase A)
+  useEffect(() => {
+    const session = getSession();
+    if (!session) {
+      alert("Your session has expired. Please log in again.");
+      setFlow(2);
+      return;
+    }
+
+    touchSession();
+  }, [setFlow]);
+
+  // Load user + generate identity QR
   useEffect(() => {
     const u = getUser();
     setUser(u);
 
     if (u) {
-      // Build identity payload
       const payload = {
         userId: u.userId,
         name: u.name,
@@ -22,7 +35,6 @@ export default function Flow6IdentityCard({ setFlow }) {
         issuedAt: Date.now()
       };
 
-      // Encrypt identity token
       encryptPayload(payload).then((encrypted) => {
         setIdentityQR(JSON.stringify(encrypted));
       });

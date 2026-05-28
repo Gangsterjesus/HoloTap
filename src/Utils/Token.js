@@ -1,52 +1,45 @@
-// src/utils/token.js
+// src/Utils/Token.js
 
-const SECRET = "holotap-secret-key-32bytes-minimum";
+import CryptoJS from "crypto-js";
+
+const TOKEN_SECRET_KEY = "holotap-secret-key";
+const TOKEN_TTL_MILLISECONDS = 5 * 60 * 1000; // 5 minutes
 
 export async function encryptPayload(payload) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(JSON.stringify(payload));
+  const tokenWrapper = {
+    payload,
+    issuedAt: Date.now()
+  };
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(SECRET),
-    { name: "AES-GCM" },
-    false,
-    ["encrypt"]
-  );
-
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-
-  const encrypted = await crypto.subtle.encrypt(
-    { name: "AES-GCM", iv },
-    key,
-    data
-  );
+  const json = JSON.stringify(tokenWrapper);
+  const ciphertext = CryptoJS.AES.encrypt(json, TOKEN_SECRET_KEY).toString();
 
   return {
-    iv: Array.from(iv),
-    data: Array.from(new Uint8Array(encrypted))
+    token: ciphertext
   };
 }
 
-export async function decryptPayload(encrypted) {
-  const encoder = new TextEncoder();
+export async function decryptPayload(tokenObject) {
+  try {
+    const bytes = CryptoJS.AES.decrypt(tokenObject.token, TOKEN_SECRET_KEY);
+    const decryptedJson = bytes.toString(CryptoJS.enc.Utf8);
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(SECRET),
-    { name: "AES-GCM" },
-    false,
-    ["decrypt"]
-  );
+    if (!decryptedJson) {
+      throw new Error("Decryption failed");
+    }
 
-  const iv = new Uint8Array(encrypted.iv);
-  const data = new Uint8Array(encrypted.data);
+    const tokenWrapper = JSON.parse(decryptedJson);
 
-  const decrypted = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
-    key,
-    data
-  );
+    const now = Date.now();
+    const age = now - tokenWrapper.issuedAt;
 
-  return JSON.parse(new TextDecoder().decode(decrypted));
+    if (age > TOKEN_TTL_MILLISECONDS) {
+      throw new Error("Token expired");
+    }
+
+    return tokenWrapper.payload;
+  } catch (error) {
+    console.error("Token decryption error:", error);
+    throw new Error("Invalid or expired token");
+  }
 }

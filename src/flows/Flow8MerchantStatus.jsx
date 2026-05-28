@@ -1,10 +1,23 @@
 // src/flows/Flow8MerchantStatus.jsx
 
 import { useEffect, useState } from "react";
+import { getSession, touchSession } from "../Utils/Session";
+// ...other imports...
+
 
 export default function Flow8MerchantStatus({ setFlow }) {
   const [lastTx, setLastTx] = useState(null);
   const [status, setStatus] = useState("Awaiting scans...");
+useEffect(() => {
+  const session = getSession();
+  if (!session) {
+    alert("Your session has expired. Please log in again.");
+    setFlow(2);
+    return;
+  }
+
+  touchSession();
+}, [setFlow]);
 
   useEffect(() => {
     const logs = JSON.parse(localStorage.getItem("ht_logs") || "[]");

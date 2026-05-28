@@ -1,6 +1,7 @@
 // src/flows/Flow5CreatorDashboard.jsx
 
 import { useEffect, useState } from "react";
+import { getSession, touchSession } from "../Utils/Session";
 
 export default function Flow5CreatorDashboard({ setFlow }) {
   const [logs, setLogs] = useState([]);
@@ -8,11 +9,22 @@ export default function Flow5CreatorDashboard({ setFlow }) {
   const [lastPayment, setLastPayment] = useState(null);
 
   useEffect(() => {
+    const session = getSession();
+    if (!session) {
+      alert("Your session has expired. Please log in again.");
+      setFlow(2);
+      return;
+    }
+
+    touchSession();
+  }, [setFlow]);
+
+  useEffect(() => {
     const storedLogs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
     setLogs(storedLogs);
 
     if (storedLogs.length > 0) {
-      const revenue = storedLogs.reduce((sum, tx) => sum + tx.amount, 0);
+      const revenue = storedLogs.reduce((sum, transaction) => sum + transaction.amount, 0);
       setTotalRevenue(revenue);
       setLastPayment(storedLogs[storedLogs.length - 1]);
     }
