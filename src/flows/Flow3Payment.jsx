@@ -1,97 +1,115 @@
 // src/flows/Flow3Payment.jsx
 
-import { useState } from "react";
-import QRCode from "react-qr-code";
-import { getSession } from "../Utils/Session";
-import { encryptPayload } from "../Utils/Token";
+/**
+ * HoloTap — Flow 3: Payment Screen
+ * Author: Raymond Newton
+ * Date: 01 June 2026
+ *
+ * Purpose:
+ * Handles user payment entry, validation, and QR token generation for the
+ * consumer-facing payment flow.
+ */
 
-export default function Flow3Payment({ setFlow, setQrTokenObject }) {
+import { useState } from "react";
+import { generateQrToken } from "../services/QrTokenService";
+import { formatCurrency } from "../Utils/format";
+
+export default function Flow3Payment({ setFlow, creator }) {
   const [amount, setAmount] = useState("");
-  const [desc, setDesc] = useState("");
-  const [qrData, setQrData] = useState(null);
+  const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
-  const handleGenerate = async () => {
+  function parseAmount(value) {
+    const numeric = Number(value);
+    if (Number.isNaN(numeric) || numeric <= 0) {
+      return null;
+    }
+    return numeric;
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
     setError("");
 
-    // Validate amount
-    if (!amount.trim()) {
-      setError("Please enter an amount");
+    const parsedAmount = parseAmount(amount);
+
+    if (!parsedAmount) {
+      setError("Please enter a valid amount greater than zero.");
       return;
     }
 
-    // Validate session
-    const session = getSession();
-    if (!session) {
-      setError("No active session. Please log in again.");
-      return;
+    try {
+      const tokenObject = await generateQrToken({
+        amount: parsedAmount,
+        description: description.trim() || null,
+        userId: creator?.id || "anonymous"
+      });
+
+      localStorage.setItem("ht_last_qr_token", JSON.stringify(tokenObject));
+
+      const logs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
+      logs.push({
+        id: crypto.randomUUID(),
+        amount: parsedAmount,
+        description: description.trim() || null,
+        createdAt: Date.now()
+      });
+      localStorage.setItem("ht_logs", JSON.stringify(logs));
+
+      setFlow(7); // go to Processing
+    } catch (error) {
+      console.error("Error generating QR token:", error);
+      setError("Something went wrong while generating the payment token.");
     }
-
-    // Build payment payload
-    const payload = {
-      sessionId: session.token,
-      userId: session.userId,
-      amount: Number(amount),
-      description: desc || "",
-      timestamp: Date.now()
-    };
-
-    // Encrypt payload
-    const encrypted = await encryptPayload(payload);
-
-    // Save for Flow 7 (state + localStorage)
-    setQrTokenObject(encrypted);
-    localStorage.setItem("ht_last_qr_token", JSON.stringify(encrypted));
-
-    // Display QR
-    setQrData(JSON.stringify(encrypted));
-  };
-
-  const handleContinue = () => {
-    if (!qrData) {
-      setError("Please generate a QR code first.");
-      return;
-    }
-    setFlow(7); // Move to Flow 7 — Processing
-  };
+  }
 
   return (
     <div className="ht-container">
       <h2>Flow 3 — Payment</h2>
-      <p>Enter payment details to generate a secure QR code.</p>
 
-      <input
-        type="number"
-        placeholder="Amount (£)"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="ht-input"
-      />
-
-      <input
-        type="text"
-        placeholder="Description (optional)"
-        value={desc}
-        onChange={(e) => setDesc(e.target.value)}
-        className="ht-input"
-      />
-
-      {error && <p className="ht-error">{error}</p>}
-
-      <button className="cta__button" onClick={handleGenerate}>
-        Generate QR
-      </button>
-
-      {qrData && (
-        <div className="ht-qr-container" style={{ marginTop: 20 }}>
-          <h3>Your Secure Payment QR</h3>
-          <QRCode value={qrData} size={180} />
-
-          <button className="cta__button" onClick={handleContinue}>
-            Continue
-          </button>
+      <form onSubmit={handleSubmit}>
+        <div className="form__group">
+          <label htmlFor="amount">Amount</label>
+          <input
+            id="amount"
+            type="number"
+            min="0"
+            step="0.01"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+          />
+          {amount && (
+            <p className="form__hint">
+              Preview: {formatCurrency(parseAmount(amount) || 0)}
+            </p>
+          )}
         </div>
-      )}
+
+        <div className="form__group">
+          <label htmlFor="description">Description (optional)</label>
+          <input
+            id="description"
+            type="text"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+          />
+        </div>
+
+        {error && <p className="form__error">{error}</p>}
+
+        <button type="submit" className="cta__button">
+          Generate QR Code
+        </button>
+
+        <button
+          type="button"
+          className="cta__button cta__button--secondary"
+          onClick={() => setFlow(2)}
+        >
+          Back
+        </button>
+      </form>
     </div>
   );
 }
+

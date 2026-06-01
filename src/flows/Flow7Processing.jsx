@@ -1,69 +1,98 @@
 // src/flows/Flow7Processing.jsx
 
-import { useEffect } from "react";
+/**
+ * HoloTap — Flow 7: Payment Processing
+ * Author: Raymond Newton
+ * Date: 01 June 2026
+ *
+ * Purpose:
+ * Verifies the QR token generated in Flow 3 and transitions to the
+ * confirmation screen once the token is valid and within TTL.
+ */
+
+import { useEffect, useState } from "react";
 import { decryptPayload } from "../Utils/Token";
+import { formatCurrency } from "../Utils/format";
 
-const LAST_TOKEN_KEY = "ht_last_qr_token";
+export default function Flow7Processing({ setFlow }) {
+  const [status, setStatus] = useState("processing");
+  const [details, setDetails] = useState(null);
+  const [error, setError] = useState("");
 
-export default function Flow7Processing({ qrTokenObject, setFlow }) {
   useEffect(() => {
-    async function processToken() {
+    async function verifyToken() {
       try {
-        // Ensure token exists
-        if (!qrTokenObject) {
-          alert("No QR token found.");
-          setFlow(5); // Back to dashboard
+        const stored = localStorage.getItem("ht_last_qr_token");
+
+        if (!stored) {
+          setError("No payment token found. Please generate a new QR code.");
+          setStatus("error");
           return;
         }
 
-        const currentTokenString = JSON.stringify(qrTokenObject);
-        const lastToken = localStorage.getItem(LAST_TOKEN_KEY);
+        const tokenObject = JSON.parse(stored);
+        const payload = await decryptPayload(tokenObject);
 
-        // Replay‑attack prevention
-        if (lastToken && lastToken === currentTokenString) {
-          alert("This QR code has already been used.");
-          setFlow(4); // Still show success, but do not re-log
-          return;
-        }
+        setDetails(payload);
+        setStatus("success");
 
-        // Decrypt token
-        const payload = await decryptPayload(qrTokenObject);
-
-        // Build log entry
-        const logEntry = {
+        // Optionally persist verified transaction
+        const logs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
+        logs.push({
           id: crypto.randomUUID(),
           amount: payload.amount,
-          description: payload.description || "",
-          userId: payload.userId,
-          sessionId: payload.sessionId,
+          description: payload.description,
           processedAt: Date.now()
-        };
-
-        // Save log
-        const rawLogs = localStorage.getItem("ht_logs");
-        const logs = rawLogs ? JSON.parse(rawLogs) : [];
-        logs.push(logEntry);
+        });
         localStorage.setItem("ht_logs", JSON.stringify(logs));
 
-        // Save last token to prevent replay
-        localStorage.setItem(LAST_TOKEN_KEY, currentTokenString);
-
-        // Move to confirmation
-        setFlow(4);
+        setTimeout(() => setFlow(4), 1200);
       } catch (error) {
-        console.error("Flow 7 error:", error);
-        alert("The payment token is invalid or expired.");
-        setFlow(5);
+        console.error("Token verification failed:", error);
+        setError("Payment token is invalid or has expired.");
+        setStatus("error");
       }
     }
 
-    processToken();
-  }, [qrTokenObject, setFlow]);
+    verifyToken();
+  }, [setFlow]);
+
+  if (status === "processing") {
+    return (
+      <div className="ht-container">
+        <h2>Flow 7 — Processing Payment</h2>
+        <p>Please wait while we verify your payment token…</p>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <div className="ht-container">
+        <h2>Flow 7 — Processing Error</h2>
+        <p>{error}</p>
+        <button className="cta__button" onClick={() => setFlow(3)}>
+          Back to Payment
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="ht-container">
-      <h2>Flow 7 — Processing</h2>
-      <p>Processing your payment…</p>
+      <h2>Flow 7 — Payment Verified</h2>
+      {details && (
+        <div className="ht-card">
+          <p>
+            <strong>Amount:</strong> {formatCurrency(details.amount)}
+          </p>
+          {details.description && (
+            <p>
+              <strong>Description:</strong> {details.description}</p>
+          )}
+        </div>
+      )}
+      <p>Redirecting to confirmation…</p>
     </div>
   );
 }
