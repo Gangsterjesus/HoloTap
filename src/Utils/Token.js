@@ -1,4 +1,23 @@
-// src/Utils/Token.js
+/**
+ * HoloTap — Token Encryption & Verification Utility
+ * Author: Raymond Newton
+ * Date: 01 June 2026
+ *
+ * Purpose:
+ * Provides secure, single‑use, time‑limited token generation and validation
+ * for HoloTap QR-based payment flows. Tokens contain no sensitive data and
+ * are encrypted using AES before being embedded into QR codes.
+ *
+ * Behaviour:
+ * - encryptPayload(): wraps payload with issuedAt timestamp and encrypts it
+ * - decryptPayload(): decrypts token, validates TTL, and returns payload
+ *
+ * Security Notes:
+ * - Tokens expire after 5 minutes (configurable)
+ * - AES encryption prevents tampering or inspection
+ * - No card or personal data is stored inside tokens
+ * - Includes issuedAt timestamp for TTL enforcement
+ */
 
 import CryptoJS from "crypto-js";
 
