@@ -6,11 +6,15 @@ import { getUser } from "../services/UserService";
 import { encryptPayload } from "../Utils/Token";
 import { getSession, touchSession } from "../Utils/Session";
 
+
+
+// formatCurrency not needed in this component
+
 export default function Flow6IdentityCard({ setFlow }) {
   const [user, setUser] = useState(null);
   const [identityQR, setIdentityQR] = useState(null);
 
-  // 🔐 Session‑gate patch (Phase A)
+  // 🔐 Session‑gate patch
   useEffect(() => {
     const session = getSession();
     if (!session) {
@@ -60,13 +64,30 @@ export default function Flow6IdentityCard({ setFlow }) {
 
       <div className="ht-card" style={{ marginTop: 20, padding: 20 }}>
         <h3>{user.name}</h3>
+
         <p><strong>User ID:</strong> {user.userId}</p>
-        <p><strong>Mobile:</strong> {user.mobile}</p>
+
+        {/* ⭐ Mobile formatting fallback */}
+        <p><strong>Mobile:</strong> {String(user.mobile).trim()}</p>
 
         {identityQR && (
           <div style={{ marginTop: 20 }}>
             <h4>Identity QR</h4>
             <QRCode value={identityQR} size={160} />
+
+            {/* ⭐ Expiry notice */}
+            <p style={{ marginTop: 10, fontSize: "0.9em", opacity: 0.7 }}>
+              This identity QR expires in 5 minutes.
+            </p>
+
+            {/* ⭐ Regenerate QR */}
+            <button
+              className="cta__button"
+              onClick={() => window.location.reload()}
+              style={{ marginTop: 10 }}
+            >
+              Regenerate Identity QR
+            </button>
           </div>
         )}
       </div>

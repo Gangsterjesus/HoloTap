@@ -24,7 +24,10 @@ export default function Flow5CreatorDashboard({ setFlow }) {
     setLogs(storedLogs);
 
     if (storedLogs.length > 0) {
-      const revenue = storedLogs.reduce((sum, transaction) => sum + transaction.amount, 0);
+      const revenue = storedLogs.reduce(
+        (sum, transaction) => sum + transaction.amount,
+        0
+      );
       setTotalRevenue(revenue);
       setLastPayment(storedLogs[storedLogs.length - 1]);
     }
@@ -37,16 +40,23 @@ export default function Flow5CreatorDashboard({ setFlow }) {
 
       <div className="ht-card" style={{ marginTop: 20 }}>
         <h3>Overview</h3>
+
         <p><strong>Total Payments:</strong> {logs.length}</p>
-        <p><strong>Total Revenue:</strong> £{totalRevenue.toFixed(2)}</p>
+
+        {/* ⭐ Currency formatting applied */}
+        <p><strong>Total Revenue:</strong> £{Number(totalRevenue).toFixed(2)}</p>
 
         {lastPayment && (
           <>
             <h4 style={{ marginTop: 15 }}>Last Payment</h4>
-            <p><strong>Amount:</strong> £{lastPayment.amount}</p>
+
+            {/* ⭐ Currency formatting applied */}
+            <p><strong>Amount:</strong> £{Number(lastPayment.amount).toFixed(2)}</p>
+
             {lastPayment.description && (
               <p><strong>Description:</strong> {lastPayment.description}</p>
             )}
+
             <p>
               <strong>Processed:</strong>{" "}
               {new Date(lastPayment.processedAt).toLocaleString()}
@@ -60,15 +70,27 @@ export default function Flow5CreatorDashboard({ setFlow }) {
           Make a New Payment
         </button>
 
-        <button className="cta__button" onClick={() => setFlow(9)} style={{ marginLeft: 10 }}>
+        <button
+          className="cta__button"
+          onClick={() => setFlow(9)}
+          style={{ marginLeft: 10 }}
+        >
           View Logs (Flow 9)
         </button>
 
-        <button className="cta__button" onClick={() => setFlow(6)} style={{ marginLeft: 10 }}>
+        <button
+          className="cta__button"
+          onClick={() => setFlow(6)}
+          style={{ marginLeft: 10 }}
+        >
           Identity Card (Flow 6)
         </button>
 
-        <button className="cta__button" onClick={() => setFlow(8)} style={{ marginLeft: 10 }}>
+        <button
+          className="cta__button"
+          onClick={() => setFlow(8)}
+          style={{ marginLeft: 10 }}
+        >
           Merchant Status (Flow 8)
         </button>
       </div>

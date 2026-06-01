@@ -3,22 +3,25 @@
 import { useEffect, useState } from "react";
 import { getUser } from "../services/UserService";
 import { getSession, touchSession } from "../Utils/Session";
+import { formatCurrency } from "../Utils/format";
 
 export default function Flow10AdminDashboard({ setFlow }) {
   const [creator, setCreator] = useState(null);
   const [logs, setLogs] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
-useEffect(() => {
-  const session = getSession();
-  if (!session) {
-    alert("Your session has expired. Please log in again.");
-    setFlow(2);
-    return;
-  }
 
-  touchSession();
-}, [setFlow]);
+  // 🔐 Session‑gate
+  useEffect(() => {
+    const session = getSession();
+    if (!session) {
+      alert("Your session has expired. Please log in again.");
+      setFlow(2);
+      return;
+    }
+    touchSession();
+  }, [setFlow]);
 
+  // Load creator + logs + revenue
   useEffect(() => {
     const u = getUser();
     setCreator(u);
@@ -32,6 +35,7 @@ useEffect(() => {
     }
   }, []);
 
+  // ⚠ Admin reset
   const handleResetSystem = () => {
     if (window.confirm("Are you sure? This will wipe ALL logs and tokens.")) {
       localStorage.removeItem("ht_logs");
@@ -47,12 +51,14 @@ useEffect(() => {
       <h2>Flow 10 — Admin Dashboard</h2>
       <p>System‑level controls and analytics.</p>
 
+      {/* System Summary */}
       <div className="ht-card" style={{ marginTop: 20 }}>
         <h3>System Summary</h3>
         <p><strong>Total Transactions:</strong> {logs.length}</p>
-        <p><strong>Total Revenue:</strong> £{totalRevenue.toFixed(2)}</p>
+        <p><strong>Total Revenue:</strong> {formatCurrency(totalRevenue)}</p>
       </div>
 
+      {/* Creator Info */}
       {creator && (
         <div className="ht-card" style={{ marginTop: 20 }}>
           <h3>Registered Creator</h3>
@@ -62,6 +68,7 @@ useEffect(() => {
         </div>
       )}
 
+      {/* All Transactions */}
       <div className="ht-card" style={{ marginTop: 20 }}>
         <h3>All Transactions</h3>
 
@@ -74,20 +81,25 @@ useEffect(() => {
             style={{ marginBottom: 15, padding: 15 }}
           >
             <h4>Transaction ID: {tx.id}</h4>
-            <p><strong>Amount:</strong> £{tx.amount}</p>
+
+            <p><strong>Amount:</strong> {formatCurrency(tx.amount)}</p>
+
             {tx.description && (
               <p><strong>Description:</strong> {tx.description}</p>
             )}
+
             <p>
               <strong>Processed:</strong>{" "}
               {new Date(tx.processedAt).toLocaleString()}
             </p>
+
             <p><strong>User ID:</strong> {tx.userId}</p>
             <p><strong>Session ID:</strong> {tx.sessionId}</p>
           </div>
         ))}
       </div>
 
+      {/* Controls */}
       <div style={{ marginTop: 20 }}>
         <button className="cta__button" onClick={() => setFlow(5)}>
           Back to Creator Dashboard

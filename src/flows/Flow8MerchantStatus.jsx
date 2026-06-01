@@ -4,20 +4,20 @@ import { useEffect, useState } from "react";
 import { getSession, touchSession } from "../Utils/Session";
 // ...other imports...
 
-
 export default function Flow8MerchantStatus({ setFlow }) {
   const [lastTx, setLastTx] = useState(null);
   const [status, setStatus] = useState("Awaiting scans...");
-useEffect(() => {
-  const session = getSession();
-  if (!session) {
-    alert("Your session has expired. Please log in again.");
-    setFlow(2);
-    return;
-  }
 
-  touchSession();
-}, [setFlow]);
+  useEffect(() => {
+    const session = getSession();
+    if (!session) {
+      alert("Your session has expired. Please log in again.");
+      setFlow(2);
+      return;
+    }
+
+    touchSession();
+  }, [setFlow]);
 
   useEffect(() => {
     const logs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
@@ -43,7 +43,8 @@ useEffect(() => {
         <div className="ht-card" style={{ marginTop: 20 }}>
           <h3>Last Scanned Payment</h3>
 
-          <p><strong>Amount:</strong> £{lastTx.amount}</p>
+          {/* ⭐ Currency formatting applied */}
+          <p><strong>Amount:</strong> £{Number(lastTx.amount).toFixed(2)}</p>
 
           {lastTx.description && (
             <p><strong>Description:</strong> {lastTx.description}</p>
@@ -61,7 +62,9 @@ useEffect(() => {
       )}
 
       {!lastTx && (
-        <p style={{ marginTop: 20 }}>No scans yet. Waiting for your first payment.</p>
+        <p style={{ marginTop: 20 }}>
+          No scans yet. Waiting for your first payment.
+        </p>
       )}
 
       <div style={{ marginTop: 20 }}>
@@ -72,3 +75,4 @@ useEffect(() => {
     </div>
   );
 }
+
