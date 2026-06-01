@@ -12,7 +12,7 @@ export default function Flow7Processing({ qrTokenObject, setFlow }) {
         // Ensure token exists
         if (!qrTokenObject) {
           alert("No QR token found.");
-          setFlow(5);
+          setFlow(5); // Back to dashboard
           return;
         }
 
@@ -22,7 +22,7 @@ export default function Flow7Processing({ qrTokenObject, setFlow }) {
         // Replay‑attack prevention
         if (lastToken && lastToken === currentTokenString) {
           alert("This QR code has already been used.");
-          setFlow(4);
+          setFlow(4); // Still show success, but do not re-log
           return;
         }
 

@@ -5,7 +5,7 @@ import QRCode from "react-qr-code";
 import { getSession } from "../Utils/Session";
 import { encryptPayload } from "../Utils/Token";
 
-export default function Flow3Payment({ setFlow }) {
+export default function Flow3Payment({ setFlow, setQrTokenObject }) {
   const [amount, setAmount] = useState("");
   const [desc, setDesc] = useState("");
   const [qrData, setQrData] = useState(null);
@@ -14,11 +14,13 @@ export default function Flow3Payment({ setFlow }) {
   const handleGenerate = async () => {
     setError("");
 
+    // Validate amount
     if (!amount.trim()) {
       setError("Please enter an amount");
       return;
     }
 
+    // Validate session
     const session = getSession();
     if (!session) {
       setError("No active session. Please log in again.");
@@ -37,15 +39,20 @@ export default function Flow3Payment({ setFlow }) {
     // Encrypt payload
     const encrypted = await encryptPayload(payload);
 
-    // PATCH: Save encrypted token for Flow 7
+    // Save for Flow 7 (state + localStorage)
+    setQrTokenObject(encrypted);
     localStorage.setItem("ht_last_qr_token", JSON.stringify(encrypted));
 
-    // Store QR data for display
+    // Display QR
     setQrData(JSON.stringify(encrypted));
   };
 
   const handleContinue = () => {
-    setFlow(7); // Go to Flow 7 — Processing
+    if (!qrData) {
+      setError("Please generate a QR code first.");
+      return;
+    }
+    setFlow(7); // Move to Flow 7 — Processing
   };
 
   return (
@@ -79,6 +86,7 @@ export default function Flow3Payment({ setFlow }) {
         <div className="ht-qr-container" style={{ marginTop: 20 }}>
           <h3>Your Secure Payment QR</h3>
           <QRCode value={qrData} size={180} />
+
           <button className="cta__button" onClick={handleContinue}>
             Continue
           </button>

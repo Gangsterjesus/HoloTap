@@ -1,8 +1,11 @@
+// src/flows/Flow1Registration.jsx
+
 import { useState } from "react";
 import holoBadge from "../assets/HoloTap-Badge.png";
 import CountrySelector from "../components/CountrySelector.jsx";
+import { saveUser } from "../services/userService";
 
-export default function HTRegistration() {
+export default function Flow1Registration({ setFlow }) {
   const [country, setCountry] = useState("+44");
   const [mobile, setMobile] = useState("");
 
@@ -12,7 +15,21 @@ export default function HTRegistration() {
       return;
     }
 
-    alert(`Registration started for: ${country} ${mobile}`);
+    // Normalise mobile number (remove spaces, leading zeros)
+    const cleanedMobile = mobile.replace(/\s+/g, "").replace(/^0+/, "");
+
+    const newUser = {
+      name: "Creator",                 // placeholder name
+      country,
+      mobile: cleanedMobile,
+      userId: crypto.randomUUID()
+    };
+
+    // Save to storage (ht_users + ht_user)
+    saveUser(newUser);
+
+    alert("Registration complete.");
+    setFlow(2); // Move to Flow 2 — Returning User Login
   };
 
   return (
@@ -46,7 +63,7 @@ export default function HTRegistration() {
 
         <CountrySelector value={country} onChange={setCountry} />
 
-        <label style={{ display: "block", marginBottom: 8 }}>
+        <label style={{ display: "block", marginBottom: 8, marginTop: 15 }}>
           Mobile Number
         </label>
 
