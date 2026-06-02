@@ -1,11 +1,58 @@
 /**
- * HoloTap — Flow 7A: Consumer Payment Processing
- * Author: Raymond Newton
- * Date: 01 June 2026
+ * ============================================================
+ *  HoloTap — Consumer Payment Processing
+ *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  Author: Raymond Newton
+ *  Date: 02 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
  *
- * Purpose:
- * Verifies the QR token generated in Flow 3 and transitions to
- * Flow 4 (Payment Confirmation) once the token is valid.
+ *  Purpose:
+ *  Validates the encrypted QR payment token generated during the
+ *  consumer Scan‑to‑Pay flow. Once verified, the component writes
+ *  a transaction entry to the ledger and transitions the consumer
+ *  to the Payment Confirmation screen.
+ *
+ *  Flow Context:
+ *  - Replaces the academic “Flow 7A — Processing”
+ *  - Triggered immediately after scanning a merchant QR code
+ *  - Leads directly into the consumer confirmation screen
+ *
+ *  Security Notes:
+ *  - Token verification uses decryptPayload() which enforces:
+ *        • AES‑encrypted payload
+ *        • HMAC integrity validation
+ *        • Nonce replay protection
+ *        • Token ID revocation checks
+ *        • 5‑minute TTL expiry
+ *  - No sensitive data is stored in component state
+ *  - Ledger writes are append‑only for audit integrity
+ *
+ *  Data Model:
+ *  payload = {
+ *    amount: number,
+ *    description?: string,
+ *    issuedAt: number
+ *  }
+ *
+ *  ledgerEntry = {
+ *    id: string,
+ *    amount: number,
+ *    description?: string,
+ *    processedAt: number
+ *  }
+ *
+ *  Dependencies:
+ *  - decryptPayload()     → secure token validation
+ *  - formatCurrency()     → UI formatting helper
+ *  - localStorage.ht_logs → append‑only transaction ledger
+ *
+ *  Behaviour:
+ *  - Shows “Processing…” while verifying token
+ *  - Shows error screen if token is invalid/expired
+ *  - Shows success screen then auto‑redirects to confirmation
+ *
+ * ============================================================
  */
 
 import { useEffect, useState } from "react";

@@ -1,21 +1,54 @@
 /**
- * HoloTap — Consumer Home Screen
- * Author: Raymond Newton
- * Date: 02 June 2026
+ * ============================================================
+ *  HoloTap — Consumer Home Screen
+ *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  Author: Raymond Newton
+ *  Date: 02 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
  *
- * Purpose:
- * Displays the authenticated consumer’s home dashboard after login.
- * Provides access to Scan to Pay, Payments, Wallet, and Settings.
+ *  Purpose:
+ *  Displays the authenticated consumer’s home dashboard after
+ *  successful login. Provides navigation to core consumer flows:
+ *    - Scan to Pay
+ *    - My Payments
+ *    - My Wallet
+ *    - Settings
  *
- * Architecture Notes:
- * - Uses ConsumerSession.js for session validation, expiry, and refresh.
- * - Reads consumer identity (fullMobile) from active session.
- * - Contains no business logic — UI only.
- * - Redirects to ConsumerLogin if session is missing or expired.
+ *  Flow Context:
+ *  - Entry point for all consumer‑side payment actions.
+ *  - Replaces the academic “Flow 3/4/5” scaffolds with a unified
+ *    modern consumer dashboard.
+ *  - Accessible only when a valid consumer session exists.
  *
- * Dependencies:
- * - ConsumerSession.js (getConsumerSession, touchConsumerSession, clearConsumerSession)
- * - Branding assets (HoloTap badge)
+ *  Security Notes:
+ *  - Session is validated on mount using getConsumerSession().
+ *  - touchConsumerSession() extends session TTL on each visit.
+ *  - clearConsumerSession() is used for explicit logout.
+ *  - No sensitive data is stored in component state.
+ *
+ *  Data Model:
+ *  consumerSession = {
+ *    fullMobile: string,
+ *    userId: string,
+ *    issuedAt: number,
+ *    expiresAt: number
+ *  }
+ *
+ *  Architecture Notes:
+ *  - UI‑only component; contains no business logic.
+ *  - Reads identity exclusively from ConsumerSession.js.
+ *  - Uses setFlow() for navigation within the HoloTap router.
+ *  - Branding assets loaded from /assets.
+ *
+ *  Dependencies:
+ *  - ConsumerSession.js
+ *      → getConsumerSession()
+ *      → touchConsumerSession()
+ *      → clearConsumerSession()
+ *  - HoloTap branding assets (HoloTap‑Badge.png)
+ *
+ * ============================================================
  */
 
 import { useEffect, useState } from "react";

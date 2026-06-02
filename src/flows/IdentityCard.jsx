@@ -1,3 +1,47 @@
+/**
+ * ============================================================
+ *  HoloTap — Merchant Identity Card (Flow 6)
+ *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  Author: Raymond Newton
+ *  Date: 02 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
+ *
+ *  Purpose:
+ *  Displays the authenticated merchant’s identity profile and
+ *  generates a secure, time‑limited identity QR code using the
+ *  HoloTap token encryption system. This QR is used for merchant
+ *  verification, onboarding, and cross‑device identity recovery.
+ *
+ *  Flow Context:
+ *  - Part of the Merchant UX pathway.
+ *  - Replaces the academic scaffold “Flow 6 — Identity Card”.
+ *  - Accessed only after a valid merchant session is restored.
+ *
+ *  Security Notes:
+ *  - Session is validated on mount via getSession() + touchSession().
+ *  - Identity QR is encrypted using encryptPayload() (AES + HMAC).
+ *  - QR expires after 5 minutes (TTL enforced in Token.js).
+ *  - No personal data is stored in the QR; only encrypted payload.
+ *
+ *  Data Model:
+ *  payload = {
+ *    userId: string,
+ *    name: string,
+ *    mobile: string,
+ *    issuedAt: number
+ *  }
+ *
+ *  Dependencies:
+ *  - userService.getUser()          → loads merchant profile
+ *  - token.encryptPayload()         → generates encrypted QR payload
+ *  - session.getSession()           → session gate
+ *  - session.touchSession()         → extend session TTL
+ *  - react-qr-code                  → QR rendering
+ *
+ * ============================================================
+ */
+
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { getUser } from "../services/userService";

@@ -1,13 +1,24 @@
-import { useState, useEffect } from "react";
+/**
+ * ============================================================
+ *  HoloTap — Global Application Router
+ *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  Author: Raymond Newton
+ *  Date: 02 June 2026
+ * ============================================================
+ *
+ *  Purpose:
+ *  Delegates routing to ConsumerRouter or MerchantRouter based
+ *  on stored user identity. This file contains no UI logic.
+ *
+ * ============================================================
+ */
 
-import ConsumerRegistration from "./flows/ConsumerRegistration.jsx";
-import ConsumerLogin from "./flows/ConsumerLogin.jsx";
-import ConsumerHome from "./screens/ConsumerHome.jsx";
-
-import MerchantHome from "./screens/MerchantHome.jsx";
-
+import { useEffect, useState } from "react";
 import { getUser } from "./services/userService";
 import { getSession } from "./Utils/Session";
+
+import ConsumerRouter from "./Routers/ConsumerRouter.js";
+import MerchantRouter from "./Routers/MerchantRouter.jsx";
 
 export default function AppRouter() {
   const [user, setUser] = useState(null);
@@ -18,35 +29,16 @@ export default function AppRouter() {
     setSession(getSession());
   }, []);
 
-  // No user stored → show registration
-  if (!user) {
-    return (
-      <ConsumerRegistration
-        onComplete={() => {
-          setUser(getUser());
-        }}
-      />
-    );
-  }
+  // No user → consumer onboarding
+  if (!user) return <ConsumerRouter />;
 
-  // User exists but no session → show login
-  if (!session) {
-    return (
-      <ConsumerLogin
-        onComplete={() => setSession(getSession())}
-        onRegister={() => {
-          localStorage.removeItem("ht_user");
-          setUser(null);
-        }}
-      />
-    );
-  }
+  // No session → consumer login
+  if (!session) return <ConsumerRouter />;
 
-  // User logged in → route by role
-  if (user.role === "merchant") {
-    return <MerchantHome />;
-  }
+  // Merchant role → merchant router
+  if (user.role === "merchant") return <MerchantRouter />;
 
-  return <ConsumerHome />;
+  // Default → consumer router
+  return <ConsumerRouter />;
 }
 

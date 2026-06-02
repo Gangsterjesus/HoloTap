@@ -1,10 +1,52 @@
 /**
- * HoloTap — Admin Dashboard (Flow 10)
- * Author: Raymond Newton
- * Date: 01 June 2026
+ * ============================================================
+ *  HoloTap — Admin Dashboard (System Control Panel)
+ *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  Author: Raymond Newton
+ *  Date: 02 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
  *
- * Purpose:
- * Provides system‑level controls and analytics for the merchant device.
+ *  Purpose:
+ *  Provides system‑level analytics, merchant information, and
+ *  administrative controls for the HoloTap merchant device.
+ *  This includes:
+ *    - Viewing all ledger transactions
+ *    - Calculating total revenue
+ *    - Displaying registered merchant identity
+ *    - Performing a full system reset (logs + tokens)
+ *
+ *  Flow Context:
+ *  - Replaces the academic “Flow 10 — Admin Dashboard”
+ *  - Accessible only after a valid merchant session is restored
+ *  - Part of the merchant‑side operational toolkit
+ *
+ *  Security Notes:
+ *  - Session is validated on mount via getSession() + touchSession()
+ *  - Ledger is read from `ht_logs` (append‑only transaction history)
+ *  - System reset wipes:
+ *        • ht_logs
+ *        • ht_last_qr_token
+ *    but does NOT remove merchant identity or sessions
+ *
+ *  Data Model:
+ *  Ledger Entry:
+ *  {
+ *    id: string,
+ *    amount: number,
+ *    description?: string,
+ *    processedAt: number,
+ *    userId: string,
+ *    sessionId: string
+ *  }
+ *
+ *  Dependencies:
+ *  - UserService.getUser()          → loads merchant profile
+ *  - Session.getSession()           → session gate
+ *  - Session.touchSession()         → extend session TTL
+ *  - formatCurrency()               → currency formatting helper
+ *
+ * ============================================================
  */
 
 import { useEffect, useState } from "react";
