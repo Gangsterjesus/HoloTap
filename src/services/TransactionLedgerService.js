@@ -1,54 +1,71 @@
 /**
- * TransactionLedgerService.js
- * System‑level ledger operations for administrators.
- * 
- * Responsibilities:
- * - Load and save the global transaction ledger (ht_logs)
- * - Append new transactions
- * - Delete transactions
- * - Provide full audit trail access
+ * ============================================================
+ *  HoloTap — Transaction Ledger Service
+ *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  Author: Raymond Newton
+ *  Date: 02 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
+ *
+ *  Purpose:
+ *  Provides a persistent, append‑only transaction ledger for all
+ *  HoloTap payment events. This ledger is the authoritative audit
+ *  trail for merchants, administrators, and system integrity.
+ *
+ *  Architectural Notes:
+ *  - Ledger entries are immutable once written.
+ *  - Refunds and voids DO NOT modify the ledger; they are stored
+ *    separately in RefundService.js under `ht_refunds`.
+ *  - Ledger is stored in localStorage under `ht_logs`.
+ *  - All entries include merchant tagID for identity scoping.
+ *
+ *  Ledger Entry Structure:
+ *  {
+ *    transactionId: string,
+ *    amount: number,
+ *    timestamp: number,
+ *    tagID: string,          // merchant identity
+ *    consumerId: string,     // optional
+ *    type: "payment"
+ *  }
+ *
+ *  Exports:
+ *  - loadLedger()
+ *  - saveLogs(entry)
+ *
+ * ============================================================
  */
 
-const LOG_KEY = "ht_logs";
+// src/services/TransactionLedgerService.js
+
+const LEDGER_KEY = "ht_logs";
 
 /* -------------------------------------------------------
-   Load & Save Ledger
+   Load Ledger
 ------------------------------------------------------- */
 
 export function loadLedger() {
-  return JSON.parse(localStorage.getItem(LOG_KEY) || "[]");
-}
-
-export function saveLedger(logs) {
-  localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+  try {
+    return JSON.parse(localStorage.getItem(LEDGER_KEY) || "[]");
+  } catch {
+    return [];
+  }
 }
 
 /* -------------------------------------------------------
-   Append a new transaction
+   Append to Ledger (saveLogs)
 ------------------------------------------------------- */
 
-export function appendTransaction(tx) {
+export function saveLogs(entry) {
   const logs = loadLedger();
-  logs.push(tx);
-  saveLedger(logs);
-  return tx;
-}
 
-/* -------------------------------------------------------
-   Delete a transaction (admin‑only)
-------------------------------------------------------- */
+  const record = {
+    ...entry,
+    timestamp: entry.timestamp || Date.now()
+  };
 
-export function deleteTransaction(transactionId) {
-  const logs = loadLedger();
-  const filtered = logs.filter((t) => t.transactionId !== transactionId);
-  saveLedger(filtered);
-  return { success: true };
-}
+  logs.push(record);
+  localStorage.setItem(LEDGER_KEY, JSON.stringify(logs));
 
-/* -------------------------------------------------------
-   Full audit trail
-------------------------------------------------------- */
-
-export function getAuditTrail() {
-  return loadLedger();
+  return record;
 }

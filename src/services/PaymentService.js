@@ -16,6 +16,8 @@ function loadLogs() {
   return JSON.parse(localStorage.getItem(LOG_KEY) || "[]");
 }
 
+
+
 function loadRefunds() {
   return JSON.parse(localStorage.getItem(REFUND_KEY) || "[]");
 }
