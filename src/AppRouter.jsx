@@ -17,8 +17,8 @@ import { useEffect, useState } from "react";
 import { getUser } from "./services/userService";
 import { getSession } from "./Utils/Session";
 
-import ConsumerRouter from "./Routers/ConsumerRouter.js";
-import MerchantRouter from "./Routers/MerchantRouter.jsx";
+import { ConsumerRouter, MerchantRouter } from "./Routers";
+
 
 export default function AppRouter() {
   const [user, setUser] = useState(null);
