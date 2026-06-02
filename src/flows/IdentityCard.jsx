@@ -1,28 +1,21 @@
-// src/flows/Flow6IdentityCard.jsx
-
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-import { getUser } from "../services/UserService";
-import { encryptPayload } from "../Utils/Token";
-import { getSession, touchSession } from "../Utils/Session";
-
-
-
-// formatCurrency not needed in this component
+import { getUser } from "../services/userService";
+import { encryptPayload } from "../utils/token";
+import { getSession, touchSession } from "../utils/session";
 
 export default function Flow6IdentityCard({ setFlow }) {
   const [user, setUser] = useState(null);
   const [identityQR, setIdentityQR] = useState(null);
 
-  // 🔐 Session‑gate patch
+  // Session gate
   useEffect(() => {
     const session = getSession();
     if (!session) {
       alert("Your session has expired. Please log in again.");
-      setFlow(2);
+      setFlow(2); // Back to login
       return;
     }
-
     touchSession();
   }, [setFlow]);
 
@@ -47,9 +40,10 @@ export default function Flow6IdentityCard({ setFlow }) {
 
   if (!user) {
     return (
-      <div className="ht-container">
-        <h2>Flow 6 — Identity Card</h2>
-        <p>No user profile found.</p>
+      <div className="flow6__container">
+        <h2 className="flow6__title">Flow 6 — Merchant Identity</h2>
+        <p>No merchant profile found.</p>
+
         <button className="cta__button" onClick={() => setFlow(1)}>
           Go to Registration
         </button>
@@ -58,33 +52,28 @@ export default function Flow6IdentityCard({ setFlow }) {
   }
 
   return (
-    <div className="ht-container">
-      <h2>Flow 6 — Identity Card</h2>
-      <p>Your official HoloTap creator identity.</p>
+    <div className="flow6__container">
+      <h2 className="flow6__title">Flow 6 — Merchant Identity</h2>
+      <p className="flow6__subtitle">Your official HoloTap merchant identity.</p>
 
-      <div className="ht-card" style={{ marginTop: 20, padding: 20 }}>
-        <h3>{user.name}</h3>
+      <div className="flow6__card">
+        <h3 className="flow6__name">{user.name}</h3>
 
         <p><strong>User ID:</strong> {user.userId}</p>
-
-        {/* ⭐ Mobile formatting fallback */}
         <p><strong>Mobile:</strong> {String(user.mobile).trim()}</p>
 
         {identityQR && (
-          <div style={{ marginTop: 20 }}>
+          <div className="flow6__qrblock">
             <h4>Identity QR</h4>
             <QRCode value={identityQR} size={160} />
 
-            {/* ⭐ Expiry notice */}
-            <p style={{ marginTop: 10, fontSize: "0.9em", opacity: 0.7 }}>
+            <p className="flow6__expiry">
               This identity QR expires in 5 minutes.
             </p>
 
-            {/* ⭐ Regenerate QR */}
             <button
               className="cta__button"
               onClick={() => window.location.reload()}
-              style={{ marginTop: 10 }}
             >
               Regenerate Identity QR
             </button>
@@ -92,11 +81,12 @@ export default function Flow6IdentityCard({ setFlow }) {
         )}
       </div>
 
-      <div style={{ marginTop: 20 }}>
-        <button className="cta__button" onClick={() => setFlow(5)}>
-          Back to Dashboard
-        </button>
-      </div>
+      <button
+        className="cta__button flow6__back"
+        onClick={() => setFlow(5)} // Back to Merchant Dashboard
+      >
+        Back to Dashboard
+      </button>
     </div>
   );
 }

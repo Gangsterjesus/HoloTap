@@ -1,4 +1,11 @@
-// src/flows/Flow10AdminDashboard.jsx
+/**
+ * HoloTap — Admin Dashboard (Flow 10)
+ * Author: Raymond Newton
+ * Date: 01 June 2026
+ *
+ * Purpose:
+ * Provides system‑level controls and analytics for the merchant device.
+ */
 
 import { useEffect, useState } from "react";
 import { getUser } from "../services/UserService";
@@ -6,11 +13,11 @@ import { getSession, touchSession } from "../Utils/Session";
 import { formatCurrency } from "../Utils/format";
 
 export default function Flow10AdminDashboard({ setFlow }) {
-  const [creator, setCreator] = useState(null);
+  const [merchant, setMerchant] = useState(null);
   const [logs, setLogs] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
 
-  // 🔐 Session‑gate
+  // Session gate
   useEffect(() => {
     const session = getSession();
     if (!session) {
@@ -21,10 +28,10 @@ export default function Flow10AdminDashboard({ setFlow }) {
     touchSession();
   }, [setFlow]);
 
-  // Load creator + logs + revenue
+  // Load merchant + logs + revenue
   useEffect(() => {
     const u = getUser();
-    setCreator(u);
+    setMerchant(u);
 
     const storedLogs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
     setLogs(storedLogs);
@@ -35,7 +42,7 @@ export default function Flow10AdminDashboard({ setFlow }) {
     }
   }, []);
 
-  // ⚠ Admin reset
+  // System reset
   const handleResetSystem = () => {
     if (window.confirm("Are you sure? This will wipe ALL logs and tokens.")) {
       localStorage.removeItem("ht_logs");
@@ -47,39 +54,35 @@ export default function Flow10AdminDashboard({ setFlow }) {
   };
 
   return (
-    <div className="ht-container">
-      <h2>Flow 10 — Admin Dashboard</h2>
-      <p>System‑level controls and analytics.</p>
+    <div className="flow10__container">
+      <h2 className="flow10__title">Admin Dashboard</h2>
+      <p className="flow10__subtitle">System‑level controls and analytics.</p>
 
       {/* System Summary */}
-      <div className="ht-card" style={{ marginTop: 20 }}>
+      <div className="flow10__card">
         <h3>System Summary</h3>
         <p><strong>Total Transactions:</strong> {logs.length}</p>
         <p><strong>Total Revenue:</strong> {formatCurrency(totalRevenue)}</p>
       </div>
 
-      {/* Creator Info */}
-      {creator && (
-        <div className="ht-card" style={{ marginTop: 20 }}>
-          <h3>Registered Creator</h3>
-          <p><strong>Name:</strong> {creator.name}</p>
-          <p><strong>User ID:</strong> {creator.userId}</p>
-          <p><strong>Mobile:</strong> {creator.mobile}</p>
+      {/* Merchant Info */}
+      {merchant && (
+        <div className="flow10__card">
+          <h3>Registered Merchant</h3>
+          <p><strong>Name:</strong> {merchant.name}</p>
+          <p><strong>User ID:</strong> {merchant.userId}</p>
+          <p><strong>Mobile:</strong> {merchant.mobile}</p>
         </div>
       )}
 
       {/* All Transactions */}
-      <div className="ht-card" style={{ marginTop: 20 }}>
+      <div className="flow10__card">
         <h3>All Transactions</h3>
 
         {logs.length === 0 && <p>No transactions found.</p>}
 
         {logs.map((tx) => (
-          <div
-            key={tx.id}
-            className="ht-card"
-            style={{ marginBottom: 15, padding: 15 }}
-          >
+          <div key={tx.id} className="flow10__tx">
             <h4>Transaction ID: {tx.id}</h4>
 
             <p><strong>Amount:</strong> {formatCurrency(tx.amount)}</p>
@@ -100,14 +103,13 @@ export default function Flow10AdminDashboard({ setFlow }) {
       </div>
 
       {/* Controls */}
-      <div style={{ marginTop: 20 }}>
+      <div className="flow10__controls">
         <button className="cta__button" onClick={() => setFlow(5)}>
-          Back to Creator Dashboard
+          Back to Merchant Dashboard
         </button>
 
         <button
-          className="cta__button"
-          style={{ marginLeft: 10, backgroundColor: "#b30000" }}
+          className="cta__button flow10__reset"
           onClick={handleResetSystem}
         >
           Reset System

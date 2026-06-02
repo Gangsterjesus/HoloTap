@@ -1,18 +1,16 @@
-// src/flows/Flow7Processing.jsx
-
 /**
- * HoloTap — Flow 7: Payment Processing
+ * HoloTap — Flow 7A: Consumer Payment Processing
  * Author: Raymond Newton
  * Date: 01 June 2026
  *
  * Purpose:
- * Verifies the QR token generated in Flow 3 and transitions to the
- * confirmation screen once the token is valid and within TTL.
+ * Verifies the QR token generated in Flow 3 and transitions to
+ * Flow 4 (Payment Confirmation) once the token is valid.
  */
 
 import { useEffect, useState } from "react";
-import { decryptPayload } from "../Utils/Token";
-import { formatCurrency } from "../Utils/format";
+import { decryptPayload } from "../utils/token";
+import { formatCurrency } from "../utils/format";
 
 export default function Flow7Processing({ setFlow }) {
   const [status, setStatus] = useState("processing");
@@ -36,7 +34,7 @@ export default function Flow7Processing({ setFlow }) {
         setDetails(payload);
         setStatus("success");
 
-        // Optionally persist verified transaction
+        // Persist verified transaction
         const logs = JSON.parse(localStorage.getItem("ht_logs") || "[]");
         logs.push({
           id: crypto.randomUUID(),
@@ -46,9 +44,11 @@ export default function Flow7Processing({ setFlow }) {
         });
         localStorage.setItem("ht_logs", JSON.stringify(logs));
 
+        // Redirect to Flow 4 (Payment Confirmation)
         setTimeout(() => setFlow(4), 1200);
-      } catch (error) {
-        console.error("Token verification failed:", error);
+
+      } catch (err) {
+        console.error("Token verification failed:", err);
         setError("Payment token is invalid or has expired.");
         setStatus("error");
       }
@@ -59,8 +59,8 @@ export default function Flow7Processing({ setFlow }) {
 
   if (status === "processing") {
     return (
-      <div className="ht-container">
-        <h2>Flow 7 — Processing Payment</h2>
+      <div className="flow7a__container">
+        <h2 className="flow7a__title">Flow 7 — Processing Payment</h2>
         <p>Please wait while we verify your payment token…</p>
       </div>
     );
@@ -68,9 +68,10 @@ export default function Flow7Processing({ setFlow }) {
 
   if (status === "error") {
     return (
-      <div className="ht-container">
-        <h2>Flow 7 — Processing Error</h2>
+      <div className="flow7a__container">
+        <h2 className="flow7a__title">Flow 7 — Processing Error</h2>
         <p>{error}</p>
+
         <button className="cta__button" onClick={() => setFlow(3)}>
           Back to Payment
         </button>
@@ -79,19 +80,23 @@ export default function Flow7Processing({ setFlow }) {
   }
 
   return (
-    <div className="ht-container">
-      <h2>Flow 7 — Payment Verified</h2>
+    <div className="flow7a__container">
+      <h2 className="flow7a__title">Flow 7 — Payment Verified</h2>
+
       {details && (
-        <div className="ht-card">
+        <div className="flow7a__card">
           <p>
             <strong>Amount:</strong> {formatCurrency(details.amount)}
           </p>
+
           {details.description && (
             <p>
-              <strong>Description:</strong> {details.description}</p>
+              <strong>Description:</strong> {details.description}
+            </p>
           )}
         </div>
       )}
+
       <p>Redirecting to confirmation…</p>
     </div>
   );
