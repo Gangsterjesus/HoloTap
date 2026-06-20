@@ -59,3 +59,7 @@ export function findConsumer(fullMobile) {
   return list.find((c) => c.fullMobile === fullMobile);
 }
 
+/* Get consumer by mobile (alias for findConsumer) */
+export function getConsumerByMobile(fullMobile) {
+  return findConsumer(fullMobile);
+}

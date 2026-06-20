@@ -89,3 +89,9 @@ export function touchMerchantSession() {
 export function clearMerchantSession() {
   localStorage.removeItem(MERCHANT_SESSION_KEY);
 }
+/* -------------------------------------------------------
+   Store Merchant Session (manual setter)
+------------------------------------------------------- */
+export function storeMerchantSession(session) {
+  localStorage.setItem(MERCHANT_SESSION_KEY, JSON.stringify(session));
+}

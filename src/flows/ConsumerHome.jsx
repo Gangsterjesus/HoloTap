@@ -36,7 +36,8 @@ import {
   createConsumerSession,
   clearConsumerSession
 } from "../Utils/ConsumerSession.js";
-import { getConsumerByMobile } from "../services/ConsumerService.js";
+import { getConsumerByMobile } from "../services/ConsumerServices.js";
+
 
 export default function ConsumerLogin({ onLogin }) {
   const [dialCode, setDialCode] = useState("+44");
