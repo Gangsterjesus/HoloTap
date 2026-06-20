@@ -1,4 +1,21 @@
-/* src/components/Gallery.css */
+/**
+ * ============================================================
+ *  HoloTap — Image Gallery Stylesheet
+ *  File: src/components/Gallery.css
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+ *  Author: Raymond Newton
+ *  Date: 20 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
+ *
+ *  Purpose:
+ *  Provides layout and visual styling for the Gallery component,
+ *  including responsive wrapping, hover interactions, and
+ *  accessible image presentation.
+ *
+ * ============================================================
+ */
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -26,5 +43,5 @@
 .gallery-caption {
   margin-top: 0.5rem;
   font-size: 0.9rem;
-  color: #444;
+  color: #444444;
 }

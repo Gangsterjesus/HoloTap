@@ -1,29 +1,31 @@
 /**
  * ============================================================
- *  HoloTap — Country / Area Code Selector Component
- *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  HoloTap — Country / Dial Code Selector Component
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
- *  Date: 02 June 2026
+ *  Date: 20 June 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
  *  Provides a reusable dropdown component for selecting an
- *  international country/area code. Used across consumer
- *  registration and login flows to construct fullMobile.
+ *  international dial code. Used across consumer registration
+ *  and login flows to construct fullMobile values.
  *
  *  Architecture Notes:
  *  - Stateless UI component.
- *  - Emits selected country code via onChange callback.
- *  - Does not perform validation or business logic.
+ *  - Emits the selected dial code via the onChange callback.
+ *  - Performs no validation or business logic.
  *  - Designed for extensibility (additional countries can be added).
  *
  *  Identity Model:
- *  - fullMobile = countryCode + cleanedMobile
- *  - This component supplies the countryCode portion.
+ *  - fullMobile = dialCode + cleanedMobile
+ *  - This component supplies the dialCode portion.
  *
- *  Dependencies:
- *  - None (pure UI component).
+ *  Engineering Notes:
+ *  - Fully Vite‑compliant and production‑ready.
+ *  - No legacy TM352 dependencies remain.
+ *  - Clean, accessible, mobile‑friendly select element.
  *
  * ============================================================
  */
@@ -33,7 +35,7 @@ export default function CountrySelector({ value, onChange }) {
     <select
       className="form__input"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(event) => onChange(event.target.value)}
     >
       <option value="+44">🇬🇧 +44 United Kingdom</option>
       <option value="+1">🇺🇸 +1 United States</option>

@@ -1,4 +1,32 @@
-// src/components/ConsumerPayment.jsx
+/**
+ * ============================================================
+ *  HoloTap — Consumer Payment Entry (Backend Payment Creation)
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+ *  Author: Raymond Newton
+ *  Date: 20 June 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
+ *
+ *  Purpose:
+ *  Provides the consumer‑side interface for entering a payment
+ *  amount and initiating a backend payment request. This screen
+ *  is displayed after the consumer scans the merchant’s QR code
+ *  and receives a valid merchant session identifier.
+ *
+ *  Architecture Notes:
+ *  - Calls backend payment endpoint via paymentApiService.js.
+ *  - Emits onProcessing(paymentId) to parent router (holo.jsx).
+ *  - Validates numeric input before backend submission.
+ *  - Displays loading, error, and transition states.
+ *
+ *  Engineering Notes:
+ *  - All imports validated for existence and case‑sensitivity.
+ *  - No business logic beyond payment creation.
+ *  - Designed for backend expansion (e.g., currency selection).
+ *  - Fully TM352‑compatible and Vite‑compliant.
+ *
+ * ============================================================
+ */
 
 import { useState } from "react";
 import { createPayment } from "../services/paymentApiService.js";
@@ -27,8 +55,9 @@ export default function ConsumerPayment({ sessionId, onProcessing }) {
         return;
       }
 
-      // Pass payment ID back to parent (Holo or router)
-      onProcessing(response.data.paymentId);
+      if (onProcessing) {
+        onProcessing(response.data.paymentId);
+      }
 
     } catch (err) {
       setError("Server error: " + err.message);

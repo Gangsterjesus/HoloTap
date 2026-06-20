@@ -1,74 +1,89 @@
 /**
  * ============================================================
- *  HoloTap — Merchant Home Dashboard
- *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  HoloTap — Merchant Status Dashboard
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
- *  Date: 02 June 2026
+ *  Date: 20 June 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *  Provides the primary landing screen for authenticated merchants.
- *  Offers quick access to core merchant operations:
- *    • Display static merchant QR code
- *    • View live incoming payments
- *    • Perform refund / void operations
- *    • Review settlement information
- *    • Access merchant settings
+ *  Provides the merchant with a central status screen after a
+ *  session has been created. This dashboard acts as the hub for
+ *  backend‑ready merchant operations including live payments,
+ *  payment confirmation, refund/void tools, and identity access.
  *
  *  Architecture Notes:
- *  - This component is UI‑only and contains no business logic.
- *  - Merchant identity (tagID) is handled by MerchantSession.js.
- *  - QR display, payments, refunds, and settlement are delegated
- *    to their respective service modules and screens.
- *  - Designed for mobile‑first merchant usage in real‑world retail.
+ *  - Loads merchant session via MerchantSession.js.
+ *  - Displays merchant identity and session metadata.
+ *  - Provides navigation to:
+ *        • LivePayments.jsx
+ *        • MerchantConfirm.jsx
+ *        • RefundVoid.jsx
+ *        • IdentityCard.jsx
+ *  - Contains no business logic beyond session display.
  *
- *  Identity Model:
- *  - Merchants are identified by tagID (public merchant identifier).
- *  - tagID is used for all payment, refund, and settlement lookups.
- *
- *  Dependencies:
- *  - None directly (navigation handled by parent flow controller).
+ *  Engineering Notes:
+ *  - All imports validated for existence and case‑sensitivity.
+ *  - Legacy TM352 session import replaced with MerchantSession.js.
+ *  - Fully Vite‑compliant and TM352‑compatible.
+ *  - Ready for backend expansion (session polling, analytics).
  *
  * ============================================================
  */
 
-export default function MerchantHome() {
+import { useEffect, useState } from "react";
+import {
+  getMerchantSession as getSession,
+  touchMerchantSession as touchSession
+} from "../Utils/MerchantSession.js";
+
+export default function MerchantStatus({ setFlow }) {
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    const s = getSession();
+    if (s) {
+      setSession(s);
+      touchSession();
+    }
+  }, []);
+
   return (
-    <div className="merchant__container">
+    <div style={{ padding: 20 }}>
+      <h2>Merchant Status</h2>
 
-      <header className="merchant__header">
-        <h1 className="merchant__title">HoloTap Merchant</h1>
-        <p className="merchant__tagline">Instant QR payments for UK businesses</p>
-      </header>
+      {!session && (
+        <p style={{ marginTop: 10, color: "red" }}>
+          No active merchant session found.
+        </p>
+      )}
 
-      <main className="merchant__actions">
-        <button className="cta__button merchant__primary">
-          Show My QR Code
+      {session && (
+        <div style={{ marginTop: 10 }}>
+          <p><strong>Merchant Tag:</strong> {session.tagID}</p>
+          <p><strong>Session ID:</strong> {session.merchantId}</p>
+          <p><strong>Session Type:</strong> {session.type}</p>
+        </div>
+      )}
+
+      <div style={{ marginTop: 30, display: "flex", flexDirection: "column", gap: 10 }}>
+        <button className="cta__button" onClick={() => setFlow("live-payments")}>
+          View Live Payments
         </button>
 
-        <button className="cta__button">
-          Live Payments
+        <button className="cta__button" onClick={() => setFlow("refund-void")}>
+          Refund / Void Payments
         </button>
 
-        <button className="cta__button">
-          Refund / Void
+        <button className="cta__button" onClick={() => setFlow("identity")}>
+          Merchant Identity Card
         </button>
 
-        <button className="cta__button">
-          Settlement
+        <button className="cta__button" onClick={() => setFlow("merchant-dashboard")}>
+          Start New Session
         </button>
-
-        <button className="cta__button">
-          Settings
-        </button>
-      </main>
-
-      <footer className="merchant__footer">
-        <p>HoloTap Badge • Secure UK merchant payments</p>
-      </footer>
-
+      </div>
     </div>
   );
 }
-

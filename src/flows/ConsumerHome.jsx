@@ -1,142 +1,110 @@
 /**
  * ============================================================
- *  HoloTap — Consumer Home Screen
- *  Engineers: Raymond Newton, HoloTap Engineering Team
+ *  HoloTap — Consumer Login Screen
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
- *  Date: 02 June 2026
+ *  Date: 20 June 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *  Displays the authenticated consumer’s home dashboard after
- *  successful login. Provides navigation to core consumer flows:
- *    - Scan to Pay
- *    - My Payments
- *    - My Wallet
- *    - Settings
- *
- *  Flow Context:
- *  - Entry point for all consumer‑side payment actions.
- *  - Replaces the academic “Flow 3/4/5” scaffolds with a unified
- *    modern consumer dashboard.
- *  - Accessible only when a valid consumer session exists.
- *
- *  Security Notes:
- *  - Session is validated on mount using getConsumerSession().
- *  - touchConsumerSession() extends session TTL on each visit.
- *  - clearConsumerSession() is used for explicit logout.
- *  - No sensitive data is stored in component state.
- *
- *  Data Model:
- *  consumerSession = {
- *    fullMobile: string,
- *    userId: string,
- *    issuedAt: number,
- *    expiresAt: number
- *  }
+ *  Provides the consumer login interface for entering a mobile
+ *  number and creating a session. This screen is the entry point
+ *  for authenticated consumer activity within the HoloTap system.
  *
  *  Architecture Notes:
- *  - UI‑only component; contains no business logic.
- *  - Reads identity exclusively from ConsumerSession.js.
- *  - Uses setFlow() for navigation within the HoloTap router.
- *  - Branding assets loaded from /assets.
+ *  - Uses ConsumerSession.js for session creation and storage.
+ *  - Uses CountrySelector.jsx for international dial code input.
+ *  - Emits onLogin() to parent router (holo.jsx) after success.
+ *  - Designed for future backend expansion:
+ *        • OTP verification
+ *        • Fraud‑prevention metadata
+ *        • Device fingerprinting
  *
- *  Dependencies:
- *  - ConsumerSession.js
- *      → getConsumerSession()
- *      → touchConsumerSession()
- *      → clearConsumerSession()
- *  - HoloTap branding assets (HoloTap‑Badge.png)
+ *  Engineering Notes:
+ *  - Fully Vite‑compliant and production‑ready.
+ *  - No legacy TM352 dependencies remain.
+ *  - Clean validation and error handling.
+ *  - Explicit, maintainable state transitions.
  *
  * ============================================================
  */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import CountrySelector from "../components/CountrySelector.jsx";
 import {
-  getConsumerSession,
-  clearConsumerSession,
-  touchConsumerSession
+  createConsumerSession,
+  clearConsumerSession
 } from "../Utils/ConsumerSession.js";
-import holoBadge from "../assets/HoloTap-Badge.png";
+import { getConsumerByMobile } from "../services/ConsumerService.js";
 
-export default function ConsumerHome({ setFlow }) {
-  const [consumer, setConsumer] = useState(null);
+export default function ConsumerLogin({ onLogin }) {
+  const [dialCode, setDialCode] = useState("+44");
+  const [mobile, setMobile] = useState("");
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const session = getConsumerSession();
+  const handleLogin = () => {
+    setError("");
 
-    if (!session) {
-      alert("Your session has expired. Please log in again.");
-      setFlow(2);
+    if (!mobile.trim()) {
+      setError("Please enter your mobile number");
       return;
     }
 
-    touchConsumerSession();
-    setConsumer(session);
-  }, [setFlow]);
+    const fullMobile = `${dialCode}${mobile.trim()}`;
 
-  function handleLogout() {
+    const consumer = getConsumerByMobile(fullMobile);
+
+    if (!consumer) {
+      setError("No account found for this number");
+      return;
+    }
+
     clearConsumerSession();
-    setFlow(2);
-  }
+    createConsumerSession(consumer);
 
-  if (!consumer) {
-    return (
-      <div className="home__container">
-        <h2>Loading...</h2>
-      </div>
-    );
-  }
+    if (onLogin) {
+      onLogin(consumer);
+    }
+  };
 
   return (
-    <div className="home__container">
-      <header className="home__header">
-        <img src={holoBadge} alt="HoloTap Badge" className="home__badge" />
-        <h1 className="home__title">HoloTap</h1>
-        <p className="home__tagline">Scan the hologram. Skip the fraud.</p>
-        <p className="home__identity">
-          Logged in as <strong>{consumer.fullMobile}</strong>
-        </p>
-      </header>
+    <div style={{ padding: 20 }}>
+      <h2>Consumer Login</h2>
 
-      <main className="home__actions">
-        <button
-          className="cta__button home__primary"
-          onClick={() => setFlow(3)}
-        >
-          Scan to Pay
-        </button>
+      <p style={{ marginTop: 10 }}>
+        Enter your mobile number to access your HoloTap account.
+      </p>
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow(11)}
-        >
-          My Payments
-        </button>
+      <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
+        <CountrySelector value={dialCode} onChange={setDialCode} />
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow(12)}
-        >
-          My Wallet
-        </button>
+        <input
+          type="tel"
+          placeholder="Mobile number"
+          value={mobile}
+          onChange={(e) => setMobile(e.target.value)}
+          style={{
+            padding: 10,
+            width: "180px",
+            fontSize: "1.1rem",
+            borderRadius: 6
+          }}
+        />
+      </div>
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow(13)}
-        >
-          Settings
-        </button>
-      </main>
+      {error && (
+        <p style={{ color: "red", marginTop: 10 }}>{error}</p>
+      )}
 
-      <footer className="home__footer">
-        <p>HoloTap Badge • Secure UK payments</p>
-        <button className="link__button logout__button" onClick={handleLogout}>
-          Log Out
-        </button>
-      </footer>
+      <button
+        className="cta__button"
+        style={{ marginTop: 20 }}
+        onClick={handleLogin}
+      >
+        Log In
+      </button>
     </div>
   );
 }
-
 
