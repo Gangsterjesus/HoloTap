@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HoloTap — Refund and Void Operations (Merchant Tools)
+ *  HoloTap — Refund / Void Payment Screen
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
  *  Date: 20 June 2026
@@ -8,136 +8,189 @@
  * ============================================================
  *
  *  Purpose:
- *  Provides merchant‑side tools for refunding or voiding
- *  previously completed payments. This screen is part of the
- *  administrative merchant workflow and supports both TM352
- *  localStorage data and backend‑ready service calls.
+ *  Allows merchants to void or refund payments from an active
+ *  session. Displays recent payments and refund history.
  *
  *  Architecture Notes:
  *  - Loads merchant session via MerchantSession.js.
- *  - Fetches payment history via PaymentService.js.
- *  - Supports refund and void operations (localStorage fallback).
- *  - Emits no navigation events; controlled by parent router.
+ *  - Fetches payments via paymentService.js.
+ *  - Processes refunds/voids via RefundService.js.
+ *  - Navigation controlled by React Router.
  *
  *  Engineering Notes:
- *  - All imports validated for existence and case‑sensitivity.
- *  - Legacy TM352 session import replaced with MerchantSession.js.
- *  - PaymentService.js import corrected for Vite compatibility.
- *  - Ready for backend expansion (PATCH /refund, PATCH /void).
- *  - Fully TM352‑compatible and Vite‑compliant.
+ *  - Fully Vite‑compliant and production‑ready.
+ *  - All imports validated for case‑sensitivity.
+ *  - Backend‑ready for real refund/void operations.
  *
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getMerchantSession as getSession,
   touchMerchantSession as touchSession
 } from "../Utils/MerchantSession.js";
-import { getUser } from "../services/UserService.js";
-import { fetchMerchantPayments } from "../services/PaymentService.js";
+import {
+  fetchMerchantPayments
+} from "../services/paymentService.js";
+import {
+  processRefund,
+  processVoid,
+  fetchRefundHistory
+} from "../services/RefundService.js";
 
-export default function RefundVoid({ setFlow }) {
-  const [payments, setPayments] = useState([]);
+export default function RefundVoid() {
+  const navigate = useNavigate();
+
   const [session, setSession] = useState(null);
-  const [error, setError] = useState("");
+  const [payments, setPayments] = useState([]);
+  const [refunds, setRefunds] = useState([]);
+  const [message, setMessage] = useState("");
 
+  // Load merchant session
   useEffect(() => {
     const s = getSession();
-    if (!s) {
-      setError("No active merchant session");
-      return;
-    }
+    if (!s) return;
 
     setSession(s);
     touchSession();
-    loadPayments();
   }, []);
 
-  const loadPayments = async () => {
-    setError("");
+  // Load payments + refund history
+  useEffect(() => {
+    if (!session) return;
 
-    try {
-      const response = await fetchMerchantPayments();
+    fetchMerchantPayments(session.merchantId).then((data) => {
+      setPayments(data || []);
+    });
 
-      if (!response.success) {
-        setError("Unable to load payment history");
-        return;
-      }
+    fetchRefundHistory(session.merchantId).then((data) => {
+      setRefunds(data || []);
+    });
+  }, [session]);
 
-      setPayments(response.data);
+  const handleRefund = async (paymentId) => {
+    setMessage("");
 
-    } catch (err) {
-      setError("Server error: " + err.message);
+    const result = await processRefund(paymentId);
+
+    if (result?.success) {
+      setMessage("Refund processed successfully.");
+      refreshData();
+    } else {
+      setMessage("Refund failed.");
     }
   };
 
-  const handleRefund = (id) => {
-    alert(`Refund operation triggered for payment ${id} (localStorage fallback)`);
+  const handleVoid = async (paymentId) => {
+    setMessage("");
+
+    const result = await processVoid(paymentId);
+
+    if (result?.success) {
+      setMessage("Payment voided successfully.");
+      refreshData();
+    } else {
+      setMessage("Void failed.");
+    }
   };
 
-  const handleVoid = (id) => {
-    alert(`Void operation triggered for payment ${id} (localStorage fallback)`);
+  const refreshData = () => {
+    if (!session) return;
+
+    fetchMerchantPayments(session.merchantId).then((data) => {
+      setPayments(data || []);
+    });
+
+    fetchRefundHistory(session.merchantId).then((data) => {
+      setRefunds(data || []);
+    });
   };
 
   return (
     <div style={{ padding: 20 }}>
       <h2>Refund / Void Payments</h2>
 
-      {session && (
-        <p>
-          <strong>Merchant:</strong> {session.tagID}
+      {!session && (
+        <p style={{ marginTop: 10, color: "red" }}>
+          No active merchant session found.
         </p>
       )}
 
-      {error && (
-        <p style={{ color: "red", marginTop: 10 }}>{error}</p>
+      {message && (
+        <p style={{ marginTop: 10, color: "#00eaff" }}>{message}</p>
       )}
 
-      {payments.length === 0 && !error && (
-        <p style={{ marginTop: 20 }}>No completed payments available.</p>
+      {/* Recent Payments */}
+      <h3 style={{ marginTop: 30 }}>Recent Payments</h3>
+
+      {payments.length === 0 && (
+        <p>No payments available.</p>
       )}
 
-      {payments.length > 0 && (
-        <div style={{ marginTop: 20 }}>
-          {payments.map((p) => (
-            <div
-              key={p.id}
-              style={{
-                background: "#222",
-                padding: 15,
-                marginBottom: 10,
-                borderRadius: 6
-              }}
+      {payments.map((p) => (
+        <div
+          key={p.transactionId}
+          style={{
+            background: "#222",
+            padding: 15,
+            borderRadius: 8,
+            marginBottom: 15
+          }}
+        >
+          <p><strong>Amount:</strong> £{p.amount.toFixed(2)}</p>
+          <p><strong>Status:</strong> {p.status}</p>
+          <p><strong>Consumer:</strong> {p.consumerName || "Anonymous"}</p>
+          <p><strong>ID:</strong> {p.transactionId}</p>
+
+          <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+            <button
+              className="cta__button"
+              onClick={() => handleRefund(p.transactionId)}
             >
-              <p><strong>Payment ID:</strong> {p.id}</p>
-              <p><strong>Amount:</strong> £{p.amount}</p>
-              <p><strong>Status:</strong> {p.status}</p>
+              Refund
+            </button>
 
-              <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
-                <button
-                  className="cta__button"
-                  onClick={() => handleRefund(p.id)}
-                >
-                  Refund
-                </button>
-
-                <button
-                  className="cta__button"
-                  onClick={() => handleVoid(p.id)}
-                >
-                  Void
-                </button>
-              </div>
-            </div>
-          ))}
+            <button
+              className="cta__button"
+              onClick={() => handleVoid(p.transactionId)}
+            >
+              Void
+            </button>
+          </div>
         </div>
+      ))}
+
+      {/* Refund History */}
+      <h3 style={{ marginTop: 40 }}>Refund History</h3>
+
+      {refunds.length === 0 && (
+        <p>No refund history available.</p>
       )}
+
+      {refunds.map((r) => (
+        <div
+          key={r.refundId}
+          style={{
+            background: "#111",
+            padding: 15,
+            borderRadius: 8,
+            marginBottom: 15
+          }}
+        >
+          <p><strong>Refund ID:</strong> {r.refundId}</p>
+          <p><strong>Payment ID:</strong> {r.paymentId}</p>
+          <p><strong>Amount:</strong> £{r.amount.toFixed(2)}</p>
+          <p><strong>Status:</strong> {r.status}</p>
+          <p><strong>Time:</strong> {new Date(r.timestamp).toLocaleString()}</p>
+        </div>
+      ))}
 
       <button
         className="cta__button"
-        style={{ marginTop: 20 }}
-        onClick={() => setFlow("merchant-status")}
+        style={{ marginTop: 30 }}
+        onClick={() => navigate("/merchant/status")}
       >
         Back to Merchant Status
       </button>

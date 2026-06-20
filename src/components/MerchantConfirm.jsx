@@ -15,7 +15,7 @@
  *
  *  Architecture Notes:
  *  - Calls backend confirmation endpoint via paymentApiService.js.
- *  - Emits onComplete() to parent router (holo.jsx) after success.
+ *  - Redirects to /merchant/status after successful confirmation.
  *  - Displays loading, error, and confirmation states.
  *  - No business logic beyond payment approval.
  *
@@ -29,9 +29,13 @@
  */
 
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { confirmPayment } from "../services/paymentApiService.js";
 
-export default function MerchantConfirm({ paymentId, onComplete }) {
+export default function MerchantConfirm() {
+  const navigate = useNavigate();
+  const { paymentId } = useParams();
+
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState("");
@@ -57,9 +61,10 @@ export default function MerchantConfirm({ paymentId, onComplete }) {
 
       setConfirmed(true);
 
-      if (onComplete) {
-        setTimeout(() => onComplete(), 1200);
-      }
+      // Navigate back to merchant status after a short delay
+      setTimeout(() => {
+        navigate("/merchant/status", { replace: true });
+      }, 1200);
 
     } catch (err) {
       setError("Server error: " + err.message);

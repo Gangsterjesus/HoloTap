@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HoloTap — Consumer Payment Processing Screen
+ *  HoloTap — Consumer Payment Confirmation Screen
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
  *  Date: 20 June 2026
@@ -8,17 +8,16 @@
  * ============================================================
  *
  *  Purpose:
- *  Displays a transitional “processing” state to the consumer
- *  after a payment has been created. This screen prevents
- *  duplicate submissions and prepares the user for the final
- *  confirmation stage once the merchant approves the payment.
+ *  Displays the final confirmation state to the consumer after
+ *  completing a payment. This screen is shown once the consumer
+ *  has finished the payment flow and is ready to return home.
  *
  *  Architecture Notes:
  *  - Pure UI component; contains no business logic.
  *  - Designed for future backend expansion:
- *        • Polling for payment status
- *        • WebSocket real‑time updates
- *        • Automatic transition to confirmation screen
+ *        • Displaying payment metadata
+ *        • Showing merchant confirmation details
+ *        • Loyalty or receipt integration
  *  - Navigation controlled by React Router.
  *
  *  Engineering Notes:
@@ -29,22 +28,25 @@
  * ============================================================
  */
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function ConsumerProcessing() {
+export default function ConsumerConfirm() {
   const navigate = useNavigate();
+  const { paymentId } = useParams();
 
   return (
     <div style={{ padding: 20, textAlign: "center" }}>
-      <h2>Processing Payment</h2>
+      <h2>Payment Complete</h2>
 
       <p style={{ marginTop: 10 }}>
-        Your payment request has been sent to the merchant.
+        Your payment has been successfully submitted.
       </p>
 
-      <p style={{ marginTop: 10 }}>
-        Please wait while the merchant confirms the transaction.
-      </p>
+      {paymentId && (
+        <p style={{ marginTop: 10, opacity: 0.8 }}>
+          Payment ID: <strong>{paymentId}</strong>
+        </p>
+      )}
 
       <div
         style={{
@@ -52,8 +54,8 @@ export default function ConsumerProcessing() {
           width: 60,
           height: 60,
           borderRadius: "50%",
-          border: "6px solid #555",
-          borderTopColor: "#00eaff",
+          border: "6px solid #00ff99",
+          borderTopColor: "#222",
           animation: "spin 1s linear infinite",
           marginLeft: "auto",
           marginRight: "auto"
@@ -61,7 +63,7 @@ export default function ConsumerProcessing() {
       />
 
       <p style={{ marginTop: 20, fontStyle: "italic" }}>
-        This may take a few moments.
+        Thank you for using HoloTap.
       </p>
 
       <button
@@ -69,7 +71,7 @@ export default function ConsumerProcessing() {
         style={{ marginTop: 30 }}
         onClick={() => navigate("/consumer")}
       >
-        Cancel and Return Home
+        Return Home
       </button>
     </div>
   );

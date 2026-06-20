@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HoloTap — Live Payments (Merchant Pending Payments View)
+ *  HoloTap — Merchant Live Payments Screen
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
  *  Date: 20 June 2026
@@ -8,90 +8,123 @@
  * ============================================================
  *
  *  Purpose:
- *  Provides the merchant with a real‑time list of pending
- *  consumer payments. This screen allows the merchant to select
- *  a payment for confirmation, transitioning to the backend
- *  approval flow (MerchantConfirm.jsx).
+ *  Displays real‑time incoming payments for the merchant during
+ *  an active session. Provides visibility of pending, approved,
+ *  and rejected transactions.
  *
  *  Architecture Notes:
- *  - Designed for backend integration via PaymentService.js.
- *  - Emits onSelectPayment(paymentId) to parent router (holo.jsx).
- *  - Falls back to localStorage for TM352 compatibility.
- *  - No business logic beyond listing and selecting payments.
+ *  - Loads merchant session via MerchantSession.js.
+ *  - Fetches live payments via PaymentService.js.
+ *  - Pure UI component; no business logic beyond display.
+ *  - Navigation controlled by React Router.
  *
  *  Engineering Notes:
- *  - All imports validated for existence and case‑sensitivity.
- *  - Handles empty states gracefully.
- *  - Fully Vite‑compliant and TM352‑compatible.
- *  - Ready for backend expansion (polling, WebSockets, etc.).
+ *  - Fully Vite‑compliant and production‑ready.
+ *  - All imports validated for case‑sensitivity.
+ *  - Ready for backend expansion (WebSockets, polling).
  *
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
-import { fetchMerchantPayments } from "../services/PaymentService.js";
+import { useNavigate } from "react-router-dom";
+import {
+  getMerchantSession as getSession,
+  touchMerchantSession as touchSession
+} from "../Utils/MerchantSession.js";
+import { fetchMerchantPayments } from "../services/paymentService.js";
 
-export default function LivePayments({ onSelectPayment }) {
+export default function LivePayments() {
+  const navigate = useNavigate();
+
+  const [session, setSession] = useState(null);
   const [payments, setPayments] = useState([]);
-  const [error, setError] = useState("");
 
+  // Load session
   useEffect(() => {
-    loadPayments();
+    const s = getSession();
+    if (!s) return;
+
+    setSession(s);
+    touchSession();
   }, []);
 
-  const loadPayments = async () => {
-    setError("");
+  // Load payments
+  useEffect(() => {
+    if (!session) return;
 
-    try {
-      const response = await fetchMerchantPayments();
-
-      if (!response.success) {
-        setError("Unable to load payments");
-        return;
-      }
-
-      setPayments(response.data);
-
-    } catch (err) {
-      setError("Server error: " + err.message);
-    }
-  };
+    fetchMerchantPayments(session.merchantId).then((data) => {
+      setPayments(data || []);
+    });
+  }, [session]);
 
   return (
     <div style={{ padding: 20 }}>
       <h2>Live Payments</h2>
-      <p>Pending consumer payments awaiting merchant confirmation.</p>
 
-      {error && (
-        <p style={{ color: "red", marginTop: 10 }}>{error}</p>
+      {!session && (
+        <p style={{ marginTop: 10, color: "red" }}>
+          No active merchant session found.
+        </p>
       )}
 
-      {payments.length === 0 && !error && (
-        <p style={{ marginTop: 20 }}>No pending payments.</p>
+      {session && (
+        <p style={{ marginTop: 10 }}>
+          Viewing payments for merchant <strong>{session.tagID}</strong>
+        </p>
       )}
 
-      {payments.length > 0 && (
-        <div style={{ marginTop: 20 }}>
-          {payments.map((p) => (
-            <div
-              key={p.id}
-              style={{
-                background: "#222",
-                padding: 15,
-                marginBottom: 10,
-                borderRadius: 6,
-                cursor: "pointer"
-              }}
-              onClick={() => onSelectPayment(p.id)}
-            >
-              <p><strong>Payment ID:</strong> {p.id}</p>
-              <p><strong>Amount:</strong> £{p.amount}</p>
-              <p><strong>Status:</strong> {p.status}</p>
+      <div style={{ marginTop: 20 }}>
+        {payments.length === 0 && (
+          <p>No payments yet. Your QR code is ready to scan.</p>
+        )}
+
+        {payments.map((p) => (
+          <div
+            key={p.transactionId}
+            style={{
+              background: "#222",
+              padding: 15,
+              borderRadius: 8,
+              marginBottom: 15
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "1.2rem" }}>£{p.amount.toFixed(2)}</span>
+              <span
+                style={{
+                  color:
+                    p.status === "APPROVED"
+                      ? "#00ff99"
+                      : p.status === "REJECTED"
+                      ? "#ff4444"
+                      : "#00eaff"
+                }}
+              >
+                {p.status}
+              </span>
             </div>
-          ))}
-        </div>
-      )}
+
+            <p style={{ marginTop: 10 }}>
+              <strong>Consumer:</strong> {p.consumerName || "Anonymous"}
+            </p>
+            <p>
+              <strong>Time:</strong> {new Date(p.timestamp).toLocaleString()}
+            </p>
+            <p>
+              <strong>ID:</strong> {p.transactionId}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        className="cta__button"
+        style={{ marginTop: 20 }}
+        onClick={() => navigate("/merchant/status")}
+      >
+        Back to Merchant Status
+      </button>
     </div>
   );
 }
-

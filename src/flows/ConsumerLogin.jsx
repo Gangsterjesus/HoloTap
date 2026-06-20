@@ -32,16 +32,21 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CountrySelector from "../components/CountrySelector";
 import { findConsumer } from "../services/ConsumerService";
 import { createConsumerSession } from "../Utils/ConsumerSession";
 
-export default function ConsumerLogin({ setFlow }) {
+export default function ConsumerLogin() {
+  const navigate = useNavigate();
+
   const [country, setCountry] = useState("+44");
   const [mobile, setMobile] = useState("");
   const [error, setError] = useState("");
 
   function handleLogin() {
+    setError("");
+
     if (!mobile.trim()) {
       setError("Please enter your mobile number.");
       return;
@@ -58,7 +63,9 @@ export default function ConsumerLogin({ setFlow }) {
     }
 
     createConsumerSession(consumer);
-    setFlow(3); // Go to consumer home
+
+    // Redirect to consumer home
+    navigate("/consumer", { replace: true });
   }
 
   return (
@@ -84,7 +91,10 @@ export default function ConsumerLogin({ setFlow }) {
         Confirm & Continue
       </button>
 
-      <button className="link__button" onClick={() => setFlow(1)}>
+      <button
+        className="link__button"
+        onClick={() => navigate("/register")}
+      >
         Not you? Register again
       </button>
     </div>

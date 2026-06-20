@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HoloTap — Consumer Login Screen
+ *  HoloTap — Consumer Home Screen
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
  *  Date: 20 June 2026
@@ -8,103 +8,105 @@
  * ============================================================
  *
  *  Purpose:
- *  Provides the consumer login interface for entering a mobile
- *  number and creating a session. This screen is the entry point
- *  for authenticated consumer activity within the HoloTap system.
+ *  Provides the consumer with a central navigation hub after
+ *  authentication. Allows access to payment entry, wallet,
+ *  payment history, and future consumer tools.
  *
  *  Architecture Notes:
- *  - Uses ConsumerSession.js for session creation and storage.
- *  - Uses CountrySelector.jsx for international dial code input.
- *  - Emits onLogin() to parent router (holo.jsx) after success.
+ *  - Loads consumer session via ConsumerSession.js.
+ *  - Displays consumer identity and session metadata.
+ *  - Navigation controlled by React Router.
  *  - Designed for future backend expansion:
- *        • OTP verification
- *        • Fraud‑prevention metadata
- *        • Device fingerprinting
+ *        • Payment history
+ *        • Wallet balance
+ *        • Loyalty features
  *
  *  Engineering Notes:
  *  - Fully Vite‑compliant and production‑ready.
+ *  - All imports validated for case‑sensitivity.
  *  - No legacy TM352 dependencies remain.
- *  - Clean validation and error handling.
- *  - Explicit, maintainable state transitions.
+ *  - Clean, minimal, user‑friendly design.
  *
  * ============================================================
  */
 
-import { useState } from "react";
-import CountrySelector from "../components/CountrySelector.jsx";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  createConsumerSession,
+  getConsumerSession as getSession,
   clearConsumerSession
 } from "../Utils/ConsumerSession.js";
-import { getConsumerByMobile } from "../services/ConsumerServices.js";
 
+export default function ConsumerHome() {
+  const navigate = useNavigate();
+  const [consumer, setConsumer] = useState(null);
 
-export default function ConsumerLogin({ onLogin }) {
-  const [dialCode, setDialCode] = useState("+44");
-  const [mobile, setMobile] = useState("");
-  const [error, setError] = useState("");
-
-  const handleLogin = () => {
-    setError("");
-
-    if (!mobile.trim()) {
-      setError("Please enter your mobile number");
-      return;
+  useEffect(() => {
+    const s = getSession();
+    if (s) {
+      setConsumer(s);
     }
+  }, []);
 
-    const fullMobile = `${dialCode}${mobile.trim()}`;
-
-    const consumer = getConsumerByMobile(fullMobile);
-
-    if (!consumer) {
-      setError("No account found for this number");
-      return;
-    }
-
+  const logout = () => {
     clearConsumerSession();
-    createConsumerSession(consumer);
-
-    if (onLogin) {
-      onLogin(consumer);
-    }
+    navigate("/login", { replace: true });
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Consumer Login</h2>
+    <div className="home__container">
+      <header className="home__header">
+        <h1 className="home__title">HoloTap</h1>
+        <p className="home__tagline">Scan the hologram. Skip the fraud.</p>
+      </header>
 
-      <p style={{ marginTop: 10 }}>
-        Enter your mobile number to access your HoloTap account.
-      </p>
-
-      <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
-        <CountrySelector value={dialCode} onChange={setDialCode} />
-
-        <input
-          type="tel"
-          placeholder="Mobile number"
-          value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
-          style={{
-            padding: 10,
-            width: "180px",
-            fontSize: "1.1rem",
-            borderRadius: 6
-          }}
-        />
-      </div>
-
-      {error && (
-        <p style={{ color: "red", marginTop: 10 }}>{error}</p>
+      {consumer && (
+        <p style={{ marginTop: 10, opacity: 0.8 }}>
+          Logged in as <strong>{consumer.fullMobile}</strong>
+        </p>
       )}
 
-      <button
-        className="cta__button"
-        style={{ marginTop: 20 }}
-        onClick={handleLogin}
-      >
-        Log In
-      </button>
+      <main className="home__actions">
+        <button
+          className="cta__button home__primary"
+          onClick={() => navigate("/pay")}
+        >
+          Scan to Pay
+        </button>
+
+        <button
+          className="cta__button"
+          onClick={() => navigate("/payments")}
+        >
+          My Payments
+        </button>
+
+        <button
+          className="cta__button"
+          onClick={() => navigate("/wallet")}
+        >
+          My Wallet
+        </button>
+
+        <button
+          className="cta__button"
+          onClick={() => navigate("/settings")}
+        >
+          Settings
+        </button>
+      </main>
+
+      <footer className="home__footer">
+        <button
+          className="link__button"
+          style={{ marginTop: 20 }}
+          onClick={logout}
+        >
+          Log Out
+        </button>
+
+        <p style={{ marginTop: 10 }}>HoloTap Badge • Secure UK payments</p>
+      </footer>
     </div>
   );
 }

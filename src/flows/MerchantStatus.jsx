@@ -9,36 +9,34 @@
  *
  *  Purpose:
  *  Provides the merchant with a central status screen after a
- *  session has been created. This dashboard acts as the hub for
- *  backend‑ready merchant operations including live payments,
- *  payment confirmation, refund/void tools, and identity access.
+ *  session has been created. Displays merchant identity and
+ *  session metadata, and provides navigation to operational
+ *  merchant tools.
  *
  *  Architecture Notes:
  *  - Loads merchant session via MerchantSession.js.
- *  - Displays merchant identity and session metadata.
- *  - Provides navigation to:
- *        • LivePayments.jsx
- *        • MerchantConfirm.jsx
- *        • RefundVoid.jsx
- *        • IdentityCard.jsx
- *  - Contains no business logic beyond session display.
+ *  - Displays merchant tagID, merchantId, and session metadata.
+ *  - Contains no business logic beyond identity display.
+ *  - Navigation controlled by React Router.
  *
  *  Engineering Notes:
  *  - All imports validated for existence and case‑sensitivity.
  *  - Legacy TM352 session import replaced with MerchantSession.js.
- *  - Fully Vite‑compliant and TM352‑compatible.
+ *  - Fully Vite‑compliant and production‑ready.
  *  - Ready for backend expansion (session polling, analytics).
  *
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getMerchantSession as getSession,
   touchMerchantSession as touchSession
 } from "../Utils/MerchantSession.js";
 
-export default function MerchantStatus({ setFlow }) {
+export default function MerchantStatus() {
+  const navigate = useNavigate();
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -60,27 +58,36 @@ export default function MerchantStatus({ setFlow }) {
       )}
 
       {session && (
-        <div style={{ marginTop: 10 }}>
+        <div style={{ marginTop: 20 }}>
           <p><strong>Merchant Tag:</strong> {session.tagID}</p>
           <p><strong>Session ID:</strong> {session.merchantId}</p>
           <p><strong>Session Type:</strong> {session.type}</p>
+          <p><strong>Created:</strong> {new Date(session.createdAt).toLocaleString()}</p>
+          <p><strong>Expires:</strong> {new Date(session.expiresAt).toLocaleString()}</p>
         </div>
       )}
 
-      <div style={{ marginTop: 30, display: "flex", flexDirection: "column", gap: 10 }}>
-        <button className="cta__button" onClick={() => setFlow("live-payments")}>
+      <div
+        style={{
+          marginTop: 30,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10
+        }}
+      >
+        <button className="cta__button" onClick={() => navigate("/live")}>
           View Live Payments
         </button>
 
-        <button className="cta__button" onClick={() => setFlow("refund-void")}>
+        <button className="cta__button" onClick={() => navigate("/refund")}>
           Refund / Void Payments
         </button>
 
-        <button className="cta__button" onClick={() => setFlow("identity")}>
+        <button className="cta__button" onClick={() => navigate("/identity")}>
           Merchant Identity Card
         </button>
 
-        <button className="cta__button" onClick={() => setFlow("merchant-dashboard")}>
+        <button className="cta__button" onClick={() => navigate("/merchant")}>
           Start New Session
         </button>
       </div>

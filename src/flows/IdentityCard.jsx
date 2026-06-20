@@ -17,7 +17,7 @@
  *  - Loads merchant session via MerchantSession.js.
  *  - Displays merchant tagID and internal merchantId.
  *  - Contains no business logic beyond identity display.
- *  - Navigation controlled by parent router (holo.jsx).
+ *  - Navigation controlled by React Router.
  *
  *  Engineering Notes:
  *  - All imports validated for existence and case‑sensitivity.
@@ -29,12 +29,14 @@
  */
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getMerchantSession as getSession,
   touchMerchantSession as touchSession
 } from "../Utils/MerchantSession.js";
 
-export default function IdentityCard({ setFlow }) {
+export default function IdentityCard() {
+  const navigate = useNavigate();
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function IdentityCard({ setFlow }) {
       <button
         className="cta__button"
         style={{ marginTop: 20 }}
-        onClick={() => setFlow("merchant-status")}
+        onClick={() => navigate("/merchant/status")}
       >
         Back to Merchant Status
       </button>

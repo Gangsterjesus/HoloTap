@@ -1,0 +1,67 @@
+HoloTap/
+│
+├── package.json
+├── vite.config.js
+├── index.html
+│
+├── src/
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│   │
+│   ├── Routes/
+│   │   ├── AppRouter.jsx          ← FULL ROUTER FILE (consumer + merchant)
+│   │   ├── ProtectedRoute.jsx
+│   │
+│   ├── flows/
+│   │   ├── ConsumerRegistration.jsx
+│   │   ├── ConsumerLogin.jsx
+│   │   ├── ConsumerPayment.jsx
+│   │   ├── ConsumerProcessing.jsx
+│   │   ├── ConsumerConfirm.jsx
+│   │   │
+│   │   ├── MerchantDashboard.jsx
+│   │   ├── MerchantStatus.jsx
+│   │   ├── LivePayments.jsx
+│   │   ├── RefundVoid.jsx
+│   │   ├── IdentityCard.jsx
+│   │   ├── MerchantConfirm.jsx
+│   │   │
+│   │   ├── AdminDashboard.jsx
+│   │
+│   ├── screens/
+│   │   ├── ConsumerHome.jsx
+│   │   ├── MerchantHome.jsx
+│   │
+│   ├── services/
+│   │   ├── userService.js
+│   │   ├── paymentApiService.js
+│   │   ├── paymentService.js
+│   │   ├── RefundService.js
+│   │
+│   ├── Utils/
+│   │   ├── Session.js
+│   │   ├── ConsumerSession.js
+│   │   ├── MerchantSession.js
+│   │
+│   ├── assets/
+│   │   ├── logo.png
+│   │   ├── icons/
+│   │   ├── styles/
+│   │       ├── global.css
+│   │       ├── buttons.css
+│   │       ├── layout.css
+│   │
+│   └── components/
+│       ├── NavBar.jsx
+│       ├── Footer.jsx
+│       ├── Card.jsx
+│
+└── api/
+    ├── server.js
+    ├── routes/
+    ├── controllers/
+    ├── services/
+    ├── models/
+    ├── middleware/
+    └── utils/

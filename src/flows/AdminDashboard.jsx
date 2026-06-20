@@ -31,48 +31,43 @@
  * ============================================================
  */
 
-export default function AdminDashboard({ setFlow }) {
+import { Link } from "react-router-dom";
+
+export default function AdminDashboard() {
   return (
     <div style={{ padding: 20 }}>
       <h2>Administrative Dashboard</h2>
       <p>System‑level controls and monitoring tools for HoloTap operators.</p>
 
-      <div style={{ marginTop: 30, display: "flex", flexDirection: "column", gap: 10 }}>
-        <button
-          className="cta__button"
-          onClick={() => setFlow("live-payments")}
-        >
+      <div
+        style={{
+          marginTop: 30,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10
+        }}
+      >
+        <Link className="cta__button" to="/live">
           View Live Payments
-        </button>
+        </Link>
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow("refund-void")}
-        >
+        <Link className="cta__button" to="/refund">
           Refund / Void Payments
-        </button>
+        </Link>
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow("identity")}
-        >
+        <Link className="cta__button" to="/identity">
           Merchant Identity Card
-        </button>
+        </Link>
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow("merchant-status")}
-        >
+        <Link className="cta__button" to="/merchant/status">
           Merchant Status Overview
-        </button>
+        </Link>
 
-        <button
-          className="cta__button"
-          onClick={() => setFlow("merchant-dashboard")}
-        >
+        <Link className="cta__button" to="/merchant">
           Start New Merchant Session
-        </button>
+        </Link>
       </div>
     </div>
   );
 }
+

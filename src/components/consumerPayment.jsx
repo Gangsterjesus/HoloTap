@@ -15,7 +15,7 @@
  *
  *  Architecture Notes:
  *  - Calls backend payment endpoint via paymentApiService.js.
- *  - Emits onProcessing(paymentId) to parent router (holo.jsx).
+ *  - Redirects to /processing/:paymentId after successful creation.
  *  - Validates numeric input before backend submission.
  *  - Displays loading, error, and transition states.
  *
@@ -29,9 +29,12 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPayment } from "../services/paymentApiService.js";
 
-export default function ConsumerPayment({ sessionId, onProcessing }) {
+export default function ConsumerPayment({ sessionId }) {
+  const navigate = useNavigate();
+
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,9 +58,10 @@ export default function ConsumerPayment({ sessionId, onProcessing }) {
         return;
       }
 
-      if (onProcessing) {
-        onProcessing(response.data.paymentId);
-      }
+      const paymentId = response.data.paymentId;
+
+      // Redirect to processing screen
+      navigate(`/processing/${paymentId}`, { replace: true });
 
     } catch (err) {
       setError("Server error: " + err.message);

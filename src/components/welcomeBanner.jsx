@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HoloTap — Welcome Banner Component
+ *  HoloTap — Welcome Banner Component (Header‑Safe Version)
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
  *  Date: 20 June 2026
@@ -8,61 +8,55 @@
  * ============================================================
  *
  *  Purpose:
- *  Provides the primary brand banner displayed on the HoloTap
- *  landing screen. This component introduces the product,
- *  reinforces brand identity, and sets the visual tone for the
- *  consumer and merchant experience.
+ *  Provides the landing‑page hero section WITHOUT duplicating
+ *  the global header. This component now focuses solely on the
+ *  introductory message and visual spacing for the home screen.
  *
  *  Architecture Notes:
- *  - Pure presentational component; contains no business logic.
+ *  - Header elements (badge, title, tagline) removed to avoid
+ *    duplication with the global header in Holo.jsx.
+ *  - Pure presentational component; no business logic.
  *  - Designed for reuse across multiple screens.
- *  - Accepts no props; static brand element.
  *
  *  Engineering Notes:
  *  - Fully Vite‑compliant and production‑ready.
- *  - No legacy TM352 dependencies remain.
  *  - Clean, accessible, and responsive layout.
- *  - Inline styles avoided except for minimal layout control.
+ *  - Inline styles kept minimal and controlled.
  *
  * ============================================================
  */
-
-import holoBadge from "../assets/HoloTap-Badge.png";
 
 export default function WelcomeBanner() {
   return (
     <div
       style={{
         textAlign: "center",
-        paddingTop: 20,
-        paddingBottom: 20
+        paddingTop: 10,
+        paddingBottom: 20,
+        maxWidth: 600,
+        margin: "0 auto"
       }}
     >
-      <img
-        src={holoBadge}
-        alt="HoloTap Badge"
+      <h2
         style={{
-          width: 120,
+          fontSize: "1.8rem",
           marginBottom: 10
         }}
-      />
-
-      <h1
-        style={{
-          fontSize: "2.2rem",
-          marginBottom: 5
-        }}
       >
-        HoloTap
-      </h1>
+        Why HoloTap?
+      </h2>
 
       <p
         style={{
           fontSize: "1.1rem",
-          opacity: 0.9
+          opacity: 0.9,
+          lineHeight: 1.5
         }}
       >
-        Scan the hologram. Skip the fraud.
+        Holographic QR and account‑to‑account payments.
+        <br />
+        Secure, fraud‑resistant, and built for creators,
+        merchants, and consumers.
       </p>
     </div>
   );

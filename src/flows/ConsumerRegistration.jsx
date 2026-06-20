@@ -19,7 +19,7 @@
  *        • Consumer identity creation
  *        • Device fingerprinting
  *        • Fraud‑prevention metadata
- *  - Emits onComplete() to parent router (holo.jsx).
+ *  - Redirects to /consumer after successful registration.
  *
  *  Engineering Notes:
  *  - Fully Vite‑compliant and production‑ready.
@@ -31,8 +31,11 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function ConsumerRegistration({ onComplete }) {
+export default function ConsumerRegistration() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
@@ -45,9 +48,9 @@ export default function ConsumerRegistration({ onComplete }) {
     }
 
     // Future backend: create consumer identity here
-    if (onComplete) {
-      onComplete(name.trim());
-    }
+
+    // Redirect to consumer home
+    navigate("/consumer", { replace: true });
   };
 
   return (

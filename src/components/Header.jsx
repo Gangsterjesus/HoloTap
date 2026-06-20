@@ -1,68 +1,47 @@
 /**
  * ============================================================
- *  HoloTap — Mascot Image Component (with Fallback Handling)
+ *  HoloTap — Global Header Component
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Author: Raymond Newton
  *  Date: 20 June 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *  Provides a resilient mascot image component that gracefully
- *  handles load failures by switching to a fallback asset. This
- *  ensures brand consistency even when the primary mascot image
- *  is unavailable or corrupted.
+ *  Provides the global brand header for all HoloTap screens.
+ *  Ensures the badge, title, and tagline appear exactly once
+ *  across the entire application.
  *
  *  Architecture Notes:
- *  - Pure presentational component with internal error state.
- *  - Accepts a primary image source and optional alt text.
- *  - Automatically replaces the image with a fallback asset on
- *    load failure.
- *  - Designed for reuse across all HoloTap screens.
- *
- *  Engineering Notes:
- *  - Fully Vite‑compliant and production‑ready.
- *  - No legacy TM352 dependencies remain.
- *  - Uses explicit state for clarity and maintainability.
- *  - Emits a console warning for diagnostic visibility.
+ *  - Pure presentational component.
+ *  - No routing or business logic.
+ *  - Consumed by Layout.jsx.
  *
  * ============================================================
  */
 
-import { useState } from "react";
-import mascotFallback from "../assets/images/mascot-fallback.png";
+import holoBadge from "../assets/HoloTap-Badge.png";
 
-export default function MascotImage({
-  src,
-  alt = "HoloTap Mascot",
-  className = "mascot"
-}) {
-  const [imageSource, setImageSource] = useState(src);
-  const [hasError, setHasError] = useState(false);
-
-  const handleError = () => {
-    setImageSource(mascotFallback);
-    setHasError(true);
-
-    console.warn(
-      "MascotImage: Primary mascot image failed to load. Fallback asset applied."
-    );
-  };
-
+export default function Header() {
   return (
-    <>
+    <header
+      style={{
+        textAlign: "center",
+        paddingTop: 20,
+        paddingBottom: 10
+      }}
+    >
       <img
-        src={imageSource}
-        alt={alt}
-        className={className}
-        onError={handleError}
+        src={holoBadge}
+        alt="HoloTap Badge"
+        style={{ width: 120, marginBottom: 10 }}
       />
 
-      {hasError && (
-        <p className="error-message">
-          Mascot image failed to load. Displaying fallback asset.
-        </p>
-      )}
-    </>
+      <h1 style={{ fontSize: "2.2rem", marginBottom: 5 }}>HoloTap</h1>
+
+      <p style={{ fontSize: "1.1rem", opacity: 0.9 }}>
+        Scan the hologram. Skip the fraud.
+      </p>
+    </header>
   );
 }
+
