@@ -2,22 +2,33 @@
 
 import { useState } from "react";
 
-// Consumer screens
+// -----------------------------
+// Consumer Screens (existing)
+// -----------------------------
 import ConsumerRegistration from "./flows/ConsumerRegistration.jsx";
 import ConsumerHome from "./flows/ConsumerHome.jsx";
-import ConsumerProcessing from "./flows/ConsumerProcessing.jsx"; 
-import ConsumerRouter from "./flows/ConsumerRouter.jsx";
+import ConsumerProcessing from "./flows/ConsumerProcessing.jsx";
+import ConsumerPayment from "./components/ConsumerPayment.jsx";
 
 
-// Creator / Merchant / Admin screens
+// -----------------------------
+// Backend‑Ready Screens (new)
+// -----------------------------
+import MerchantDashboard from "./components/MerchantDashboard.jsx";   // NEW backend session + QR
+// (We will add ConsumerPayment + MerchantConfirm next)
+
+// -----------------------------
+// Creator / Merchant / Admin Screens (existing)
+// -----------------------------
 import MerchantStatus from "./flows/MerchantStatus.jsx";
 import AdminDashboard from "./flows/AdminDashboard.jsx";
 import IdentityCard from "./flows/IdentityCard.jsx";
 import LivePayments from "./flows/LivePayments.jsx";
 import RefundVoid from "./flows/RefundVoid.jsx";
 
-
-// Landing components
+// -----------------------------
+// Landing Components
+// -----------------------------
 import WelcomeBanner from "./components/WelcomeBanner.jsx";
 import Feature from "./components/Feature.jsx";
 import holoBadge from "./assets/HoloTap-Badge.png";
@@ -27,6 +38,9 @@ export default function Holo() {
 
   const renderScreen = () => {
     switch (screen) {
+      // -----------------------------
+      // Consumer Flows
+      // -----------------------------
       case "register":
         return (
           <ConsumerRegistration
@@ -37,30 +51,36 @@ export default function Holo() {
       case "consumer-home":
         return <ConsumerHome setFlow={setScreen} />;
 
-      case "payment":
-        return <PaymentEntry setFlow={setScreen} />;
-
       case "processing":
-        return <Processing setFlow={setScreen} />;
+        return <ConsumerProcessing setFlow={setScreen} />;
 
-      case "confirmation":
-        return <Confirmation setFlow={setScreen} />;
+      // -----------------------------
+      // Backend‑Ready Merchant Flow
+      // -----------------------------
+      case "merchant-dashboard":
+        return <MerchantDashboard />;
 
-      case "creator":
-        return <CreatorDashboard setFlow={setScreen} />;
-
-      case "identity":
-        return <IdentityCard setFlow={setScreen} />;
-
-      case "merchant":
+      // -----------------------------
+      // Existing Merchant/Admin Screens
+      // -----------------------------
+      case "merchant-status":
         return <MerchantStatus setFlow={setScreen} />;
 
       case "admin":
         return <AdminDashboard setFlow={setScreen} />;
 
-      case "logging":
-        return <Logging setFlow={setScreen} />;
+      case "identity":
+        return <IdentityCard setFlow={setScreen} />;
 
+      case "live-payments":
+        return <LivePayments setFlow={setScreen} />;
+
+      case "refund-void":
+        return <RefundVoid setFlow={setScreen} />;
+
+      // -----------------------------
+      // Default Landing Page
+      // -----------------------------
       default:
         return (
           <>
@@ -76,8 +96,8 @@ export default function Holo() {
                 Consumer Home
               </button>
 
-              <button className="cta__button" onClick={() => setScreen("creator")}>
-                Creator Dashboard
+              <button className="cta__button" onClick={() => setScreen("merchant-dashboard")}>
+                Merchant Dashboard (Backend)
               </button>
 
               <button className="cta__button" onClick={() => setScreen("admin")}>
@@ -108,16 +128,15 @@ export default function Holo() {
         <button className="cta__button" onClick={() => setScreen("home")}>Home</button>
         <button className="cta__button" onClick={() => setScreen("register")}>Register</button>
         <button className="cta__button" onClick={() => setScreen("consumer-home")}>Consumer Home</button>
-        <button className="cta__button" onClick={() => setScreen("payment")}>Payment</button>
-        <button className="cta__button" onClick={() => setScreen("creator")}>Creator</button>
+        <button className="cta__button" onClick={() => setScreen("merchant-dashboard")}>Merchant Dashboard</button>
         <button className="cta__button" onClick={() => setScreen("identity")}>Identity</button>
-        <button className="cta__button" onClick={() => setScreen("merchant")}>Merchant</button>
+        <button className="cta__button" onClick={() => setScreen("merchant-status")}>Merchant Status</button>
         <button className="cta__button" onClick={() => setScreen("admin")}>Admin</button>
-        <button className="cta__button" onClick={() => setScreen("logging")}>Logs</button>
+        <button className="cta__button" onClick={() => setScreen("live-payments")}>Live Payments</button>
+        <button className="cta__button" onClick={() => setScreen("refund-void")}>Refund/Void</button>
       </nav>
 
       {renderScreen()}
     </div>
   );
 }
-
