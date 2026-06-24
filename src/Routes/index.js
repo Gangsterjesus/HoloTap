@@ -1,16 +1,9 @@
-/**
- * ============================================================
- *  HoloTap — Router Barrel Export
- *  Engineers: Raymond Newton, HoloTap Engineering Team
- *  Date: 02 June 2026
- * ============================================================
- *
- *  Purpose:
- *  Provides a single export point for all routing modules.
- *  Enables clean, maintainable imports across the application.
- *
- * ============================================================
- */
+import { Router } from "express";
+import qrRoutes from "./qr.routes.js";
 
-export { default as ConsumerRouter } from "./ConsumerRouter.jsx";
-export { default as MerchantRouter } from "./MerchantRouter.jsx";
+const router = Router();
+
+// API ROUTES
+router.use("/qr", qrRoutes);
+
+export default router;
