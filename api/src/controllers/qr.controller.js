@@ -1,6 +1,6 @@
 import { createQrSession } from "../services/qr.service.js";
 
-export async function createQrSessionController(req, res) {
+export async function createQRSession(req, res) {
   try {
     const { merchantId } = req.body;
 
