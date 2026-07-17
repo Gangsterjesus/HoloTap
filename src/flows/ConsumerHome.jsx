@@ -35,7 +35,7 @@ import { useNavigate } from "react-router-dom";
 import {
   getConsumerSession as getSession,
   clearConsumerSession
-} from "../utils/ConsumerSession.js";
+} from "./utils/ConsumerSession.js";
 
 export default function ConsumerHome() {
   const navigate = useNavigate();
