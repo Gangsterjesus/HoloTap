@@ -35,7 +35,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CountrySelector from "../components/CountrySelector";
 import { findConsumer } from "../services/ConsumerService";
-import { createConsumerSession } from "../Utils/ConsumerSession";
+import { createConsumerSession } from "../utils/ConsumerSession";
 
 export default function ConsumerLogin() {
   const navigate = useNavigate();

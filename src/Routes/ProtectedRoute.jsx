@@ -32,7 +32,7 @@
 
 import { Navigate } from "react-router-dom";
 import { getUser } from "../services/userService";
-import { getSession } from "../Utils/Session";
+import { getSession } from "../utils/Session";
 
 export default function ProtectedRoute({ role, children }) {
   const user = getUser();

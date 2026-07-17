@@ -35,7 +35,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import { getUser } from "./services/userService";
-import { getSession } from "./Utils/Session";
+import { getSession } from "./utils/Session.js";
 
 import Holo from "./Holo.jsx";
 

@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import {
   getMerchantSession as getSession,
   touchMerchantSession as touchSession
-} from "../Utils/MerchantSession.js";
+} from "./utils/MerchantSession.js";
 import {
   fetchMerchantPayments
 } from "../services/paymentService.js";

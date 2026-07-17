@@ -24,6 +24,11 @@
  */
 
 import { Routes, Route } from "react-router-dom";
+import { getSession } from "../utils/Session.js";
+
+const session = getSession();
+
+
 
 // Consumer Screens
 import ConsumerRegistration from "../flows/ConsumerRegistration.jsx";
