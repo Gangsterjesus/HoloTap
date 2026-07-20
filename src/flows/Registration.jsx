@@ -1,13 +1,9 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import holoBadge from "../assets/HoloTap-Badge.png";
 import CountrySelector from "../components/CountrySelector.jsx";
-
+import { saveUser } from "../services/userService";
 import { createUser } from "../Data/mockDB.js";
-
-
-
 
 export default function Registration() {
   const navigate = useNavigate();

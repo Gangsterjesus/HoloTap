@@ -1,1 +1,5 @@
-{ "name": "holotap-monorepo", "private": true, "workspaces": ["apps/*"] }
+{
+  "name": "holotap-monorepo",
+  "private": true,
+  "workspaces": ["apps/*"]
+}

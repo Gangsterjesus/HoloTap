@@ -1,51 +1,44 @@
+# 💠 HoloTap — Scan‑to‑Pay for the Next Digital Economy
 
-💠 HoloTap — Scan‑to‑Pay with Personality
-HoloTap is a creator‑first fintech playground built for fans, indie devs, and the future of peer‑powered payments. With mascot‑driven branding, holographic QR logic, and open‑source collaboration, HoloTap makes microtransactions feel secure, stylish, and fun.
+HoloTap is a creator‑first QR‑code payment prototype designed for fast, secure, and frictionless micro‑transactions. Built for fans, creators, and independent developers, HoloTap blends holographic QR logic with a modular open‑source architecture — paving the way for future digital‑asset payments.
 
 🌍 Vision
-To empower creators and fans with a secure, hologram‑enhanced QR payment platform — where every transaction leaves a shimmer, not just a footprint.
+To deliver a secure, modern QR‑code payment platform that evolves naturally into the next era of digital value — including NFTs, BRICS‑aligned digital currencies, and emerging asset‑to‑asset (A2A) payment systems.
 
 🚀 Features
-• 	💠 Holographic QR & A2A payments
-• 	🏅 Contributor badges, tiers & shoutouts
-• 	🐕 Mascot‑powered branding and playful UX
-• 	🧩 Modular React components, CSS tokens & font system
-• 	🔐 Open‑source and contributor‑friendly
-• 	🌐 Future integration with BRICS‑aligned digital currency systems
+• 💠 Holographic QR payments
+• 💠 Secure token‑based transaction flow
+• 💠 Creator‑friendly micro‑payment design
+• 💠 Modular React components, CSS tokens & font system
+• 💠 Open‑source and contributor‑friendly
+• 💠 Future integration with NFTs & BRICS‑aligned digital currencies
 
 🛠️ Tech Stack
-• 	React + Vite
-• 	HTML5 / CSS3 / JavaScript
-• 	TypeScript (in progress)
-• 	Node.js (planned)
-• 	GitHub Pages (for live preview)
+• React + Vite
+• HTML5 / CSS3 / JavaScript
+• TypeScript (in progress)
+• Node.js (planned)
+• GitHub Pages (for live preview)
 
-🎨 Mascot Manifesto
-HoloTap isn’t just a logo — it’s a personality.
-Our mascot represents loyalty, creativity, and the playful spirit of open source.
-From tail wags to bone tosses, every animation celebrates contributors.
-Want to evolve HoloTap’s look or voice?
-Submit your ideas via Issues or Pull Requests.
+🎨 Design Philosophy
+HoloTap focuses on clarity, modularity, and security. Every component is built to be reusable, auditable, and easy to extend — whether for simple QR payments or advanced digital‑asset flows.
 
 🤝 Contributing
-We welcome all kinds of contributions — from bug fixes and feature ideas to branding tweaks and mascot redesigns.
+We welcome contributions of all kinds — from code improvements and feature ideas to architecture discussions and documentation.
+
 Ways to help:
-• 	💠 Fork the repo and submit a PR
-• 	💠 Suggest features via GitHub Issues
-• 	💠 Join the conversation and help shape HoloTap’s future
+• Fork the repo and submit a PR
+• Suggest features via GitHub Issues
+• Join the conversation and help shape HoloTap’s evolution
 
 📄 License
-Licensed under the AGPL‑3.0.
-You are free to use, modify, and distribute this project under the terms of the license.
+Licensed under the AGPL‑3.0. You are free to use, modify, and distribute this project under the terms of the license.
 
 🔗 Live Preview
 Coming soon via GitHub Pages.
 
-🐾 Join the Movement
-HoloTap is more than code — it’s a contributor‑first ecosystem.
-Let’s build a payment platform that’s secure, stylish, and community‑powered.
-
 👤 Credits
 Founder & Lead Developer: Raymond Newton
 Final‑year BSc Computing & IT student at The Open University
-Visionary behind HoloTap’s architecture, branding, and creator‑first mission
+
+## Architect of HoloTap's QR‑payment vision and future digital‑currency roadmap
