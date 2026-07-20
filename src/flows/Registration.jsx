@@ -1,8 +1,16 @@
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import holoBadge from "../assets/HoloTap-Badge.png";
 import CountrySelector from "../components/CountrySelector.jsx";
 
-export default function HTRegistration() {
+import { createUser } from "../Data/mockDB.js";
+
+
+
+
+export default function Registration() {
+  const navigate = useNavigate();
   const [country, setCountry] = useState("+44");
   const [mobile, setMobile] = useState("");
 
@@ -12,12 +20,16 @@ export default function HTRegistration() {
       return;
     }
 
-    alert(`Registration started for: ${country} ${mobile}`);
+    const user = createUser({
+      mobileNumber: mobile,
+      countryCode: country
+    });
+
+    navigate(`/host/${user.id}`);
   };
 
   return (
     <div style={{ padding: 20 }}>
-
       {/* FLOW 0 — HOLOTAP BADGE */}
       <div style={{ textAlign: "center", marginBottom: 30 }}>
         <img
@@ -46,7 +58,7 @@ export default function HTRegistration() {
 
         <CountrySelector value={country} onChange={setCountry} />
 
-        <label style={{ display: "block", marginBottom: 8 }}>
+        <label style={{ display: "block", marginBottom: 8, marginTop: 20 }}>
           Mobile Number
         </label>
 
