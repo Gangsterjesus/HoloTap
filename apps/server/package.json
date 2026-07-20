@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "holotap-api",
   "version": "1.0.0",
@@ -16,3 +17,6 @@
     "nodemon": "^3.0.0"
   }
 }
+=======
+{ "name": "server", "version": "1.0.0", "private": true } 
+>>>>>>> 54c14b5 (Restore workspace structure and regenerate lockfile)
