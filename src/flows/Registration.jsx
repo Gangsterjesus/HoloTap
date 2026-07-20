@@ -1,11 +1,12 @@
-// src/flows/Flow1Registration.jsx
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import holoBadge from "../assets/HoloTap-Badge.png";
 import CountrySelector from "../components/CountrySelector.jsx";
 import { saveUser } from "../services/userService";
+import { createUser } from "../Data/mockDB.js";
 
-export default function Flow1Registration({ setFlow }) {
+export default function Registration() {
+  const navigate = useNavigate();
   const [country, setCountry] = useState("+44");
   const [mobile, setMobile] = useState("");
 
@@ -15,26 +16,16 @@ export default function Flow1Registration({ setFlow }) {
       return;
     }
 
-    // Normalise mobile number (remove spaces, leading zeros)
-    const cleanedMobile = mobile.replace(/\s+/g, "").replace(/^0+/, "");
+    const user = createUser({
+      mobileNumber: mobile,
+      countryCode: country
+    });
 
-    const newUser = {
-      name: "Creator",                 // placeholder name
-      country,
-      mobile: cleanedMobile,
-      userId: crypto.randomUUID()
-    };
-
-    // Save to storage (ht_users + ht_user)
-    saveUser(newUser);
-
-    alert("Registration complete.");
-    setFlow(2); // Move to Flow 2 — Returning User Login
+    navigate(`/host/${user.id}`);
   };
 
   return (
     <div style={{ padding: 20 }}>
-
       {/* FLOW 0 — HOLOTAP BADGE */}
       <div style={{ textAlign: "center", marginBottom: 30 }}>
         <img
@@ -63,7 +54,7 @@ export default function Flow1Registration({ setFlow }) {
 
         <CountrySelector value={country} onChange={setCountry} />
 
-        <label style={{ display: "block", marginBottom: 8, marginTop: 15 }}>
+        <label style={{ display: "block", marginBottom: 8, marginTop: 20 }}>
           Mobile Number
         </label>
 
