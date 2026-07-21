@@ -1,79 +1,21 @@
-
-
 /**
  * =============================================================================
- * ENGINEERING HEADER — QR SCANNER SCREEN
+ * ENGINEERING HEADER — QR SCANNER SCREEN (Consumer-Led Pipeline)
  * =============================================================================
  * Author: Raymond Newton
- * Date: 29 June 2026
- * File: scan-qr.tsx
+ * Date: 21 July 2026 — 13:20 BST
+ * File: scan-qrc.tsx
  *
- * -----------------------------------------------------------------------------
- * PURPOSE
- * -----------------------------------------------------------------------------
- * This screen handles the consumer-facing QR scanning flow. It opens the device
- * camera, scans merchant QR codes, extracts the encoded session token, and sends
- * it to the backend for verification. Once validated, the screen navigates to
- * the Payment screen with the merchantId and sessionId required for payment.
+ * PURPOSE:
+ *   Consumer scans merchant QR code to begin payment session.
  *
- * -----------------------------------------------------------------------------
- * ARCHITECTURE NOTES
- * -----------------------------------------------------------------------------
- * - Uses Expo Camera (CameraView) for scanning QR codes.
- * - Uses Expo Router for navigation to the Payment screen.
- * - Uses useCameraPermissions() to request and manage camera access.
- * - Scanning is throttled using a `scanned` boolean to prevent duplicate scans.
- * - Backend endpoint `/api/qr/verify` validates the QR token and returns
- *   merchantId + sessionId.
- * - Navigation passes parameters via Expo Router query params.
- *
- * -----------------------------------------------------------------------------
- * FLOW ALIGNMENT
- * -----------------------------------------------------------------------------
- * Flow 3: Merchant generates QR code
- *   - Merchant app produces a signed token encoded into a QR code.
- *
- * Flow 4: Consumer scans QR code
- *   - This screen opens the camera and reads the QR token.
- *
- * Flow 5: Session Verification
- *   - The scanned token is POSTed to `/api/qr/verify`.
- *   - Backend returns merchantId + sessionId.
- *
- * Flow 6: Payment Initialisation
- *   - Navigation to `/payment` occurs with validated parameters.
- *
- * -----------------------------------------------------------------------------
- * ENGINEERING NOTES
- * -----------------------------------------------------------------------------
- * - The `scanned` flag prevents multiple rapid scans from triggering duplicate
- *   backend requests or navigation events.
- * - Error handling is intentionally simple (alert-based) during development.
- * - The backend IP address is currently hardcoded for local testing; this will
- *   be replaced with environment configuration in production.
- * - The screen is designed to be lightweight and responsive, avoiding expensive
- *   re-renders and maintaining predictable state transitions.
- * - Camera permission flow is handled automatically on mount.
- *
- * -----------------------------------------------------------------------------
- * TESTING NOTES
- * -----------------------------------------------------------------------------
- * - Manual testing: verify scanning behaviour with valid and invalid QR codes.
- * - API testing: confirm backend returns correct merchantId/sessionId.
- * - Permission testing: confirm camera permission prompts appear correctly.
- * - Navigation testing: confirm router pushes to `/payment` with correct params.
+ * FLOW ALIGNMENT:
+ *   Flow 1 — Consumer scans merchant QR
+ *   Flow 2 — Backend verifies QR token → returns merchantId + sessionId
+ *   Flow 3 — Consumer navigates to Payment screen
  *
  * =============================================================================
  */
-
-
-
-
-
-
-
-
-
 
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
@@ -81,27 +23,45 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import { API_URL } from "../src/config";
 
-
-
+/* ============================================================================
+ * SECTION: Component Initialisation
+ * ----------------------------------------------------------------------------
+ * - Sets up router for navigation
+ * - Sets up camera permission state
+ * - Sets up `scanned` flag to prevent duplicate scans
+ * ========================================================================== */
 export default function ScanQR() {
   const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
-
+  /* ============================================================================
+   * SECTION: Camera Permission Handling
+   * ----------------------------------------------------------------------------
+   * - Requests camera permission on mount
+   * - Ensures camera opens automatically without user interaction
+   * - Prevents scanning until permission is granted
+   * ========================================================================== */
   useEffect(() => {
     if (!permission?.granted) {
       requestPermission();
     }
   }, [permission, requestPermission]);
 
+  /* ============================================================================
+   * SECTION: QR Scan Handler
+   * ----------------------------------------------------------------------------
+   * - Prevents duplicate scans using `scanned` flag
+   * - Sends scanned QR token to backend `/session/verify`
+   * - Backend returns merchantId + sessionId
+   * - Navigates to Payment screen with validated parameters
+   * ========================================================================== */
   const handleScan = async (data: string) => {
     if (scanned) return;
     setScanned(true);
 
     try {
-     const response = await fetch("http://192.168.1.205:3000/session/verify", {
-
+      const response = await fetch(`${API_URL}/session/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: data }),
@@ -110,7 +70,6 @@ export default function ScanQR() {
       const result = await response.json();
 
       if (response.ok) {
-        // cast to any to satisfy expo-router route typing for dynamic routes
         router.push({
           pathname: "/payment",
           params: {
@@ -128,10 +87,21 @@ export default function ScanQR() {
     }
   };
 
+  /* ============================================================================
+   * SECTION: Permission Loading State
+   * ----------------------------------------------------------------------------
+   * - Displays loading indicator while permission state is being resolved
+   * ========================================================================== */
   if (!permission) {
     return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
   }
 
+  /* ============================================================================
+   * SECTION: Permission Denied UI
+   * ----------------------------------------------------------------------------
+   * - Informs user that camera access is required
+   * - Prevents scanning until permission is granted
+   * ========================================================================== */
   if (!permission.granted) {
     return (
       <View style={styles.center}>
@@ -140,6 +110,13 @@ export default function ScanQR() {
     );
   }
 
+  /* ============================================================================
+   * SECTION: Main Scanner UI
+   * ----------------------------------------------------------------------------
+   * - Renders full-screen camera view
+   * - Handles barcode scanning via `onBarcodeScanned`
+   * - Displays instructional text overlay
+   * ========================================================================== */
   return (
     <View style={styles.container}>
       <CameraView
@@ -151,6 +128,13 @@ export default function ScanQR() {
   );
 }
 
+/* ============================================================================
+ * SECTION: Stylesheet
+ * ----------------------------------------------------------------------------
+ * - Dark background for high contrast
+ * - Full-screen camera layout
+ * - Overlay text for user guidance
+ * ========================================================================== */
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000" },
   camera: { flex: 1 },

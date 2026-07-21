@@ -1,21 +1,35 @@
 /**
  * =============================================================================
- * HOLOTAP MOBILE — PAYMENT RESULT SCREEN (payment-result.tsx)
+ * ENGINEERING HEADER — PAYMENT RESULT SCREEN (Consumer-Led Pipeline)
  * =============================================================================
  * Engineer: Raymond Newton (E5357171)
  * Assistant: Copilot Engineering Assistant
- * Date: 02 July 2026
+ * Date: 21 July 2026 — 13:24 BST
+ * File: payment-result.tsx
  * © 2026 HoloTap Technologies Ltd. All rights reserved.
  *
  * PURPOSE:
- * Fully upgraded Flow 8 — Payment Result screen.
- * Adds hologram animation, backend verification, loading state,
- * success/failure UI, auto‑return timer, and strict TypeScript typing.
+ *   Displays the final payment outcome to the consumer after submitting a bill
+ *   payment. Includes hologram animation, backend verification, loading state,
+ *   success/failure UI, and strict TypeScript typing.
  *
- * TM470 COMPLIANCE:
- * - Modular, testable, flow‑aligned, maintainable
- * - No business logic inside UI
- * - Strong typing + clean architecture
+ * FLOW ALIGNMENT (Consumer Journey):
+ *   Flow 1 — Consumer scans merchant QR (scan-qrc.tsx)
+ *   Flow 2 — Backend verifies QR token → returns merchantId + sessionId
+ *   Flow 3 — Consumer enters payment amount (payment.tsx)
+ *   Flow 4 — Payment submission → hologram result (this screen)
+ *
+ * ARCHITECTURE NOTES:
+ *   - Backend verification ensures payment integrity
+ *   - Reanimated hologram animation provides visual confirmation
+ *   - Auto-return timer navigates consumer back to home screen
+ *   - Clean fintech UI consistent with HOLOTAP design system
+ *
+ * TESTING NOTES:
+ *   - Validate backend `/payment/result` endpoint
+ *   - Validate hologram animation behaviour
+ *   - Validate auto-return timer
+ *   - Validate navigation parameters
  * =============================================================================
  */
 
@@ -23,10 +37,6 @@ import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { API_URL } from "../src/config";
-
-
-
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -35,11 +45,12 @@ import Animated, {
   withSequence,
 } from "react-native-reanimated";
 
-/**
- * =============================================================================
- *  TypeScript Types — Route Params (Multi‑Currency + Status)
- * =============================================================================
- */
+/* ============================================================================
+ * SECTION: TypeScript Types — Route Params (Multi-Currency + Status)
+ * ----------------------------------------------------------------------------
+ * - Supports future currencies (GBP, BTC, ETH, CBDC, NFT)
+ * - Supports blockchain metadata (txHash, nftId)
+ * ========================================================================== */
 interface RouteParams {
   amount?: string;
   currency?: string;
@@ -50,11 +61,11 @@ interface RouteParams {
   nftId?: string;
 }
 
-/**
- * =============================================================================
- *  Currency Metadata — Scalable for Future Currencies
- * =============================================================================
- */
+/* ============================================================================
+ * SECTION: Currency Metadata — Scalable for Future Currencies
+ * ----------------------------------------------------------------------------
+ * - Centralised metadata for symbol + decimal precision
+ * ========================================================================== */
 const currencyMeta: Record<string, { symbol: string; decimals: number }> = {
   GBP: { symbol: "£", decimals: 2 },
   BTC: { symbol: "₿", decimals: 8 },
@@ -64,11 +75,11 @@ const currencyMeta: Record<string, { symbol: string; decimals: number }> = {
   CBDC: { symbol: "¤", decimals: 2 },
 };
 
-/**
- * =============================================================================
- *  Modular Currency Formatter
- * =============================================================================
- */
+/* ============================================================================
+ * SECTION: Modular Currency Formatter
+ * ----------------------------------------------------------------------------
+ * - Converts raw amount + currency into formatted output
+ * ========================================================================== */
 function formatCurrency(amount?: string, currency?: string): string {
   if (!amount || !currency) return "—";
   const meta = currencyMeta[currency] ?? currencyMeta.GBP;
@@ -77,11 +88,14 @@ function formatCurrency(amount?: string, currency?: string): string {
   return `${meta.symbol}${numeric.toFixed(meta.decimals)}`;
 }
 
-/**
- * =============================================================================
- *  Main Component — PaymentResult (Upgraded)
- * =============================================================================
- */
+/* ============================================================================
+ * SECTION: Main Component — PaymentResult
+ * ----------------------------------------------------------------------------
+ * - Verifies payment with backend
+ * - Displays success/failure UI
+ * - Runs hologram animation
+ * - Auto-returns consumer to home screen
+ * ========================================================================== */
 export default function PaymentResult() {
   const router = useRouter();
   const params = useLocalSearchParams() as RouteParams;
@@ -93,11 +107,12 @@ export default function PaymentResult() {
 
   const formattedAmount = formatCurrency(params.amount, params.currency);
 
-  /**
-   * =============================================================================
-   *  Backend Verification — Ensures Payment Integrity
-   * =============================================================================
-   */
+  /* ============================================================================
+   * SECTION: Backend Verification — Ensures Payment Integrity
+   * ----------------------------------------------------------------------------
+   * - Confirms final payment status from backend
+   * - Protects against client-side spoofing
+   * ========================================================================== */
   useEffect(() => {
     async function verifyPayment() {
       try {
@@ -105,7 +120,6 @@ export default function PaymentResult() {
           `https://api.holotap.co/payment/result?sessionId=${params.sessionId}`
         );
         const json = await res.json();
-
         setBackendStatus(json.status ?? "failed");
       } catch {
         setBackendStatus("failed");
@@ -117,11 +131,12 @@ export default function PaymentResult() {
     verifyPayment();
   }, [params.sessionId]);
 
-  /**
-   * =============================================================================
-   *  Hologram Animation — Reanimated v3
-   * =============================================================================
-   */
+  /* ============================================================================
+   * SECTION: Hologram Animation — Reanimated v3
+   * ----------------------------------------------------------------------------
+   * - Pulsing hologram effect
+   * - Uses shared values + timing + repeat
+   * ========================================================================== */
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -136,25 +151,26 @@ export default function PaymentResult() {
     transform: [{ scale: opacity.value + 0.6 }],
   }));
 
-  /**
-   * =============================================================================
-   *  Auto‑Return Timer — 4 Seconds
-   * =============================================================================
-   */
+  /* ============================================================================
+   * SECTION: Auto-Return Timer — 4 Seconds
+   * ----------------------------------------------------------------------------
+   * - Returns consumer to home screen
+   * - Prevents lingering on result screen
+   * ========================================================================== */
   useEffect(() => {
     if (!loading) {
       const timer = setTimeout(() => {
-        router.replace("/merchant-dashboard");
+        router.replace("/"); // consumer home screen
       }, 4000);
       return () => clearTimeout(timer);
     }
   }, [loading, router]);
 
-  /**
-   * =============================================================================
-   *  Loading State
-   * =============================================================================
-   */
+  /* ============================================================================
+   * SECTION: Loading State
+   * ----------------------------------------------------------------------------
+   * - Displays verification spinner
+   * ========================================================================== */
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -164,11 +180,12 @@ export default function PaymentResult() {
     );
   }
 
-  /**
-   * =============================================================================
-   *  Failure State
-   * =============================================================================
-   */
+  /* ============================================================================
+   * SECTION: Failure State
+   * ----------------------------------------------------------------------------
+   * - Displays failure UI
+   * - Shows merchant + session identifiers
+   * ========================================================================== */
   if (backendStatus === "failed") {
     return (
       <SafeAreaView style={styles.container}>
@@ -186,21 +203,19 @@ export default function PaymentResult() {
           The payment could not be completed.
         </Text>
 
-        <Text
-          style={styles.link}
-          onPress={() => router.replace("/merchant-dashboard")}
-        >
-          Return to Dashboard
+        <Text style={styles.link} onPress={() => router.replace("/")}>
+          Return Home
         </Text>
       </SafeAreaView>
     );
   }
 
-  /**
-   * =============================================================================
-   *  Success State — With Hologram Animation
-   * =============================================================================
-   */
+  /* ============================================================================
+   * SECTION: Success State — With Hologram Animation
+   * ----------------------------------------------------------------------------
+   * - Displays formatted amount + metadata
+   * - Shows hologram animation
+   * ========================================================================== */
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Payment Successful</Text>
@@ -237,16 +252,18 @@ export default function PaymentResult() {
         ✨ Hologram Activated ✨
       </Animated.Text>
 
-      <Text style={styles.autoReturn}>Returning to dashboard…</Text>
+      <Text style={styles.autoReturn}>Returning home…</Text>
     </SafeAreaView>
   );
 }
 
-/**
- * =============================================================================
- *  Stylesheet — Clean Fintech UI
- * =============================================================================
- */
+/* ============================================================================
+ * SECTION: Stylesheet — Clean Fintech UI
+ * ----------------------------------------------------------------------------
+ * - Consistent spacing
+ * - Card layout
+ * - High readability
+ * ========================================================================== */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
