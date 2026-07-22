@@ -1,0 +1,58 @@
+/* ============================================================
+   HoloTap — Input Styles
+   File: src/components/Input.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 22 July 2026
+   © 2026 HoloTap Technologies Ltd. All rights reserved.
+   ============================================================ */
+
+/* ============================
+   WRAPPER
+   ============================ */
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+/* ============================
+   LABEL
+   ============================ */
+.input-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* ============================
+   INPUT FIELD
+   ============================ */
+.input-field {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  font-size: 15px;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0078ff;
+  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.15);
+}
+
+/* ============================
+   ERROR STATE
+   ============================ */
+.input-error {
+  border-color: #d93025;
+  box-shadow: 0 0 0 3px rgba(217, 48, 37, 0.15);
+}
+
+.input-error-message {
+  font-size: 13px;
+  color: #d93025;
+  margin-top: 2px;
+}

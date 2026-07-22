@@ -1,0 +1,14 @@
+/* ============================================================
+   HoloTap — Dashboard Grid Styles
+   File: src/components/DashboardGrid.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 22 July 2026
+   © 2026 HoloTap Technologies Ltd. All rights reserved.
+   ============================================================ */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 10px;
+}

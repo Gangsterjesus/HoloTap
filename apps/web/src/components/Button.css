@@ -1,0 +1,62 @@
+/* ============================================================
+   HoloTap — Button Styles
+   File: src/components/Button.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 22 July 2026
+   © 2026 HoloTap Technologies Ltd. All rights reserved.
+   ============================================================ */
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+/* ============================
+   PRIMARY BUTTON
+   ============================ */
+.btn-primary {
+  background: #0078ff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #0069db;
+}
+
+/* ============================
+   SECONDARY BUTTON
+   ============================ */
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #e4e4e4;
+}
+
+/* ============================
+   GHOST BUTTON
+   ============================ */
+.btn-ghost {
+  background: transparent;
+  color: #0078ff;
+  border: 1px solid #0078ff;
+}
+
+.btn-ghost:hover {
+  background: rgba(0, 120, 255, 0.08);
+}
+
+/* ============================
+   DISABLED
+   ============================ */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

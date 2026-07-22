@@ -1,0 +1,23 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.page-header-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.page-header-subtitle {
+  margin: 4px 0 0;
+  font-size: 15px;
+  color: #666;
+}
+
+.page-header-actions {
+  display: flex;
+  gap: 12px;
+}
