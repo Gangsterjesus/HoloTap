@@ -1,0 +1,50 @@
+/* ============================================================
+   HoloTap — Navigation Styles (Production)
+   File: src/components/Navigation.module.css
+   ============================================================ */
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background-color: #111;
+  color: #fff;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.link:hover {
+  color: #fff;
+}
+
+.activeLink {
+  color: #fff;
+  font-weight: bold;
+  border-bottom: 2px solid #fff;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .menu {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}

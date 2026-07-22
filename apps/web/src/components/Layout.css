@@ -1,0 +1,35 @@
+/* ============================================================
+   HoloTap — Global Layout Styles
+   File: src/components/Layout.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 22 July 2026
+   © 2026 HoloTap Technologies Ltd. All rights reserved.
+   ============================================================ */
+
+/* ============================
+   LAYOUT WRAPPER
+   ============================ */
+.layout {
+  padding: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ============================
+   PAGE TITLE
+   ============================ */
+.layout-title {
+  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* ============================
+   PAGE CONTENT
+   ============================ */
+.layout-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
