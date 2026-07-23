@@ -1,5 +1,18 @@
 {
   "name": "holotap-monorepo",
   "private": true,
-  "workspaces": ["apps/*"]
+  "workspaces": [
+    "apps/*"
+  ],
+  "dependencies": {
+    "expo": "^57.0.8",
+    "expo-router": "^57.0.8",
+    "expo-splash-screen": "^57.0.5",
+    "expo-web-browser": "^57.0.2",
+    "react-native": "^0.86.0",
+    "react-native-gesture-handler": "^3.1.0",
+    "react-native-reanimated": "^4.5.3",
+    "react-native-safe-area-context": "^5.8.0",
+    "react-native-screens": "^4.26.2"
+  }
 }
