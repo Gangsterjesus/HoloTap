@@ -45,12 +45,14 @@ const navConfig = {
     { label: "Settings", to: "/settings" },
   ],
 
-  admin: [
-    { label: "Admin Home", to: "/admin" },
-    { label: "Logs", to: "/admin/logs" },
-    { label: "Refunds", to: "/admin/refunds" },
-    { label: "Live", to: "/admin/live" },
-  ],
+admin: [
+  { label: "Admin Dashboard", to: "/admin" },
+  { label: "Merchants", to: "/admin/merchants" },
+  { label: "System Logs", to: "/admin/logs" },
+  { label: "System Status", to: "/admin/status" },
+  { label: "Organisations", to: "/admin/organisations" },
+  { label: "Users", to: "/admin/users" },
+],
 };
 
 /* ============================
