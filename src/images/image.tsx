@@ -1,1 +1,0 @@
-import holoTapBadge from "../assets/HoloTap-Badge.png";

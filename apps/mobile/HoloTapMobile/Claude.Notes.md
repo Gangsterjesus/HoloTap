@@ -1,3 +1,0 @@
-# Claude Notes
-
-Your content starts here…
