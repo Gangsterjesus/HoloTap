@@ -1,0 +1,81 @@
+/**
+ * File: qrActivation.css
+ * Project: HoloTap Web UI
+ * Screen: QR Activation Screen
+ *
+ * Author: Raymond Newton (E5357171)
+ * Date: 24 July 2026
+ *
+ * Description:
+ *  - Styling for the QR Activation screen.
+ *  - Handles layout, typography, QR code positioning,
+ *    button styling, and active/expired states.
+ *
+ * Notes:
+ *  - Used by QRActivation.jsx
+ *  - No inline styles permitted in component.
+ */
+
+/* Layout */
+.qr-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.qr-content {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* Typography */
+.qr-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.qr-subtitle {
+  margin-bottom: 1rem;
+}
+
+.qr-label {
+  margin-top: 1rem;
+}
+
+.qr-token {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* QR Code */
+.qr-code {
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Buttons */
+.qr-button {
+  padding: 10px 20px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+/* States */
+.qr-loading {
+  color: #555;
+}
+
+.qr-error {
+  color: red;
+  font-weight: bold;
+}
+
+.qr-active {
+  color: #333;
+}
+
+.qr-expired {
+  color: red;
+  font-weight: bold;
+}

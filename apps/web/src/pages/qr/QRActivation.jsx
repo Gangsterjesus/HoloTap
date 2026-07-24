@@ -1,12 +1,38 @@
-import { useState } from "react";
+/**
+ * File: QRActivation.jsx
+ * Project: HoloTap Web UI
+ * Screen: QR Activation Screen
+ *
+ * Author: Raymond Newton (E5357171)
+ * Date: 24 July 2026
+ *
+ * Description:
+ *  - Merchant-facing screen for generating secure QR payment sessions.
+ *  - Calls /session/create on HoloTapServer.
+ *  - Renders QR code, session token, and live expiry countdown.
+ *  - Provides regeneration flow when QR expires.
+ *
+ * Notes:
+ *  - Styling is external (styles/qrActivation.css).
+ *  - Countdown auto-clears and resets on new QR generation.
+ */
+
+import { useState, useEffect } from "react";
 import QRCode from "react-qrcode-svg";
+import "../../styles/qrActivation.css";
 
 export default function QRActivation() {
+  // -------------------------------
+  // State
+  // -------------------------------
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [expires, setExpires] = useState(null);
   const [error, setError] = useState(null);
 
+  // -------------------------------
+  // Generate QR Session
+  // -------------------------------
   async function generateQR() {
     try {
       setLoading(true);
@@ -34,26 +60,68 @@ export default function QRActivation() {
     }
   }
 
+  // -------------------------------
+  // Countdown Timer
+  // -------------------------------
+  useEffect(() => {
+    if (!token || !expires) return;
+
+    const interval = setInterval(() => {
+      setExpires((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [token, expires]);
+
+  // -------------------------------
+  // Render
+  // -------------------------------
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>QR Activation</h1>
-      <p>Generate a QR code to start a secure payment session.</p>
+    <div className="qr-wrapper">
+      <h1 className="qr-title">QR Activation</h1>
+      <p className="qr-subtitle">Generate a QR code to start a secure payment session.</p>
 
-      {loading && <p>Generating QR…</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {loading && <p className="qr-loading">Generating QR…</p>}
+      {error && <p className="qr-error">{error}</p>}
 
-      {!token && (
-        <button onClick={generateQR} style={{ padding: "10px 20px" }}>
+      {!token && !loading && (
+        <button className="qr-button" onClick={generateQR}>
           Generate QR
         </button>
       )}
 
       {token && (
-        <div style={{ marginTop: "2rem" }}>
-          <QRCode value={token} size={220} />
-          <p>Session Token:</p>
-          <code>{token}</code>
-          <p>Expires in: {expires}s</p>
+        <div className="qr-content">
+          <div className="qr-code">
+            <QRCode value={token} size={220} />
+          </div>
+
+          <p className="qr-label">Session Token:</p>
+          <code className="qr-token">{token}</code>
+
+          <p className={expires > 0 ? "qr-active" : "qr-expired"}>
+            {expires > 0
+              ? `Expires in: ${expires}s`
+              : "QR expired — generate a new one"}
+          </p>
+
+          {expires === 0 && (
+            <button
+              className="qr-button"
+              onClick={() => {
+                setToken(null);
+                setExpires(null);
+              }}
+            >
+              Generate Another
+            </button>
+          )}
         </div>
       )}
     </div>

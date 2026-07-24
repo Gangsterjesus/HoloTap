@@ -1,0 +1,76 @@
+/**
+ * File: paymentsFeed.css
+ * Project: HoloTap Web UI
+ * Screen: Payments Feed
+ *
+ * Author: Raymond Newton (E5357171)
+ * Date: 24 July 2026
+ *
+ * Description:
+ *  - Styling for the Payments Feed screen.
+ *  - Handles list layout, payment rows, status colours,
+ *    and empty/loading/error states.
+ */
+
+/* Layout */
+.pf-wrapper {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.pf-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* States */
+.pf-loading {
+  color: #555;
+}
+
+.pf-error {
+  color: red;
+  font-weight: bold;
+}
+
+.pf-empty {
+  color: #777;
+  margin-top: 1rem;
+}
+
+/* List */
+.pf-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.pf-item {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Payment Row */
+.pf-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.pf-amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.pf-status {
+  font-weight: bold;
+}
+
+/* Meta */
+.pf-meta {
+  font-size: 0.85rem;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+}

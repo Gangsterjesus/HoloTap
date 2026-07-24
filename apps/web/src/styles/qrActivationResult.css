@@ -1,0 +1,54 @@
+/**
+ * File: qrActivationResult.css
+ * Project: HoloTap Web UI
+ * Screen: QR Activation Result Screen
+ *
+ * Author: Raymond Newton (E5357171)
+ * Date: 24 July 2026
+ *
+ * Description:
+ *  - Styling for the QR Activation Result screen.
+ *  - Handles success/error/pending states and action buttons.
+ */
+
+.qr-result-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.qr-result-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.qr-result-success {
+  color: green;
+  font-weight: bold;
+}
+
+.qr-result-error {
+  color: red;
+  font-weight: bold;
+}
+
+.qr-result-pending {
+  color: #555;
+}
+
+.qr-result-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.qr-result-button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.qr-result-button-secondary {
+  padding: 10px 20px;
+  background: #ddd;
+  cursor: pointer;
+}
