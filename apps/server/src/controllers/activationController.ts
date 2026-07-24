@@ -8,7 +8,7 @@
  *  - Basic audit logging (Task 01)
  */
 
-/// <reference types="express" />
+
 import { Request, Response } from 'express';
 import { getToken, activateToken } from '../services/qrTokenService';
 // Attempt to load audit logging service; fall back to a no-op when missing.
