@@ -1,37 +1,49 @@
 /**
- * HoloTapServer
- * Activation Controller
+ * HoloTapServer — Activation Controller
+ * Author: Raymond Newton
+ * Date: 24/07/2026
  *
- * Purpose:
- *  - Handle QR activation POST
- *  - Enforce replay protection
- *  - Basic audit logging (Task 01)
+ * Overview:
+ *  Handles QR activation requests from the web client.
+ *  Provides replay‑safe token activation and emits audit events.
+ *
+ * Sections:
+ *  01 — Imports
+ *  02 — Audit Logging Loader (Dynamic)
+ *  03 — activateQr Handler
+ *        - Token validation
+ *        - Replay protection
+ *        - Audit logging
+ *        - Response shaping
  */
-
 
 import { Request, Response } from 'express';
 import { getToken, activateToken } from '../services/qrTokenService';
-// Attempt to load audit logging service; fall back to a no-op when missing.
-// This keeps the controller working even if the auditLogService module is absent
-// (fixes build errors when the service isn't present in certain environments).
+
+/* -------------------------------------------------------------------------- */
+/*  02 — Audit Logging Loader (Dynamic)                                       */
+/* -------------------------------------------------------------------------- */
+
 let logEvent: (evt: any) => Promise<void> = async () => {};
+
 try {
-  // Use require to avoid static import resolution errors during build when the
-  // module/file is not available. Keep typings loose here to allow a graceful
-  // fallback.
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const _svc = require('../services/auditLogService');
-  if (_svc && typeof _svc.logEvent === 'function') {
-    logEvent = _svc.logEvent;
+  const svc = require('../services/auditLogService');
+  if (svc && typeof svc.logEvent === 'function') {
+    logEvent = svc.logEvent;
   }
-} catch (e) {
-  // Swallow errors and continue with no-op logger
+} catch {
+  // No‑op fallback (audit logging disabled)
 }
+
+/* -------------------------------------------------------------------------- */
+/*  03 — activateQr Handler                                                   */
+/* -------------------------------------------------------------------------- */
 
 export async function activateQr(req: Request, res: Response) {
   const { tokenId, tenantId } = req.body;
 
-  // Retrieve token from repo-backed service
+  // Token lookup
   const token = await getToken(tokenId);
 
   if (!token || token.tenantId !== tenantId) {
@@ -47,7 +59,7 @@ export async function activateQr(req: Request, res: Response) {
     return res.status(400).json({ error: 'Invalid token' });
   }
 
-  // Replay-safe activation
+  // Replay‑safe activation
   const ok = await activateToken(tokenId);
 
   if (!ok) {
@@ -63,6 +75,7 @@ export async function activateQr(req: Request, res: Response) {
     return res.status(400).json({ error: 'Token expired or already used' });
   }
 
+  // Successful activation
   await logEvent({
     action: 'qr_activation',
     result: 'success',
