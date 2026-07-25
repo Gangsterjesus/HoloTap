@@ -1,0 +1,58 @@
+.payments-container {
+  padding: 40px;
+}
+
+.payments-title {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.payments-subtitle {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.payments-error {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.payments-loading {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.payments-empty {
+  font-size: 16px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.payments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.payments-card {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.payments-actions {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.payments-button {
+  padding: 14px 24px;
+  background-color: #111;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}

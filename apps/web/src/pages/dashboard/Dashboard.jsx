@@ -14,7 +14,39 @@
  * ============================================================
  */
 
+import { useEffect, useState } from "react";
+import { verifySession } from "../../services/api"; // adjust if your api.ts lives elsewhere
+import { useNavigate } from "react-router-dom";
+
 export default function Dashboard() {
+  const navigate = useNavigate();
+
+  // Flow 3 state
+  const [sessionStatus, setSessionStatus] = useState("pending");
+  const [updatedAt, setUpdatedAt] = useState("");
+
+  const sessionId = localStorage.getItem("holotap_sessionId");
+
+  useEffect(() => {
+    if (!sessionId) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await verifySession(sessionId);
+        setSessionStatus(res.status);
+        setUpdatedAt(res.updatedAt);
+
+        if (res.status === "completed" || res.status === "expired") {
+          clearInterval(interval);
+        }
+      } catch (err) {
+        console.error("Polling error:", err);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [sessionId]);
+
   return (
     <div style={styles.container}>
 
@@ -29,18 +61,18 @@ export default function Dashboard() {
           ============================ */}
       <div style={styles.metrics}>
         <div style={styles.card}>
-          <h2>Total Scans</h2>
-          <p>0</p>
+          <h2>Session Status</h2>
+          <p>{sessionStatus}</p>
         </div>
 
         <div style={styles.card}>
-          <h2>Payments</h2>
-          <p>£0.00</p>
+          <h2>Last Updated</h2>
+          <p>{updatedAt || "—"}</p>
         </div>
 
         <div style={styles.card}>
           <h2>Verification Status</h2>
-          <p>Pending</p>
+          <p>{sessionStatus === "completed" ? "Verified" : "Pending"}</p>
         </div>
       </div>
 
@@ -51,6 +83,15 @@ export default function Dashboard() {
         <a href="/payments" style={styles.button}>View Payments</a>
         <a href="/identity" style={styles.button}>Identity Settings</a>
         <a href="/status" style={styles.button}>Badge Status</a>
+
+        {sessionStatus === "expired" && (
+          <button
+            style={styles.button}
+            onClick={() => navigate("/scan")}
+          >
+            Restart Session
+          </button>
+        )}
       </div>
 
     </div>
@@ -71,14 +112,12 @@ const styles = {
     marginBottom: "30px",
   },
 
-  // Metrics grid
   metrics: {
     display: "flex",
     gap: "20px",
     marginBottom: "40px",
   },
 
-  // Individual metric card
   card: {
     flex: 1,
     padding: "20px",
@@ -87,7 +126,6 @@ const styles = {
     textAlign: "center",
   },
 
-  // Quick actions
   actions: {
     display: "flex",
     gap: "20px",
