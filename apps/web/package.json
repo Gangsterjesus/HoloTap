@@ -9,9 +9,10 @@
   },
   "dependencies": {
     "html5-qrcode": "^2.3.8",
+    "minimatch": "^10.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router-dom": "7.18.1"
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
