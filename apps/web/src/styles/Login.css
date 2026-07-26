@@ -1,0 +1,131 @@
+/**
+ * ============================================================
+ *  HoloTap — Authentication: Login (Stylesheet)
+ *  File: src/pages/auth/Login.css
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+ *  Date: 23 July 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
+ *
+ *  Purpose:
+ *    Stylesheet for the Login authentication page. Provides layout,
+ *    spacing, typography, and button styling for magic link and
+ *    passkey sign‑in flows.
+ *
+ *  Responsibilities:
+ *    - Style login container and layout
+ *    - Style input fields and labels
+ *    - Style primary and secondary authentication buttons
+ * ============================================================
+ */
+
+/* ------------------------------------------------------------
+   Layout container
+   ------------------------------------------------------------
+   Provides page padding, centers content, and constrains width
+   for consistent presentation across desktop and mobile.
+------------------------------------------------------------ */
+.login-container {
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ------------------------------------------------------------
+   Page title
+   ------------------------------------------------------------
+   Large, bold heading for immediate user context.
+------------------------------------------------------------ */
+.login-title {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+/* ------------------------------------------------------------
+   Subtitle / description
+   ------------------------------------------------------------
+   Secondary text explaining available authentication methods.
+------------------------------------------------------------ */
+.login-subtitle {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* ------------------------------------------------------------
+   Form layout
+   ------------------------------------------------------------
+   Vertical spacing between form elements.
+------------------------------------------------------------ */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ------------------------------------------------------------
+   Label styling
+   ------------------------------------------------------------
+   Clear, readable label text aligned to the left.
+------------------------------------------------------------ */
+.login-label {
+  font-size: 16px;
+  color: #222;
+  text-align: left;
+}
+
+/* ------------------------------------------------------------
+   Email input field
+   ------------------------------------------------------------
+   Rounded input with padding and subtle border for clarity.
+------------------------------------------------------------ */
+.login-input {
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+/* ------------------------------------------------------------
+   Action buttons container
+   ------------------------------------------------------------
+   Horizontal layout for magic link + passkey buttons.
+------------------------------------------------------------ */
+.login-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* ------------------------------------------------------------
+   Primary button — Magic Link
+   ------------------------------------------------------------
+   Dark theme, strong contrast, high emphasis.
+------------------------------------------------------------ */
+.login-btn-primary {
+  padding: 12px 20px;
+  background-color: #111;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------
+   Secondary button — Passkey
+   ------------------------------------------------------------
+   Light theme, lower emphasis, still visually clear.
+------------------------------------------------------------ */
+.login-btn-secondary {
+  padding: 12px 20px;
+  background-color: #eaeaea;
+  color: #111;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}

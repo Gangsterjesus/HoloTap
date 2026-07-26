@@ -3,41 +3,46 @@
  *  HoloTap — Payments Overview (Flow 5)
  *  File: src/pages/payments.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 25 July 2026
+ *  Date: 26 July 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *  Displays the creator’s payment history, including amounts,
- *  timestamps, session linkage, and payment status.
+ *    Displays the creator’s payment history including amounts,
+ *    timestamps, session linkage, and payment status.
  *
  *  Subsystem:
- *  Flow 5 — Payments → Session-linked payment history
+ *    Flow 5 — Payments → Session-linked payment history
  *
  *  Notes:
- *  - Uses external CSS (payments.css)
- *  - Fetches payment data from backend API
+ *    - Uses external CSS (payments.css)
+ *    - Fetches payment data from backend API
+ *    - Accessible from global dashboard
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPayments } from "../services/api";   // adjust if needed
+import { getPayments } from "../services/api";
 import "../styles/payments.css";
+
+/* ============================
+   PAGE
+   ============================ */
 
 export default function Payments() {
   const navigate = useNavigate();
 
-  // ============================
-  // STATE MANAGEMENT
-  // ============================
+  /* ============================
+     STATE MANAGEMENT
+     ============================ */
   const [payments, setPayments] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // ============================
-  // FETCH PAYMENTS (FLOW 5 CORE)
-  // ============================
+  /* ============================
+     FETCH PAYMENTS (FLOW 5 CORE)
+     ============================ */
   useEffect(() => {
     async function loadPayments() {
       try {
@@ -54,9 +59,9 @@ export default function Payments() {
     loadPayments();
   }, []);
 
-  // ============================
-  // RENDER
-  // ============================
+  /* ============================
+     RENDER
+     ============================ */
   return (
     <div className="payments-container">
 
@@ -70,11 +75,12 @@ export default function Payments() {
       {/* LOADING */}
       {loading && <p className="payments-loading">Loading payments…</p>}
 
-      {/* PAYMENT LIST */}
+      {/* EMPTY STATE */}
       {!loading && payments.length === 0 && (
         <p className="payments-empty">No payments recorded yet.</p>
       )}
 
+      {/* PAYMENT LIST */}
       {!loading && payments.length > 0 && (
         <div className="payments-list">
           {payments.map((p) => (

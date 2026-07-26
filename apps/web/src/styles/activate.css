@@ -1,0 +1,42 @@
+/* ============================================================
+   HoloTap Web — Activation Styles (Flow 1)
+   File: src/styles/activate.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 26 July 2026
+   ============================================================ */
+
+.activate-container {
+  padding: 24px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.activate-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.activate-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.activate-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb; /* blue-600 */
+  color: #fff;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.activate-button:hover {
+  background-color: #1e4fc7;
+}

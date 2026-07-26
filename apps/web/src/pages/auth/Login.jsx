@@ -1,4 +1,3 @@
-
 /**
  * ============================================================
  *  HoloTap — Authentication: Login
@@ -16,13 +15,43 @@
  *    - Capture user email input
  *    - Request magic link delivery
  *    - Initiate passkey authentication flow
+ *    - Auto‑fill returning user details
  * ============================================================
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+
+  // ------------------------------------------------------------
+  // Load returning user details (email auto‑fill)
+  // ------------------------------------------------------------
+  useEffect(() => {
+    const last = localStorage.getItem("ht_last_user");
+    if (last) {
+      const user = JSON.parse(last);
+      if (user?.email) {
+        setEmail(user.email);
+      }
+    }
+  }, []);
+
+  // ------------------------------------------------------------
+  // Optional: Auto‑redirect returning users directly to passkey
+  // Uncomment if desired
+  //
+  // useEffect(() => {
+  //   const last = localStorage.getItem("ht_last_user");
+  //   if (last) {
+  //     const user = JSON.parse(last);
+  //     if (user?.email) {
+  //       navigate("/auth/passkey", { state: { email: user.email } });
+  //     }
+  //   }
+  // }, []);
+  // ------------------------------------------------------------
 
   async function requestMagicLink() {
     await fetch("http://192.168.1.205:3001/auth/magic-link", {
@@ -41,15 +70,15 @@ export default function Login() {
   }
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Sign In</h1>
-      <p style={styles.subtitle}>Choose magic link or passkey.</p>
+    <div className="login-container">
+      <h1 className="login-title">Sign In</h1>
+      <p className="login-subtitle">Choose magic link or passkey.</p>
 
-      <div style={styles.form}>
-        <label style={styles.label}>
+      <div className="login-form">
+        <label className="login-label">
           Email address
           <input
-            style={styles.input}
+            className="login-input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -57,11 +86,11 @@ export default function Login() {
           />
         </label>
 
-        <div style={styles.actions}>
-          <button style={styles.buttonPrimary} onClick={requestMagicLink}>
+        <div className="login-actions">
+          <button className="login-btn-primary" onClick={requestMagicLink}>
             Send Magic Link
           </button>
-          <button style={styles.buttonSecondary} onClick={usePasskey}>
+          <button className="login-btn-secondary" onClick={usePasskey}>
             Use Passkey
           </button>
         </div>
@@ -69,38 +98,3 @@ export default function Login() {
     </div>
   );
 }
-
-const styles = {
-  container: { padding: "40px", maxWidth: "600px", margin: "0 auto" },
-  title: { fontSize: "36px", marginBottom: "10px", color: "#111" },
-  subtitle: { fontSize: "18px", color: "#333", marginBottom: "30px" },
-  form: { display: "flex", flexDirection: "column", gap: "16px" },
-  label: { fontSize: "16px", color: "#222", textAlign: "left" },
-  input: {
-    marginTop: "8px",
-    padding: "12px",
-    fontSize: "16px",
-    borderRadius: "8px",
-    border: "1px solid #CCC",
-    width: "100%",
-  },
-  actions: { display: "flex", gap: "16px", marginTop: "20px" },
-  buttonPrimary: {
-    padding: "12px 20px",
-    backgroundColor: "#111",
-    color: "#fff",
-    borderRadius: "8px",
-    fontWeight: "700",
-    border: "none",
-    cursor: "pointer",
-  },
-  buttonSecondary: {
-    padding: "12px 20px",
-    backgroundColor: "#EAEAEA",
-    color: "#111",
-    borderRadius: "8px",
-    fontWeight: "600",
-    border: "none",
-    cursor: "pointer",
-  },
-};

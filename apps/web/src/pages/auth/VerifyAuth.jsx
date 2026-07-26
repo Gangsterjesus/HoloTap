@@ -14,11 +14,12 @@
  *  Responsibilities:
  *    - Call verification endpoint
  *    - Display authentication status
+ *    - Persist returning user details for future login optimisation
  * ============================================================
  */
 
-
 import { useEffect, useState } from "react";
+import "./VerifyAuth.css";
 
 export default function VerifyAuth() {
   const [status, setStatus] = useState("Verifying…");
@@ -27,7 +28,21 @@ export default function VerifyAuth() {
     try {
       const res = await fetch("http://192.168.1.205:3001/auth/verify");
       const data = await res.json();
+
+      // Update UI status
       setStatus(data?.message || "Authenticated.");
+
+      // Persist returning user details
+      if (data?.authenticated && data?.email) {
+        localStorage.setItem(
+          "ht_last_user",
+          JSON.stringify({
+            email: data.email,
+            role: data.role || "merchant",
+            lastLogin: Date.now(),
+          })
+        );
+      }
     } catch (err) {
       setStatus("Verification failed.");
     }
@@ -38,15 +53,9 @@ export default function VerifyAuth() {
   }, []);
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Authentication</h1>
-      <p style={styles.subtitle}>{status}</p>
+    <div className="verify-container">
+      <h1 className="verify-title">Authentication</h1>
+      <p className="verify-status">{status}</p>
     </div>
   );
 }
-
-const styles = {
-  container: { padding: "40px", maxWidth: "600px", margin: "0 auto" },
-  title: { fontSize: "32px", marginBottom: "10px", color: "#111" },
-  subtitle: { fontSize: "18px", color: "#333" },
-};

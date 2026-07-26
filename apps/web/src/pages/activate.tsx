@@ -1,8 +1,11 @@
 /**
  * ------------------------------------------------------------
  * HoloTap Web — Activation Page (Flow 1)
- * Engineer: Raymond Newton
+ * File: src/pages/activate.tsx
+ * Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  * Date: 25 July 2026
+ * © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ------------------------------------------------------------
  *
  * Purpose:
  *   First step in the Web → Server pipeline.
@@ -12,8 +15,9 @@
  *   Flow 1 — Activation → Token issuance
  *
  * Notes:
- *   - React Router DOM (SPA architecture)
- *   - Uses useNavigate() for routing
+ *   - Inline styles removed
+ *   - Uses external CSS (activate.css)
+ *   - React Router DOM SPA architecture
  *   - Stores token in localStorage
  *   - ErrorBoundary provides consistent error UI
  * ------------------------------------------------------------
@@ -21,33 +25,20 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { activate } from "../../lib/api";
-
-
+import { activate } from "../lib/api";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import "../styles/activate.css";
 
-
-
-// ------------------------------------------------------------
-// SECTION: Activation Page Component
-// Engineer Notes:
-//   React Router DOM automatically treats this as a client component.
-//   No "use client" directive required.
-// ------------------------------------------------------------
+/* ------------------------------------------------------------
+   SECTION: Activation Page Component
+   ------------------------------------------------------------ */
 export default function Activate() {
   const navigate = useNavigate();
   const [code, setCode] = useState<string>("");
 
-
-
-  // ------------------------------------------------------------
-  // SECTION: Activation Handler
-  // Engineer Notes:
-  //   - Wraps activate() API call
-  //   - Stores token in localStorage for future flows
-  //   - Redirects to /dashboard on success
-  //   - Strict-mode safe error handling (err is unknown)
-// ------------------------------------------------------------
+  /* ------------------------------------------------------------
+     SECTION: Activation Handler
+     ------------------------------------------------------------ */
   async function handleActivate(setError: (msg: string) => void) {
     try {
       const result = await activate(code);
@@ -64,29 +55,24 @@ export default function Activate() {
     }
   }
 
-
-
-  // ------------------------------------------------------------
-  // SECTION: Render
-  // Engineer Notes:
-  //   - ErrorBoundary wraps the entire interactive block
-  //   - setError is typed explicitly to satisfy TS strict mode
-  // ------------------------------------------------------------
+  /* ------------------------------------------------------------
+     SECTION: Render
+     ------------------------------------------------------------ */
   return (
     <ErrorBoundary>
       {(setError: (msg: string) => void) => (
-        <div className="p-6 max-w-md mx-auto">
-          <h1 className="text-2xl font-semibold mb-4">Activate HoloTap</h1>
+        <div className="activate-container">
+          <h1 className="activate-title">Activate HoloTap</h1>
 
           <input
-            className="border p-2 w-full mb-4"
+            className="activate-input"
             placeholder="Enter activation code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
 
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            className="activate-button"
             onClick={() => handleActivate(setError)}
           >
             Activate

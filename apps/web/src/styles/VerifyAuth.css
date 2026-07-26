@@ -1,0 +1,48 @@
+/**
+ * ============================================================
+ *  HoloTap — Authentication: Verification (Stylesheet)
+ *  File: src/pages/auth/VerifyAuth.css
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+ *  Date: 23 July 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
+ *
+ *  Purpose:
+ *    Stylesheet for the authentication verification page.
+ *
+ *  Responsibilities:
+ *    - Style container, title, and status text
+ * ============================================================
+ */
+
+/* ------------------------------------------------------------
+   Layout container
+   ------------------------------------------------------------
+   Provides spacing and centers verification content.
+------------------------------------------------------------ */
+.verify-container {
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ------------------------------------------------------------
+   Title
+   ------------------------------------------------------------
+   Indicates the verification stage of authentication.
+------------------------------------------------------------ */
+.verify-title {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+/* ------------------------------------------------------------
+   Status text
+   ------------------------------------------------------------
+   Displays dynamic verification status (loading, success, failure).
+------------------------------------------------------------ */
+.verify-status {
+  font-size: 18px;
+  color: #333;
+}

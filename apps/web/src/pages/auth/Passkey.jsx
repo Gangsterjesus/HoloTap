@@ -17,25 +17,19 @@
  * ============================================================
  */
 
+import "./Passkey.css";
+
 export default function Passkey() {
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Use Passkey</h1>
-      <p style={styles.subtitle}>
+    <div className="passkey-container">
+      <h1 className="passkey-title">Use Passkey</h1>
+      <p className="passkey-subtitle">
         Your browser will prompt you to use a saved passkey.
       </p>
-      <p style={styles.text}>
+      <p className="passkey-text">
         Follow the browser instructions to complete sign‑in using your device
         credential or security key.
       </p>
     </div>
   );
 }
-
-const styles = {
-  container: { padding: "40px", maxWidth: "600px", margin: "0 auto" },
-  title: { fontSize: "32px", marginBottom: "10px", color: "#111" },
-  subtitle: { fontSize: "18px", color: "#333", marginBottom: "20px" },
-  text: { fontSize: "16px", color: "#222", lineHeight: "1.6" },
-};
-

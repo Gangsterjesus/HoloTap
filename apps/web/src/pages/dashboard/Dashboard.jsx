@@ -8,25 +8,38 @@
  * ============================================================
  *
  *  Purpose:
- *  The main dashboard for creators after onboarding and verification.
- *  Displays high‑level metrics, recent activity, and quick actions.
- *  This is the central hub for all creator operations.
+ *    The main dashboard for creators after onboarding and verification.
+ *    Displays high‑level metrics, recent activity, and quick actions.
+ *
+ *  Subsystem:
+ *    Flow 4 — Session Verify → Creator Monitoring
+ *
+ *  Notes:
+ *    - Inline styles removed
+ *    - Uses external CSS (dashboard.css)
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
-import { verifySession } from "../../services/api"; // adjust if your api.ts lives elsewhere
+import { verifySession } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import "../../styles/dashboard.css";
+
+/* ============================
+   PAGE
+   ============================ */
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  // Flow 3 state
   const [sessionStatus, setSessionStatus] = useState("pending");
   const [updatedAt, setUpdatedAt] = useState("");
 
   const sessionId = localStorage.getItem("holotap_sessionId");
 
+  /* ============================
+     POLLING LOOP (FLOW 4 CORE)
+     ============================ */
   useEffect(() => {
     if (!sessionId) return;
 
@@ -47,46 +60,45 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, [sessionId]);
 
+  /* ============================
+     RENDER
+     ============================ */
   return (
-    <div style={styles.container}>
+    <div className="dashboard-container">
 
-      {/* ============================
-          HEADER SECTION
-          ============================ */}
-      <h1 style={styles.title}>Creator Dashboard</h1>
-      <p style={styles.subtitle}>Your hologram badge activity and payment overview.</p>
+      {/* HEADER */}
+      <h1 className="dashboard-title">Creator Dashboard</h1>
+      <p className="dashboard-subtitle">
+        Your hologram badge activity and payment overview.
+      </p>
 
-      {/* ============================
-          METRICS SECTION
-          ============================ */}
-      <div style={styles.metrics}>
-        <div style={styles.card}>
+      {/* METRICS */}
+      <div className="dashboard-metrics">
+        <div className="dashboard-card">
           <h2>Session Status</h2>
           <p>{sessionStatus}</p>
         </div>
 
-        <div style={styles.card}>
+        <div className="dashboard-card">
           <h2>Last Updated</h2>
           <p>{updatedAt || "—"}</p>
         </div>
 
-        <div style={styles.card}>
+        <div className="dashboard-card">
           <h2>Verification Status</h2>
           <p>{sessionStatus === "completed" ? "Verified" : "Pending"}</p>
         </div>
       </div>
 
-      {/* ============================
-          QUICK ACTIONS SECTION
-          ============================ */}
-      <div style={styles.actions}>
-        <a href="/payments" style={styles.button}>View Payments</a>
-        <a href="/identity" style={styles.button}>Identity Settings</a>
-        <a href="/status" style={styles.button}>Badge Status</a>
+      {/* ACTIONS */}
+      <div className="dashboard-actions">
+        <a href="/payments" className="dashboard-button">View Payments</a>
+        <a href="/identity" className="dashboard-button">Identity Settings</a>
+        <a href="/status" className="dashboard-button">Badge Status</a>
 
         {sessionStatus === "expired" && (
           <button
-            style={styles.button}
+            className="dashboard-button"
             onClick={() => navigate("/scan")}
           >
             Restart Session
@@ -97,46 +109,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: "40px",
-  },
-  title: {
-    fontSize: "36px",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    fontSize: "18px",
-    color: "#555",
-    marginBottom: "30px",
-  },
-
-  metrics: {
-    display: "flex",
-    gap: "20px",
-    marginBottom: "40px",
-  },
-
-  card: {
-    flex: 1,
-    padding: "20px",
-    backgroundColor: "#f5f5f5",
-    borderRadius: "8px",
-    textAlign: "center",
-  },
-
-  actions: {
-    display: "flex",
-    gap: "20px",
-  },
-
-  button: {
-    padding: "14px 24px",
-    backgroundColor: "#111",
-    color: "#fff",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-};

@@ -1,0 +1,20 @@
+/* ============================================================
+   HoloTap Web — QR Scan Styles
+   File: src/styles/scan.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 26 July 2026
+   ============================================================ */
+
+.scan-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scan-reader {
+  width: 100%;
+  max-width: 500px;
+}

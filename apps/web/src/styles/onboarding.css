@@ -1,50 +1,51 @@
 /* ============================================================
-   HoloTap Web — Badge Status Styles (Flow 4)
-   File: src/styles/status.css
+   HoloTap Web — Onboarding Styles
+   File: src/styles/onboarding.css
    Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
    Date: 26 July 2026
    ============================================================ */
 
-.status-container {
+.onboarding-container {
   padding: 40px;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.status-title {
-  font-size: 32px;
+.onboarding-title {
+  font-size: 36px;
   margin-bottom: 10px;
 }
 
-.status-subtitle {
+.onboarding-subtitle {
   font-size: 18px;
   color: #555;
   margin-bottom: 30px;
 }
 
-.status-error {
-  color: red;
-  margin-bottom: 20px;
-}
-
-.status-card {
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.status-actions {
+.onboarding-form {
   display: flex;
+  flex-direction: column;
   gap: 20px;
-  margin-top: 30px;
 }
 
-.status-button {
-  padding: 14px 24px;
+.onboarding-label {
+  font-weight: bold;
+}
+
+.onboarding-input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.onboarding-button {
+  padding: 14px;
   background-color: #111;
   color: #fff;
   border-radius: 6px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
 }

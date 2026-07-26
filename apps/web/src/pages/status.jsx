@@ -1,3 +1,4 @@
+
 /**
  * ============================================================
  *  HoloTap — Badge Status (Flow 4)
@@ -8,16 +9,16 @@
  * ============================================================
  *
  *  Purpose:
- *  Creator-facing badge status page. Shows live QR/session state,
- *  verification status, and operational badge metadata.
+ *    Creator-facing badge status page. Shows live QR/session state,
+ *    verification status, and operational badge metadata.
  *
  *  Subsystem:
- *  Flow 4 — Badge Status → Session Verify → Creator Monitoring
+ *    Flow 4 — Badge Status → Session Verify → Creator Monitoring
  *
  *  Notes:
- *  - Polls /session/verify every 3 seconds
- *  - Uses holotap_sessionId from localStorage
- *  - Uses external CSS (status.css)
+ *    - Polls /session/verify every 3 seconds
+ *    - Uses holotap_sessionId from localStorage
+ *    - Uses external CSS (status.css)
  * ============================================================
  */
 
@@ -26,21 +27,25 @@ import { verifySession } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import "../styles/status.css";
 
+/* ============================
+   PAGE
+   ============================ */
+
 export default function Status() {
   const navigate = useNavigate();
 
-  // ============================
-  // STATE MANAGEMENT
-  // ============================
+  /* ============================
+     STATE MANAGEMENT
+     ============================ */
   const [sessionStatus, setSessionStatus] = useState("pending");
   const [updatedAt, setUpdatedAt] = useState("");
   const [error, setError] = useState("");
 
   const sessionId = localStorage.getItem("holotap_sessionId");
 
-  // ============================
-  // POLLING LOOP (FLOW 4 CORE)
-  // ============================
+  /* ============================
+     POLLING LOOP (FLOW 4 CORE)
+     ============================ */
   useEffect(() => {
     if (!sessionId) {
       setError("No active session found.");
@@ -65,9 +70,9 @@ export default function Status() {
     return () => clearInterval(interval);
   }, [sessionId]);
 
-  // ============================
-  // RENDER
-  // ============================
+  /* ============================
+     RENDER
+     ============================ */
   return (
     <div className="status-container">
 
