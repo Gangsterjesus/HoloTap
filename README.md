@@ -1,3 +1,7 @@
+
+## Fast, secure QR payments built for scale 🚀
+
+
 💠 HoloTap — Scan‑to‑Pay for the Next Digital Economy
 HoloTap is a dual‑version QR‑code payment platform built for both everyday mobile users and large multi‑tenant organisations.
 The small mobile version delivers fast, secure, frictionless micro‑transactions for fans, shoppers, travellers, and event attendees.
