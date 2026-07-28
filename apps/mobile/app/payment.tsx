@@ -1,64 +1,53 @@
 /**
  * =============================================================================
- * HOLOTAP MOBILE — PAYMENT INITIALISATION (payment.tsx)
+ * HOLOTAP MOBILE — PAYMENT INITIALISATION v2 (Engineering Edition)
  * =============================================================================
- * Engineer: Raymond Newton (E5357171)
- * Assistant: Copilot Engineering Assistant
- * Date: 01 July 2026
- * © 2026 HoloTap Technologies Ltd. All rights reserved.
- *
+ * Engineer:      Raymond Newton (E5357171)
+ * Assistant:     Copilot Engineering Assistant
+ * File:          app/payment.tsx
+ * Date:          28 July 2026
+ * =============================================================================
  * PURPOSE:
  * Implements Flow 6 + Flow 7 — Payment Initialisation & Submission.
  * Receives merchantId + sessionId from Flow 4, allows the user to enter
  * payment details, submits them to the backend, and transitions into
  * Flow 8 (Payment Result).
  *
- * SCALABILITY PATCH:
- * - Strong TypeScript typing for route params + backend response
- * - Modular payment helper
- * - Typed navigation (Href)
- * - Deterministic lifecycle
- * - Clean fintech UI
- * - Strict TypeScript + ESLint compliance
+ * PAYMENT LIFECYCLE:
+ *   1. Receive route params (merchantId, sessionId)
+ *   2. Validate input
+ *   3. Submit payment to backend
+ *   4. Navigate to Payment Result screen
+ *
+ * VERSION NOTES:
+ *   • v4: Correct Expo Router v6 param narrowing
+ *   • No generics, no TS2344, no invalid constraints
+ *   • Unstyled, deterministic, identity‑aligned
+ *   • Pure TypeScript, pure fintech flow
  *
  * FLOW ALIGNMENT:
- * Flow 4 → Session Verification (payment-verification.tsx)
- * Flow 5 → Payment Initialisation (this screen)
- * Flow 6 → Payment Submission
- * Flow 8 → Payment Result (payment-result.tsx)
- *
- * TM470 COMPLIANCE:
- * - Modular, testable, flow-aligned, maintainable
- * - No business logic inside UI
+ *   Flow 4 → Session Verification
+ *   Flow 5 → Payment Initialisation (this screen)
+ *   Flow 6 → Payment Submission
+ *   Flow 8 → Payment Result
  * =============================================================================
  */
 
 import React, { useState } from "react";
-import { Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, Text, View, TextInput, Button } from "react-native";
 import { useLocalSearchParams, useRouter, type Href } from "expo-router";
 import { apiPost } from "../api/client";
-import { API_URL } from "../src/config";
 
 /**
- * =============================================================================
- *  TypeScript Types — Route Params + Backend Response
- * =============================================================================
+ * Backend response for payment submission.
  */
-interface RouteParams {
-  merchantId?: string;
-  sessionId?: string;
-}
-
 interface PaymentResponse {
   success: boolean;
   message?: string;
 }
 
 /**
- * =============================================================================
- *  Modular Payment Helper — Clean & Testable
- * =============================================================================
+ * Submit payment to backend (clean + testable).
  */
 async function submitPayment(
   merchantId: string,
@@ -75,31 +64,41 @@ async function submitPayment(
 }
 
 /**
- * =============================================================================
- *  Main Component — Payment
- * =============================================================================
+ * Main Payment Initialisation Screen (unstyled)
  */
-export default function Payment() {
+export default function PaymentScreen() {
   const router = useRouter();
-  const { merchantId, sessionId } = useLocalSearchParams() as RouteParams;
+
+  /**
+   * Correct Expo Router v6 param narrowing
+   * ---------------------------------------------------------
+   * DO NOT use generics.
+   * DO NOT cast the entire object.
+   * Narrow individual fields only.
+   */
+  const params = useLocalSearchParams();
+
+  const merchantId = params.merchantId as string | undefined;
+  const sessionId = params.sessionId as string | undefined;
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   /**
-   * ---------------------------------------------------------------------------
-   * Handle Payment Submission
-   * ---------------------------------------------------------------------------
+   * Handle payment submission.
    */
-  async function handlePay() {
+  async function handleSubmit() {
+    setError(null);
+
     if (!merchantId || !sessionId) {
-      Alert.alert("Missing Data", "Merchant or session ID is missing.");
+      setError("Missing merchant or session ID.");
       return;
     }
 
     if (!amount || isNaN(Number(amount))) {
-      Alert.alert("Invalid Amount", "Please enter a valid numeric amount.");
+      setError("Invalid amount — must be numeric.");
       return;
     }
 
@@ -127,76 +126,46 @@ export default function Payment() {
         return;
       }
 
-      Alert.alert("Payment Failed", result.message ?? "Unable to process payment.");
+      setError(result.message ?? "Payment failed.");
     } catch {
-      Alert.alert("Network Error", "Unable to reach the payment server.");
+      setError("Network error — unable to reach payment server.");
     } finally {
       setLoading(false);
     }
   }
 
   /**
-   * ---------------------------------------------------------------------------
-   * Main UI
-   * ---------------------------------------------------------------------------
+   * Main unstyled fintech UI
    */
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Payment Details</Text>
+    <SafeAreaView>
+      <View>
+        <Text>Payment Initialisation</Text>
 
-      <Text style={styles.label}>Merchant ID: {merchantId}</Text>
-      <Text style={styles.label}>Session ID: {sessionId}</Text>
+        <Text>Merchant ID: {merchantId ?? "—"}</Text>
+        <Text>Session ID: {sessionId ?? "—"}</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Amount"
-        value={amount}
-        onChangeText={setAmount}
-        keyboardType="numeric"
-      />
+        <TextInput
+          value={amount}
+          onChangeText={setAmount}
+          placeholder="Amount"
+          keyboardType="numeric"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Description (optional)"
-        value={description}
-        onChangeText={setDescription}
-      />
+        <TextInput
+          value={description}
+          onChangeText={setDescription}
+          placeholder="Description (optional)"
+        />
 
-      <Button
-        title={loading ? "Processing..." : "Pay Now"}
-        onPress={handlePay}
-        disabled={loading}
-      />
+        <Button
+          title={loading ? "Processing…" : "Submit Payment"}
+          onPress={handleSubmit}
+          disabled={loading}
+        />
+
+        {error && <Text>{error}</Text>}
+      </View>
     </SafeAreaView>
   );
 }
-
-/**
- * =============================================================================
- *  Stylesheet — Clean Fintech UI
- * =============================================================================
- */
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 12,
-    marginVertical: 10,
-    borderRadius: 6,
-    fontSize: 16,
-  },
-});
