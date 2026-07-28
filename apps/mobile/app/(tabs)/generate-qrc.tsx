@@ -1,187 +1,160 @@
 /**
  * =============================================================================
- * HOLOTAP MOBILE — GENERATE QR SCREEN (generate-qrc.tsx)
+ * HOLOTAP MOBILE — GENERATE QR SCREEN v2 (Engineering Edition)
  * =============================================================================
- * Engineer: Raymond Newton (E5357171)
- * Assistant: Copilot Engineering Assistant
- * Date: 01 July 2026
- * © 2026 HoloTap Technologies Ltd. All rights reserved.
- *
+ * Engineer:      Raymond Newton (E5357171)
+ * Assistant:     Copilot Engineering Assistant
+ * File:          generate-qrc.tsx
+ * Date:          28 July 2026
+ * =============================================================================
  * PURPOSE:
- * Implements Flow 2 — Merchant QR Session Generation.
- * Requests a signed, tamper‑proof QR session token from the backend and
- * renders it as a scannable QR code for consumer payment initiation.
+ * Implements Flow 3 — Merchant QR Code Generation.
  *
- * SCALABILITY PATCH:
- * - Strong TypeScript typing for session payload
- * - Modular session helper function
- * - SafeAreaView for modern devices
- * - Clean fintech UI structure
- * - Improved error handling + UX stability
- * - Fully deterministic component lifecycle
+ * This screen renders the active QR session token provided by the
+ * identity‑aware QR session subsystem (useQrSession).
+ *
+ * ARCHITECTURE:
+ *   • Identity‑aware (useMerchantIdentity)
+ *   • Session‑aware (useQrSession)
+ *   • No styling (unstyled engineering edition)
+ *   • No local session logic
+ *   • No local expiry logic
+ *   • No Expo-era helpers
  *
  * FLOW ALIGNMENT:
- * Flow 2 → Merchant QR Session Generation
- * Flow 3 → Consumer Scan (scan-qrc.tsx)
- * Flow 4 → Backend Session Verification
- * Flow 5 → Payment Initialisation (payment.tsx)
+ *   Flow 1 → Identity
+ *   Flow 2 → QR Session
+ *   Flow 3 → QR Generation (this screen)
+ *   Flow 4 → Consumer Scan
+ *   Flow 5 → Backend Verification
+ *   Flow 6 → Payment Initialisation
  *
- * TM470 COMPLIANCE:
- * - Modular, testable, flow-aligned, maintainable
- * - No business logic inside UI
  * =============================================================================
  */
 
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text } from "react-native";
+import React from "react";
+import { SafeAreaView, Text, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { apiPost } from "../../api/client";
-import { API_URL } from "../../src/config";
+
+import { useMerchantIdentity } from "../../hooks/useMerchantIdentity";
+import { useQrSession } from "../../hooks/useQrSession";
 
 /**
  * =============================================================================
- *  TypeScript Types — Scalable Session Model
- * =============================================================================
- */
-interface SessionResponse {
-  token: string;
-  expiresIn?: number; // optional future backend field
-}
-
-/**
- * =============================================================================
- *  Modular Session Helper — Clean & Testable
- * =============================================================================
- */
-async function createQrSession(): Promise<SessionResponse> {
-  return apiPost("/session/create", {});
-}
-
-/**
- * =============================================================================
- *  Main Component — GenerateQRC
+ * Main Component — GenerateQRC (v2)
  * =============================================================================
  */
 export default function GenerateQRC() {
-  const [token, setToken] = useState<string | null>(null);
-  const [expires, setExpires] = useState<number>(30);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  /**
+   * Identity subsystem
+   * Provides merchant verification status.
+   */
+  const {
+    identity,
+    loading: identityLoading,
+    error: identityError,
+  } = useMerchantIdentity();
+
+  /**
+   * QR session subsystem
+   * Provides active QR session token + expiry metadata.
+   */
+  const {
+    session,
+    loading: sessionLoading,
+    error: sessionError,
+  } = useQrSession();
 
   /**
    * ---------------------------------------------------------------------------
-   * Refresh Session — Requests new signed QR token
+   * Identity Loading State
    * ---------------------------------------------------------------------------
    */
-  async function refreshSession() {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const data = await createQrSession();
-      setToken(data.token);
-      setExpires(data.expiresIn ?? 30); // fallback for future backend updates
-    } catch (err) {
-      console.error("QR Session Error:", err);
-      setError("Unable to generate QR session. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  /**
-   * ---------------------------------------------------------------------------
-   * Initial Load — Generate first QR session
-   * ---------------------------------------------------------------------------
-   */
-  useEffect(() => {
-    refreshSession();
-  }, []);
-
-  /**
-   * ---------------------------------------------------------------------------
-   * Countdown Timer — Auto-refresh when expired
-   * ---------------------------------------------------------------------------
-   */
-  useEffect(() => {
-    if (expires <= 0) {
-      refreshSession();
-      return;
-    }
-
-    const timer = setTimeout(() => setExpires(expires - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [expires]);
-
-  /**
-   * ---------------------------------------------------------------------------
-   * Loading State
-   * ---------------------------------------------------------------------------
-   */
-  if (loading) {
+  if (identityLoading) {
     return (
-      <SafeAreaView style={styles.center}>
-        <ActivityIndicator size="large" />
-        <Text style={styles.statusText}>Generating secure QR session…</Text>
+      <SafeAreaView>
+        <Text>Loading identity…</Text>
       </SafeAreaView>
     );
   }
 
   /**
    * ---------------------------------------------------------------------------
-   * Error State
+   * Identity Error State
    * ---------------------------------------------------------------------------
    */
-  if (error) {
+  if (identityError || !identity) {
     return (
-      <SafeAreaView style={styles.center}>
-        <Text style={styles.errorText}>{error}</Text>
-        <Text style={styles.statusText}>Tap to retry</Text>
+      <SafeAreaView>
+        <Text>Unable to load merchant identity.</Text>
       </SafeAreaView>
     );
   }
 
   /**
    * ---------------------------------------------------------------------------
-   * Main QR Display
+   * Identity Guard — Merchant must be verified
+   * ---------------------------------------------------------------------------
+   */
+  if (identity.status !== "verified") {
+    return (
+      <SafeAreaView>
+        <Text>QR generation unavailable — merchant not verified.</Text>
+      </SafeAreaView>
+    );
+  }
+
+  /**
+   * ---------------------------------------------------------------------------
+   * QR Session Loading State
+   * ---------------------------------------------------------------------------
+   */
+  if (sessionLoading) {
+    return (
+      <SafeAreaView>
+        <Text>Generating secure QR session…</Text>
+      </SafeAreaView>
+    );
+  }
+
+  /**
+   * ---------------------------------------------------------------------------
+   * QR Session Error State
+   * ---------------------------------------------------------------------------
+   */
+  if (sessionError || !session) {
+    return (
+      <SafeAreaView>
+        <Text>Unable to generate QR session.</Text>
+      </SafeAreaView>
+    );
+  }
+
+  /**
+   * ---------------------------------------------------------------------------
+   * No Active Session
+   * ---------------------------------------------------------------------------
+   */
+  if (!session.active || !session.sessionId) {
+    return (
+      <SafeAreaView>
+        <Text>No active QR session.</Text>
+      </SafeAreaView>
+    );
+  }
+
+  /**
+   * ---------------------------------------------------------------------------
+   * Main QR Display (Unstyled)
    * ---------------------------------------------------------------------------
    */
   return (
-    <SafeAreaView style={styles.center}>
-      {token && <QRCode value={token} size={240} />}
-      <Text style={styles.timer}>Expires in {expires}s</Text>
+    <SafeAreaView>
+      <View>
+        <Text>Merchant QR Code</Text>
+        <QRCode value={session.sessionId} size={240} />
+        <Text>Expires: {session.expiresAt}</Text>
+      </View>
     </SafeAreaView>
   );
 }
-
-/**
- * =============================================================================
- *  Stylesheet — Clean Fintech UI
- * =============================================================================
- */
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  statusText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: "#444",
-  },
-  errorText: {
-    fontSize: 18,
-    color: "#D32F2F",
-    fontWeight: "600",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  timer: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});

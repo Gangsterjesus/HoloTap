@@ -8,25 +8,27 @@
  * Date:          28 July 2026
  * =============================================================================
  * PURPOSE:
- * Provides identity‑aware QR session state for:
- *   • Active QR payment sessions
+ * Provides the mobile QR session context for:
+ *   • Active QR session token
  *   • Session expiry metadata
- *   • Identity‑bound session validity
- *
- * This hook forms part of the merchant identity subsystem. It ensures that
- * QR session data is only fetched when the merchant identity is verified.
+ *   • Identity‑bound session availability
  *
  * SESSION LIFECYCLE:
- *   1. Identity must be loaded
- *   2. Identity must be verified
- *   3. QR session is fetched from backend
- *   4. Session is exposed to UI consumers
+ *   1. Merchant identity must be verified
+ *   2. Load QR session payload from backend
+ *   3. Expose session state to QR generation screen
+ *   4. Provide safe fallback states when identity or session is unavailable
  *
- * FAILURE MODES:
- *   • Identity not ready → session suppressed
- *   • Identity invalid → session suppressed
- *   • Backend unreachable → error flag raised
+ * VERSION NOTES:
+ *   • v1: Initial QR session hook
+ *   • Identity‑aware session loading
+ *   • Strong TypeScript typing
+ *   • Safe fallback states for QR generation
  *
+ * FLOW ALIGNMENT:
+ *   Flow 1 → Identity
+ *   Flow 2 → QR Session (this layer)
+ *   Flow 3 → QR Generation (generate-qrc.tsx)
  * =============================================================================
  */
 
@@ -35,7 +37,7 @@ import { useMerchantIdentity } from "./useMerchantIdentity";
 
 /**
  * QR session payload returned by backend.
- * `active` determines whether a live QR session exists.
+ * `active` determines whether QR generation is allowed.
  */
 interface QRSessionPayload {
   active: boolean;
@@ -45,28 +47,31 @@ interface QRSessionPayload {
 
 /**
  * Main QR session hook.
- * Identity‑aware: only fetches QR session when merchant identity is verified.
+ * Loads session once identity is verified and exposes:
+ *   • session: QR session payload or null
+ *   • loading: session loading state
+ *   • error: session error state
+ *   • identity: merchant identity payload
  */
 export function useQrSession() {
   // Identity subsystem
-  const {
-    identity,
-    loading: identityLoading,
-    error: identityError,
-  } = useMerchantIdentity();
+  const { identity, loading: identityLoading, error: identityError } =
+    useMerchantIdentity();
 
-  // QR session state
+  // Session state
   const [session, setSession] = useState<QRSessionPayload | null>(null);
+
+  // Loading + error flags
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   /**
-   * Load QR session once identity is ready.
-   * Identity must be verified before QR session can be fetched.
+   * Load QR session from backend.
+   * Only runs when identity is verified.
    */
   useEffect(() => {
     async function loadSession() {
-      // Identity not ready or not verified → suppress QR session
+      // Identity not ready → no session
       if (
         identityLoading ||
         identityError ||
@@ -78,14 +83,17 @@ export function useQrSession() {
         return;
       }
 
-      // Identity verified → fetch QR session
       try {
         const res = await fetch("https://api.holotap.co/merchant/qr-session");
         const json = await res.json();
+
+        // Store session payload
         setSession(json);
       } catch {
+        // Backend unreachable or payload invalid
         setError(true);
       } finally {
+        // Session load complete (success or failure)
         setLoading(false);
       }
     }
@@ -94,11 +102,11 @@ export function useQrSession() {
   }, [identity, identityLoading, identityError]);
 
   /**
-   * Expose:
-   *   • session: QR session payload or null
-   *   • loading: QR session loading state
-   *   • error: QR session error state
-   *   • identity: merchant identity (verified/pending/blocked)
+   * Expose session subsystem:
+   *   • session: QR session payload
+   *   • loading: session loading state
+   *   • error: session error state
+   *   • identity: merchant identity payload
    */
   return { session, loading, error, identity };
 }
