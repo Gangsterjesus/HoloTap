@@ -1,11 +1,6 @@
 /**
  * =============================================================================
- *  HoloTap Mobile — Public Tab Layout
- * =============================================================================
- *  Engineer:      Raymond Newton — HoloTap Engineering Team
- *  Assistant:     Copilot Engineering Assistant
- *  File:          app/(tabs)/_layout.tsx
- *  Date:          28 July 2026
+ *  HoloTap Mobile — Enterprise Tab Layout
  * =============================================================================
  */
 
@@ -25,24 +20,69 @@ export default function TabLayout() {
         headerShown: false,
       }}
     >
-      {/* Scan */}
+
+      {/* Dashboard */}
       <Tabs.Screen
-        name="scan"
+        name="merchant-dashboard"
         options={{
-          title: "Scan",
+          title: "Dashboard",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="qrcode.viewfinder" color={color} />
+            <IconSymbol size={28} name="square.grid.2x2.fill" color={color} />
           ),
         }}
       />
 
-      {/* Status */}
+      {/* QR Code */}
       <Tabs.Screen
-        name="status"
+        name="generate-qrc"
         options={{
-          title: "Status",
+          title: "QR Code",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="clock.fill" color={color} />
+            <IconSymbol size={28} name="qrcode" color={color} />
+          ),
+        }}
+      />
+
+      {/* Payments */}
+      <Tabs.Screen
+        name="live-payments"
+        options={{
+          title: "Payments",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="creditcard.fill" color={color} />
+          ),
+        }}
+      />
+
+      {/* Refunds */}
+      <Tabs.Screen
+        name="refund"
+        options={{
+          title: "Refunds",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="arrow.uturn.left.circle.fill" color={color} />
+          ),
+        }}
+      />
+
+      {/* Settlement */}
+      <Tabs.Screen
+        name="settlement"
+        options={{
+          title: "Settlement",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="banknote.fill" color={color} />
+          ),
+        }}
+      />
+
+      {/* Diagnostics */}
+      <Tabs.Screen
+        name="diagnostics"
+        options={{
+          title: "Diagnostics",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="wrench.fill" color={color} />
           ),
         }}
       />
@@ -57,6 +97,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
     </Tabs>
   );
 }
