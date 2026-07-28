@@ -5,7 +5,7 @@ HoloTap is a dual‑version QR‑code payment platform built for both everyday m
 
 The mobile version delivers fast, secure, frictionless micro‑transactions for customers and travellers in everyday environments.
 
-The enterprise version powers high‑volume QR‑payments for businesses, kiosks, airports, ticket terminals, and duty‑free retail — speeding up foot‑traffic flow and reducing queue times.
+The enterprise version powers high‑volume QR‑payments for businesses, kiosks, airports, ticket terminals, and duty‑free retail — speeding up foot‑traffic flow and reducing queue times. Each QR‑code is wired to use a holographic security overlay applied on top of a standard QR‑template, providing tamper‑resistance and visual verification for both mobile users and organisations.
 
 HoloTap blends holographic QR logic with a modular architecture, paving the way for future digital‑asset payments.
 
