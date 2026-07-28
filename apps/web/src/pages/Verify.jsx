@@ -8,102 +8,53 @@
  * ============================================================
  *
  *  Purpose:
- *  Public verification page for scanning and validating HoloTap
- *  holographic badges. This page is used by customers, clients,
- *  and operators to confirm authenticity before initiating a
- *  payment or identity check.
+ *    Public verification page for scanning and validating HoloTap
+ *    holographic badges. Used by customers, clients, and operators
+ *    to confirm authenticity before initiating a payment or identity
+ *    check.
+ *
+ *  Subsystem:
+ *    Flow 6P — Public Verification → Badge Authenticity
+ *
+ *  Notes:
+ *    - Inline styles removed
+ *    - Uses external CSS (verify.css)
  * ============================================================
  */
 
+import "../styles/verify.css";
+
 export default function Verify() {
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Verify a HoloTap Badge</h1>
-      <p style={styles.subtitle}>
+    <div className="verify-container">
+      <h1 className="verify-title">Verify a HoloTap Badge</h1>
+      <p className="verify-subtitle">
         Enter the badge code or scan the hologram to confirm authenticity.
       </p>
 
-      <div style={styles.section}>
-        <label style={styles.label}>Badge Code</label>
+      {/* BADGE CODE INPUT */}
+      <div className="verify-section">
+        <label className="verify-label">Badge Code</label>
         <input
-          style={styles.input}
+          className="verify-input"
           type="text"
           placeholder="Enter badge code (e.g., HT-49302)"
         />
 
-        <button style={styles.button}>Verify Badge</button>
+        <button className="verify-button">Verify Badge</button>
       </div>
 
-      <div style={styles.scanSection}>
-        <h2 style={styles.scanTitle}>Scan Instead</h2>
-        <p style={styles.scanText}>
+      {/* SCAN OPTION */}
+      <div className="verify-scan-section">
+        <h2 className="verify-scan-title">Scan Instead</h2>
+        <p className="verify-scan-text">
           Use your mobile device to scan the hologram and verify instantly.
         </p>
 
-        <a href="#" style={styles.scanButton}>Open Scanner</a>
+        <a href="/scan" className="verify-scan-button">
+          Open Scanner
+        </a>
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: "40px",
-    maxWidth: "600px",
-    margin: "0 auto",
-  },
-  title: {
-    fontSize: "36px",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    fontSize: "18px",
-    color: "#555",
-    marginBottom: "30px",
-  },
-  section: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-    marginBottom: "40px",
-  },
-  label: {
-    fontWeight: "bold",
-  },
-  input: {
-    padding: "12px",
-    fontSize: "16px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    padding: "14px",
-    backgroundColor: "#111",
-    color: "#fff",
-    borderRadius: "6px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-  scanSection: {
-    textAlign: "center",
-    marginTop: "20px",
-  },
-  scanTitle: {
-    fontSize: "24px",
-    marginBottom: "10px",
-  },
-  scanText: {
-    fontSize: "16px",
-    color: "#555",
-    marginBottom: "20px",
-  },
-  scanButton: {
-    padding: "12px 24px",
-    backgroundColor: "#eee",
-    color: "#111",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-};

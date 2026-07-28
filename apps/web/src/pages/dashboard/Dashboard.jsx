@@ -12,7 +12,7 @@
  *    Displays high‑level metrics, recent activity, and quick actions.
  *
  *  Subsystem:
- *    Flow 4 — Session Verify → Creator Monitoring
+ *    Flow 7 — Creator Monitoring (Post‑Verification)
  *
  *  Notes:
  *    - Inline styles removed
@@ -25,10 +25,6 @@ import { verifySession } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import "../../styles/dashboard.css";
 
-/* ============================
-   PAGE
-   ============================ */
-
 export default function Dashboard() {
   const navigate = useNavigate();
 
@@ -37,9 +33,6 @@ export default function Dashboard() {
 
   const sessionId = localStorage.getItem("holotap_sessionId");
 
-  /* ============================
-     POLLING LOOP (FLOW 4 CORE)
-     ============================ */
   useEffect(() => {
     if (!sessionId) return;
 
@@ -60,19 +53,14 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, [sessionId]);
 
-  /* ============================
-     RENDER
-     ============================ */
   return (
     <div className="dashboard-container">
 
-      {/* HEADER */}
       <h1 className="dashboard-title">Creator Dashboard</h1>
       <p className="dashboard-subtitle">
         Your hologram badge activity and payment overview.
       </p>
 
-      {/* METRICS */}
       <div className="dashboard-metrics">
         <div className="dashboard-card">
           <h2>Session Status</h2>
@@ -90,11 +78,10 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ACTIONS */}
       <div className="dashboard-actions">
-        <a href="/payments" className="dashboard-button">View Payments</a>
+        <a href={`/payments/${sessionId}`} className="dashboard-button">View Payments</a>
         <a href="/identity" className="dashboard-button">Identity Settings</a>
-        <a href="/status" className="dashboard-button">Badge Status</a>
+        <a href={`/status/${sessionId}`} className="dashboard-button">Badge Status</a>
 
         {sessionStatus === "expired" && (
           <button

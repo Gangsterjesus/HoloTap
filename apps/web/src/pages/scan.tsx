@@ -1,18 +1,18 @@
 /**
  * ============================================================
- *  HoloTap Web — QR Scan Page (Flow 2)
+ *  HoloTap Web — QR Scan Page (Flow 6)
  *  File: src/pages/scan.tsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 25 July 2026
+ *  Date: 28 July 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *    Full‑screen QR scanner for Flow 2.
- *    Validates QR → starts session → redirects to dashboard.
+ *    Full‑screen QR scanner for Flow 6.
+ *    Validates QR → resumes/creates session → redirects to status page.
  *
  *  Subsystem:
- *    Flow 2 — QR → Validation → Session Start
+ *    Flow 6 — QR → Validation → Session Resume
  *
  *  Notes:
  *    - Inline styles removed
@@ -37,7 +37,7 @@ export default function Scan() {
   const scannerRef = useRef<any>(null); // html5-qrcode has no TS types
 
   /* ============================
-     FLOW 2 — QR → Validation → Session Start
+     FLOW 6 — QR → Validation → Session Resume
      ============================ */
   async function handleScanSuccess(decodedText: string) {
     try {
@@ -48,13 +48,13 @@ export default function Scan() {
         return;
       }
 
-      // Flow 3 — Start session using tokenId
+      // Flow 6 — Resume or create session using tokenId
       const session = await startSession(validated.tokenId);
 
-      // Flow 4 — Store sessionId for dashboard verification
+      // Store sessionId for Flow 7 (status page)
       localStorage.setItem("holotap_sessionId", session.sessionId);
 
-      navigate("/dashboard");
+      navigate(`/status/${session.sessionId}`);
     } catch (err) {
       console.error("QR error:", err);
       alert("Invalid QR code. Please try again.");

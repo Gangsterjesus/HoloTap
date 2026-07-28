@@ -29,16 +29,10 @@ import { activate } from "../lib/api";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import "../styles/activate.css";
 
-/* ------------------------------------------------------------
-   SECTION: Activation Page Component
-   ------------------------------------------------------------ */
 export default function Activate() {
   const navigate = useNavigate();
   const [code, setCode] = useState<string>("");
 
-  /* ------------------------------------------------------------
-     SECTION: Activation Handler
-     ------------------------------------------------------------ */
   async function handleActivate(setError: (msg: string) => void) {
     try {
       const result = await activate(code);
@@ -55,9 +49,6 @@ export default function Activate() {
     }
   }
 
-  /* ------------------------------------------------------------
-     SECTION: Render
-     ------------------------------------------------------------ */
   return (
     <ErrorBoundary>
       {(setError: (msg: string) => void) => (

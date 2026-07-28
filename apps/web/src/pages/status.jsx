@@ -1,125 +1,108 @@
-
 /**
  * ============================================================
- *  HoloTap — Badge Status (Flow 4)
+ *  HoloTap Web — Session Status Page (Flow 7)
  *  File: src/pages/status.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 25 July 2026
+ *  Date: 28 July 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *    Creator-facing badge status page. Shows live QR/session state,
- *    verification status, and operational badge metadata.
+ *    Displays session status after QR scan (Flow 6).
+ *    Fetches session → shows merchant + QR + hologram status.
+ *    Redirects to Flow 8 (payments) when session is ready.
  *
  *  Subsystem:
- *    Flow 4 — Badge Status → Session Verify → Creator Monitoring
+ *    Flow 7 — Session Status → Payment Readiness
  *
  *  Notes:
- *    - Polls /session/verify every 3 seconds
- *    - Uses holotap_sessionId from localStorage
  *    - Uses external CSS (status.css)
+ *    - Uses ErrorBoundary
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
-import { verifySession } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { getSessionStatus } from "../lib/api";
 import "../styles/status.css";
 
-/* ============================
-   PAGE
-   ============================ */
-
 export default function Status() {
+  const { sessionId } = useParams();
   const navigate = useNavigate();
 
-  /* ============================
-     STATE MANAGEMENT
-     ============================ */
-  const [sessionStatus, setSessionStatus] = useState("pending");
-  const [updatedAt, setUpdatedAt] = useState("");
-  const [error, setError] = useState("");
-
-  const sessionId = localStorage.getItem("holotap_sessionId");
+  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState(null);
+  const [error, setError] = useState(null);
 
   /* ============================
-     POLLING LOOP (FLOW 4 CORE)
+     FLOW 7 — Fetch Session Status
      ============================ */
   useEffect(() => {
-    if (!sessionId) {
-      setError("No active session found.");
-      return;
-    }
-
-    const interval = setInterval(async () => {
+    async function fetchStatus() {
       try {
-        const res = await verifySession(sessionId);
-        setSessionStatus(res.status);
-        setUpdatedAt(res.updatedAt);
+        const res = await getSessionStatus(sessionId);
 
-        if (res.status === "completed" || res.status === "expired") {
-          clearInterval(interval);
+        if (!res || !res.sessionId) {
+          setError("SESSION_NOT_FOUND");
+          setLoading(false);
+          return;
+        }
+
+        setSession(res);
+        setLoading(false);
+
+        // If session is ready → Flow 8 (payments)
+        if (res.status === "READY") {
+          navigate(`/payments/${sessionId}`);
         }
       } catch (err) {
-        console.error("Status polling error:", err);
-        setError("Unable to verify badge status.");
+        console.error("Status error:", err);
+        setError("NETWORK_ERROR");
+        setLoading(false);
       }
-    }, 3000);
+    }
 
-    return () => clearInterval(interval);
-  }, [sessionId]);
+    fetchStatus();
+  }, [sessionId, navigate]);
 
   /* ============================
      RENDER
      ============================ */
   return (
-    <div className="status-container">
+    <ErrorBoundary>
+      {() => (
+        <div className="status-container">
+          {loading && <p>Loading session…</p>}
 
-      {/* HEADER */}
-      <h1 className="status-title">Badge Status</h1>
-      <p className="status-subtitle">Live hologram badge and QR activity.</p>
+          {error && <p className="error">{error}</p>}
 
-      {/* ERROR */}
-      {error && <p className="status-error">{error}</p>}
+          {session && (
+            <div className="status-card">
+              <h1>Session Status</h1>
 
-      {/* STATUS CARD */}
-      <div className="status-card">
-        <h2>Session Status</h2>
-        <p>{sessionStatus}</p>
-      </div>
+              <p><strong>Session ID:</strong> {session.sessionId}</p>
+              <p><strong>Merchant:</strong> {session.merchantName}</p>
+              <p><strong>QR Token:</strong> {session.qrToken}</p>
+              <p><strong>Hologram:</strong> {session.hologramStatus}</p>
+              <p><strong>Status:</strong> {session.status}</p>
 
-      {/* TIMESTAMP CARD */}
-      <div className="status-card">
-        <h2>Last Updated</h2>
-        <p>{updatedAt || "—"}</p>
-      </div>
+              {session.status !== "READY" && (
+                <p className="pending">Waiting for verification…</p>
+              )}
 
-      {/* ACTIONS */}
-      <div className="status-actions">
-        <button
-          className="status-button"
-          onClick={() => navigate("/dashboard")}
-        >
-          Back to Dashboard
-        </button>
-
-        <button
-          className="status-button"
-          onClick={() => navigate("/scan")}
-        >
-          Re‑Scan QR
-        </button>
-
-        {sessionStatus === "expired" && (
-          <button
-            className="status-button"
-            onClick={() => navigate("/scan")}
-          >
-            Restart Session
-          </button>
-        )}
-      </div>
-    </div>
+              {session.status === "READY" && (
+                <button
+                  className="continue-btn"
+                  onClick={() => navigate(`/payments/${sessionId}`)}
+                >
+                  Continue to Payment
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </ErrorBoundary>
   );
 }
