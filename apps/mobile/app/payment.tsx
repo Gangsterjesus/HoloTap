@@ -32,6 +32,18 @@
  *   Flow 8 → Payment Result
  * =============================================================================
  */
+// Identity Envelope
+import { buildIdentityEnvelope } from "@/identity/buildIdentityEnvelope";
+
+// Encryption Layer
+import { encryptPayload } from "@/security/encryptPayload";
+
+// QR Logic
+import { generateQrCode } from "@/qr/generateQrCode";
+import { applyHolographicOverlay } from "@/qr/applyHolographicOverlay";
+
+// Backend (Flow 6)
+import { createPayment } from "@/api/payment/createPayment";
 
 import React, { useState } from "react";
 import { SafeAreaView, Text, View, TextInput, Button } from "react-native";
