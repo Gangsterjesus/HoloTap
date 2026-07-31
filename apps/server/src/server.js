@@ -12,10 +12,19 @@ const port = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
+// Root route
+app.get("/", (req, res) => {
+  res.json({
+    root: "HoloTap API root",
+    use: "/api",
+    docs: "/api/docs"
+  });
+});
+
 app.use("/api", router);
 
 app.use(errorMiddleware);
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`HoloTap API running on port ${port}`);
 });

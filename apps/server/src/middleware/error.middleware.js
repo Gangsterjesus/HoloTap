@@ -1,5 +1,10 @@
 export function errorMiddleware(err, req, res, next) {
-  console.error("[HoloTap API Error]", err);
+  console.error("[ERROR]", err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
   res.status(500).json({
     success: false,
     message: "Internal server error"
