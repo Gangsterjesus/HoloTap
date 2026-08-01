@@ -1,0 +1,7 @@
+holotap.co.uk {
+    reverse_proxy 127.0.0.1:4000
+}
+
+www.holotap.co.uk {
+    redir https://holotap.co.uk{uri}
+}
