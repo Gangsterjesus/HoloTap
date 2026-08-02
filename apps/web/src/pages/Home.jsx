@@ -1,70 +1,51 @@
-/**
- * ============================================================
- *  HoloTap — Public Landing Page
- *  File: Home.jsx
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *    Public landing page for HoloTap.
- *    Introduces product, brand, and core value proposition.
- *    Routes into Flow 6 (Scan) and Flow 7 (Status).
- * ============================================================
- */
-
-import "../styles/home.css";
+/* ============================================================
+   HoloTap — Engineering Build System
+   File: src/pages/public/Home.jsx
+   Author: Raymond Newton
+   Project: HoloTap Identity & QR Security Platform
+   Layer: web-ui
+   Revision: v2 — Unified Web & Mobile Architecture
+   ------------------------------------------------------------
+   Notes:
+   - Deterministic architecture only
+   - Zero template styling, zero boilerplate
+   - Tailwind v4 CSS-first UI pipeline
+   - Web UI must remain modular and stateless
+   - Identity, QR, and organisation layers isolated
+   - Explicit state transitions; no hidden side-effects
+   ============================================================ */
 
 export default function Home() {
   return (
-    <div className="home-container">
-      <h1 className="home-title">HoloTap</h1>
-      <p className="home-tagline">Scan the hologram. Skip the fraud.</p>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6">
 
-      <div className="home-section">
-        <p className="home-description">
-          HoloTap is a secure holographic payment badge designed for creators,
-          merchants, and private operators. Scan the badge to verify identity,
-          initiate payments, and eliminate fraud from your workflow.
+      {/* Title */}
+      <h1 className="text-5xl font-bold text-holotap-primary mb-4 tracking-tight">
+        HoloTap
+      </h1>
+
+      {/* Subtitle */}
+      <p className="text-lg text-gray-600 max-w-xl text-center mb-8">
+        Secure QR‑identity, instant verification, and organisation‑grade access
+        control. Built for the next generation of digital trust.
+      </p>
+
+      {/* CTA */}
+      <a
+        href="/onboarding"
+        className="px-6 py-3 bg-holotap-accent text-black font-semibold rounded-lg shadow-md hover:shadow-xl transition"
+      >
+        Get Started
+      </a>
+
+      {/* Status Box */}
+      <div className="mt-12 bg-white shadow-md rounded-xl p-6 max-w-md w-full text-center">
+        <p className="text-sm text-gray-500 mb-2">Platform Status</p>
+        <p className="text-holotap-primary font-semibold">
+          Identity & QR Modules: Initialisation Phase
         </p>
       </div>
 
-      <div className="home-features">
-        <FeatureCard
-          icon="🔒"
-          title="Secure Identity"
-          text="Every badge is cryptographically linked to a verified creator or merchant."
-        />
-        <FeatureCard
-          icon="💳"
-          title="Instant Payments"
-          text="Scan the hologram to initiate fast, fraud‑proof payments."
-        />
-        <FeatureCard
-          icon="✨"
-          title="Creator‑First"
-          text="Built for modern creators who need trust, speed, and simplicity."
-        />
-      </div>
-
-      <div className="home-actions">
-        {/* Flow 6 — QR Scan */}
-        <a href="/scan" className="btn-primary">Scan a Badge</a>
-
-        {/* Flow 7 — Session Status */}
-        <a href="/status" className="btn-secondary">Check Status</a>
-      </div>
-    </div>
-  );
-}
-
-function FeatureCard({ icon, title, text }) {
-  return (
-    <div className="feature-card" tabIndex={0}>
-      <span className="feature-icon">{icon}</span>
-      <h3 className="feature-title">{title}</h3>
-      <p className="feature-text">{text}</p>
     </div>
   );
 }

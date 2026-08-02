@@ -1,30 +1,21 @@
-/**
- * ============================================================
- *  HoloTap — Navigation Component (Upgraded Production Version)
- *  File: src/components/Navigation.jsx
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *  Provides role‑aware navigation for the HoloTap web application.
- *  Uses a config‑driven structure, semantic markup, active‑link
- *  highlighting, and mobile‑responsive layout.
- *
- *  Roles supported:
- *  - public
- *  - creator
- *  - admin
- *
- *  Styling:
- *  - All styles moved to Navigation.module.css
- *  - No inline styles
- * ============================================================
- */
+/* ============================================================
+   HoloTap — Engineering Build System
+   File: src/components/Navigation.jsx
+   Author: Raymond Newton
+   Project: HoloTap Identity & QR Security Platform
+   Layer: web-ui
+   Revision: v2 — Unified Web & Mobile Architecture
+   ------------------------------------------------------------
+   Notes:
+   - Deterministic architecture only
+   - Zero template styling, zero boilerplate
+   - Tailwind v4 CSS-first UI pipeline
+   - Web UI must remain modular and stateless
+   - Identity, QR, and organisation layers isolated
+   - Explicit state transitions; no hidden side-effects
+   ============================================================ */
 
 import { NavLink } from "react-router-dom";
-import styles from "./Navigation.module.css";
 
 /* ============================
    NAVIGATION CONFIG
@@ -45,14 +36,14 @@ const navConfig = {
     { label: "Settings", to: "/settings" },
   ],
 
-admin: [
-  { label: "Admin Dashboard", to: "/admin" },
-  { label: "Merchants", to: "/admin/merchants" },
-  { label: "System Logs", to: "/admin/logs" },
-  { label: "System Status", to: "/admin/status" },
-  { label: "Organisations", to: "/admin/organisations" },
-  { label: "Users", to: "/admin/users" },
-],
+  admin: [
+    { label: "Admin Dashboard", to: "/admin" },
+    { label: "Merchants", to: "/admin/merchants" },
+    { label: "System Logs", to: "/admin/logs" },
+    { label: "System Status", to: "/admin/system" },
+    { label: "Organisations", to: "/admin/orgs" },
+    { label: "Users", to: "/admin/users" },
+  ],
 };
 
 /* ============================
@@ -63,25 +54,33 @@ export default function Navigation({ role = "public" }) {
   const links = navConfig[role] || navConfig.public;
 
   return (
-    <nav className={styles.nav}>
-      {/* Logo */}
-      <div className={styles.logo}>HoloTap</div>
+    <nav className="w-full bg-holotap-primary text-white px-6 py-4 shadow-lg">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-      {/* Navigation Links */}
-      <ul className={styles.menu}>
-        {links.map((link) => (
-          <li key={link.to}>
-            <NavLink
-              to={link.to}
-              className={({ isActive }) =>
-                isActive ? styles.activeLink : styles.link
-              }
-            >
-              {link.label}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+        {/* Logo */}
+        <div className="text-xl font-bold tracking-wide">
+          HoloTap
+        </div>
+
+        {/* Navigation Links */}
+        <ul className="flex gap-6 text-sm">
+          {links.map((link) => (
+            <li key={link.to}>
+              <NavLink
+                to={link.to}
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-holotap-accent font-semibold transition"
+                    : "text-white hover:text-holotap-accent transition"
+                }
+              >
+                {link.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+      </div>
     </nav>
   );
 }

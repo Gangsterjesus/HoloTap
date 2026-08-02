@@ -1,60 +1,41 @@
-/**
- * ============================================================
- *  HoloTap — Authentication: Passkey (Stylesheet)
- *  File: src/pages/auth/Passkey.css
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 23 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *    Stylesheet for the Passkey authentication page.
- *
- *  Responsibilities:
- *    - Style container, title, subtitle, and guidance text
- * ============================================================
- */
-
-/* ------------------------------------------------------------
-   Layout container
+/* ============================================================
+   HoloTap Web — Authentication: Passkey Styles
+   File: src/pages/auth/Passkey.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 23 July 2026
    ------------------------------------------------------------
-   Provides spacing and centers content for consistent UX.
------------------------------------------------------------- */
+   Tailwind‑aligned legacy stylesheet
+   - No @apply (folder not in PostCSS pipeline)
+   - Clean deterministic spacing + typography
+   - Colours aligned with Tailwind palette
+   - Class names preserved for compatibility
+   ============================================================ */
+
+/* Container */
 .passkey-container {
-  padding: 40px;
+  padding: 40px;                 /* Tailwind: p-10 */
   max-width: 600px;
   margin: 0 auto;
 }
 
-/* ------------------------------------------------------------
-   Title
-   ------------------------------------------------------------
-   Strong heading indicating passkey authentication flow.
------------------------------------------------------------- */
+/* Title */
 .passkey-title {
-  font-size: 32px;
-  margin-bottom: 10px;
-  color: #111;
+  font-size: 2rem;               /* Tailwind: text-3xl */
+  font-weight: 700;              /* Tailwind: font-bold */
+  margin-bottom: 10px;           /* Tailwind: mb-2 */
+  color: #111827;                /* Tailwind: gray-900 */
 }
 
-/* ------------------------------------------------------------
-   Subtitle
-   ------------------------------------------------------------
-   Brief explanation of the browser‑level passkey prompt.
------------------------------------------------------------- */
+/* Subtitle */
 .passkey-subtitle {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 1.125rem;           /* Tailwind: text-lg */
+  color: #374151;                /* Tailwind: gray-700 */
+  margin-bottom: 20px;           /* Tailwind: mb-5 */
 }
 
-/* ------------------------------------------------------------
-   Body text
-   ------------------------------------------------------------
-   Guidance for completing passkey authentication.
------------------------------------------------------------- */
+/* Body Text */
 .passkey-text {
-  font-size: 16px;
-  color: #222;
+  font-size: 1rem;               /* Tailwind: text-base */
+  color: #1f2937;                /* Tailwind: gray-800 */
   line-height: 1.6;
 }

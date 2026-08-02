@@ -15,7 +15,6 @@
  *    Flow 6 — QR → Validation → Session Resume
  *
  *  Notes:
- *    - Inline styles removed
  *    - Uses external CSS (scan.css)
  *    - Uses html5-qrcode
  * ============================================================
@@ -28,17 +27,10 @@ import { validateQR, startSession } from "../lib/api";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import "../styles/scan.css";
 
-/* ============================
-   PAGE
-   ============================ */
-
 export default function Scan() {
   const navigate = useNavigate();
   const scannerRef = useRef<any>(null); // html5-qrcode has no TS types
 
-  /* ============================
-     FLOW 6 — QR → Validation → Session Resume
-     ============================ */
   async function handleScanSuccess(decodedText: string) {
     try {
       const validated = await validateQR(decodedText);
@@ -48,10 +40,8 @@ export default function Scan() {
         return;
       }
 
-      // Flow 6 — Resume or create session using tokenId
       const session = await startSession(validated.tokenId);
 
-      // Store sessionId for Flow 7 (status page)
       localStorage.setItem("holotap_sessionId", session.sessionId);
 
       navigate(`/status/${session.sessionId}`);
@@ -61,11 +51,8 @@ export default function Scan() {
     }
   }
 
-  /* ============================
-     INITIALISE SCANNER
-     ============================ */
   useEffect(() => {
-    scannerRef.current = new Html5QrcodeScanner(
+    const scanner = new Html5QrcodeScanner(
       "qr-reader",
       {
         fps: 10,
@@ -75,7 +62,9 @@ export default function Scan() {
       false
     );
 
-    scannerRef.current.render(
+    scannerRef.current = scanner;
+
+    scanner.render(
       (decodedText: string) => handleScanSuccess(decodedText),
       () => {}
     );
@@ -86,9 +75,6 @@ export default function Scan() {
     };
   }, []);
 
-  /* ============================
-     RENDER
-     ============================ */
   return (
     <ErrorBoundary>
       {() => (

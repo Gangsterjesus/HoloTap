@@ -1,58 +1,21 @@
-/**
- * ============================================================
- *  HoloTap — Authentication: Magic Link (Stylesheet)
- *  File: src/pages/auth/MagicLink.css
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 23 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *    Stylesheet for the Magic Link confirmation page.
- *
- *  Responsibilities:
- *    - Style container, title, subtitle, and guidance text
- * ============================================================
- */
-
-/* ------------------------------------------------------------
-   Layout container
-   ------------------------------------------------------------
-   Centers content and provides consistent spacing.
------------------------------------------------------------- */
 .magic-container {
   padding: 40px;
   max-width: 600px;
   margin: 0 auto;
 }
 
-/* ------------------------------------------------------------
-   Title
-   ------------------------------------------------------------
-   Strong heading confirming magic link delivery.
------------------------------------------------------------- */
 .magic-title {
   font-size: 32px;
   margin-bottom: 10px;
   color: #111;
 }
 
-/* ------------------------------------------------------------
-   Subtitle
-   ------------------------------------------------------------
-   Brief instruction for the user’s next step.
------------------------------------------------------------- */
 .magic-subtitle {
   font-size: 18px;
   color: #333;
   margin-bottom: 20px;
 }
 
-/* ------------------------------------------------------------
-   Body text
-   ------------------------------------------------------------
-   Fallback instructions for users who cannot find the email.
------------------------------------------------------------- */
 .magic-text {
   font-size: 16px;
   color: #222;

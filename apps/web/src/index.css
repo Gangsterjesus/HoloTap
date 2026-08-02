@@ -1,6 +1,24 @@
 /* ============================================================
-   HoloTap — Global Styles
+   HoloTap — Engineering Build System
    File: src/index.css
+   Author: Raymond Newton
+   Project: HoloTap Identity & QR Security Platform
+   Layer: web-ui
+   Revision: v2 — Unified Web & Mobile Architecture
+   ------------------------------------------------------------
+   Notes:
+   - Deterministic architecture only
+   - Zero template styling, zero boilerplate
+   - Tailwind v4 CSS-first UI pipeline
+   - Web UI must remain modular and stateless
+   - Identity, QR, and organisation layers isolated
+   - Explicit state transitions; no hidden side-effects
+   ============================================================ */
+
+@import "tailwindcss";
+
+/* ============================================================
+   Global Styles — HoloTap Web UI
    ============================================================ */
 
 body {

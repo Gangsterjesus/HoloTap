@@ -1,26 +1,21 @@
-/**
- * ============================================================
- *  HoloTap — Authentication: Login
- *  File: src/pages/auth/Login.jsx
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 23 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *    Entry point for user authentication. Allows users to initiate
- *    sign‑in using either a magic link or a passkey credential.
- *
- *  Responsibilities:
- *    - Capture user email input
- *    - Request magic link delivery
- *    - Initiate passkey authentication flow
- *    - Auto‑fill returning user details
- * ============================================================
- */
+/* ============================================================
+   HoloTap — Engineering Build System
+   File: src/pages/auth/Login.jsx
+   Author: Raymond Newton
+   Project: HoloTap Identity & QR Security Platform
+   Layer: web-ui
+   Revision: v2 — Unified Web & Mobile Architecture
+   ------------------------------------------------------------
+   Notes:
+   - Deterministic architecture only
+   - Zero template styling, zero boilerplate
+   - Tailwind v4 CSS-first UI pipeline
+   - Web UI must remain modular and stateless
+   - Identity, QR, and organisation layers isolated
+   - Explicit state transitions; no hidden side-effects
+   ============================================================ */
 
 import { useEffect, useState } from "react";
-import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -37,21 +32,6 @@ export default function Login() {
       }
     }
   }, []);
-
-  // ------------------------------------------------------------
-  // Optional: Auto‑redirect returning users directly to passkey
-  // Uncomment if desired
-  //
-  // useEffect(() => {
-  //   const last = localStorage.getItem("ht_last_user");
-  //   if (last) {
-  //     const user = JSON.parse(last);
-  //     if (user?.email) {
-  //       navigate("/auth/passkey", { state: { email: user.email } });
-  //     }
-  //   }
-  // }, []);
-  // ------------------------------------------------------------
 
   async function requestMagicLink() {
     await fetch("http://192.168.1.205:3001/auth/magic-link", {
@@ -70,30 +50,50 @@ export default function Login() {
   }
 
   return (
-    <div className="login-container">
-      <h1 className="login-title">Sign In</h1>
-      <p className="login-subtitle">Choose magic link or passkey.</p>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6">
 
-      <div className="login-form">
-        <label className="login-label">
+      {/* Title */}
+      <h1 className="text-4xl font-bold text-holotap-primary mb-4 tracking-tight">
+        Sign In
+      </h1>
+
+      {/* Subtitle */}
+      <p className="text-gray-600 text-center max-w-xl mb-10">
+        Choose magic link or passkey.
+      </p>
+
+      {/* Form */}
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md flex flex-col gap-6">
+
+        {/* Email */}
+        <label className="flex flex-col gap-2 font-semibold text-gray-700">
           Email address
           <input
-            className="login-input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
+            className="border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-holotap-accent"
           />
         </label>
 
-        <div className="login-actions">
-          <button className="login-btn-primary" onClick={requestMagicLink}>
+        {/* Actions */}
+        <div className="flex gap-4 mt-4">
+          <button
+            onClick={requestMagicLink}
+            className="flex-1 bg-holotap-primary text-white font-semibold py-3 rounded-lg shadow hover:shadow-lg transition"
+          >
             Send Magic Link
           </button>
-          <button className="login-btn-secondary" onClick={usePasskey}>
+
+          <button
+            onClick={usePasskey}
+            className="flex-1 bg-gray-200 text-black font-semibold py-3 rounded-lg shadow hover:shadow-lg transition"
+          >
             Use Passkey
           </button>
         </div>
+
       </div>
     </div>
   );

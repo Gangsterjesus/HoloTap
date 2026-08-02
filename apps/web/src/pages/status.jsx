@@ -35,9 +35,6 @@ export default function Status() {
   const [session, setSession] = useState(null);
   const [error, setError] = useState(null);
 
-  /* ============================
-     FLOW 7 — Fetch Session Status
-     ============================ */
   useEffect(() => {
     async function fetchStatus() {
       try {
@@ -52,7 +49,6 @@ export default function Status() {
         setSession(res);
         setLoading(false);
 
-        // If session is ready → Flow 8 (payments)
         if (res.status === "READY") {
           navigate(`/payments/${sessionId}`);
         }
@@ -66,16 +62,12 @@ export default function Status() {
     fetchStatus();
   }, [sessionId, navigate]);
 
-  /* ============================
-     RENDER
-     ============================ */
   return (
     <ErrorBoundary>
       {() => (
         <div className="status-container">
           {loading && <p>Loading session…</p>}
-
-          {error && <p className="error">{error}</p>}
+          {error && <p className="status-error">{error}</p>}
 
           {session && (
             <div className="status-card">

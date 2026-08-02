@@ -1,33 +1,23 @@
-/**
- * ============================================================
- *  HoloTap — Unified Application Router (Production)
- *  File: src/MainRouter.jsx
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 27 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *    The single, unified router for the HoloTap Web Platform.
- *
- *  Architecture:
- *    - React Router DOM (SPA)
- *    - Public pages
- *    - Auth pages
- *    - Organisation workspace (.org)
- *    - Admin workspace
- *    - Merchant workspace
- *    - QR flows
- *    - Payment result
- *
- *  Notes:
- *    - All creator terminology removed permanently.
- *    - Legacy TM352 routers removed.
- * ============================================================
- */
+/* ============================================================
+   HoloTap — Engineering Build System
+   File: src/MainRouter.jsx
+   Author: Raymond Newton
+   Project: HoloTap Identity & QR Security Platform
+   Layer: web-ui
+   Revision: v2 — Unified Web & Mobile Architecture
+   ------------------------------------------------------------
+   Notes:
+   - Deterministic architecture only
+   - Zero template styling, zero boilerplate
+   - Tailwind v4 CSS-first UI pipeline
+   - Web UI must remain modular and stateless
+   - Identity, QR, and organisation layers isolated
+   - Explicit state transitions; no hidden side-effects
+   ============================================================ */
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation.jsx";
+import UnderConstruction from "./pages/UnderConstruction.jsx";
 
 /* ============================
    PUBLIC PAGES
@@ -79,6 +69,15 @@ import Scan from "./pages/qr/Scan.jsx";
    ============================ */
 import PaymentResult from "./pages/payment/Result.jsx";
 
+/* ============================
+   COMMUNICATION LAYER (v1)
+   ============================ */
+import Updater from "./pages/Updater.jsx";
+import Enquiries from "./pages/Enquiries.jsx";
+import Admin from "./pages/Admin.jsx";
+import Support from "./pages/Support.jsx";
+import Dev from "./pages/Dev.jsx";
+
 
 export default function MainRouter() {
   return (
@@ -88,7 +87,7 @@ export default function MainRouter() {
       <Routes>
 
         {/* PUBLIC */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<UnderConstruction />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/verify" element={<Verify />} />
 
@@ -122,6 +121,13 @@ export default function MainRouter() {
 
         {/* PAYMENT RESULT */}
         <Route path="/payment/result" element={<PaymentResult />} />
+
+        {/* COMMUNICATION LAYER */}
+        <Route path="/updater" element={<Updater />} />
+        <Route path="/enquiries" element={<Enquiries />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/dev" element={<Dev />} />
 
       </Routes>
     </BrowserRouter>

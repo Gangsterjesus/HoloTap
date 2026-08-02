@@ -1,81 +1,92 @@
-/**
- * File: qrActivation.css
- * Project: HoloTap Web UI
- * Screen: QR Activation Screen
- *
- * Author: Raymond Newton (E5357171)
- * Date: 24 July 2026
- *
- * Description:
- *  - Styling for the QR Activation screen.
- *  - Handles layout, typography, QR code positioning,
- *    button styling, and active/expired states.
- *
- * Notes:
- *  - Used by QRActivation.jsx
- *  - No inline styles permitted in component.
- */
+/* ============================================================
+   HoloTap Web — QR Activation Styles
+   File: src/styles/qrActivation.css
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Date: 24 July 2026
+   ------------------------------------------------------------
+   Tailwind‑aligned legacy stylesheet
+   - No @apply (folder not in PostCSS pipeline)
+   - Clean deterministic spacing + typography
+   - Colours aligned with Tailwind palette
+   - Class names preserved for compatibility
+   ============================================================ */
 
 /* Layout */
 .qr-wrapper {
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem;                 /* Tailwind: p-8 */
 }
 
 .qr-content {
-  margin-top: 2rem;
+  margin-top: 2rem;              /* Tailwind: mt-8 */
   text-align: center;
 }
 
 /* Typography */
 .qr-title {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;               /* Tailwind: text-3xl */
+  font-weight: 700;              /* Tailwind: font-bold */
+  margin-bottom: 0.5rem;         /* Tailwind: mb-2 */
+  color: #111827;                /* Tailwind: gray-900 */
 }
 
 .qr-subtitle {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem;           /* Tailwind: mb-4 */
+  color: #374151;                /* Tailwind: gray-700 */
 }
 
 .qr-label {
-  margin-top: 1rem;
+  margin-top: 1rem;              /* Tailwind: mt-4 */
+  font-weight: 600;              /* Tailwind: font-semibold */
+  color: #1f2937;                /* Tailwind: gray-800 */
 }
 
 .qr-token {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem;           /* Tailwind: mb-4 */
+  font-family: monospace;
+  color: #111827;                /* Tailwind: gray-900 */
 }
 
 /* QR Code */
 .qr-code {
-  margin: 1.5rem 0;
+  margin: 1.5rem 0;              /* Tailwind: my-6 */
   display: flex;
   justify-content: center;
 }
 
 /* Buttons */
 .qr-button {
-  padding: 10px 20px;
-  margin-top: 1rem;
+  padding: 10px 20px;            /* Tailwind: py-2.5 px-5 */
+  margin-top: 1rem;              /* Tailwind: mt-4 */
   cursor: pointer;
+  background-color: #111827;     /* Tailwind: gray-900 */
+  color: #fff;
+  border-radius: 6px;            /* Tailwind: rounded-lg */
+  font-weight: 600;              /* Tailwind: font-semibold */
+  transition: background-color 0.2s ease;
+}
+
+.qr-button:hover {
+  background-color: #1f2937;     /* Tailwind: gray-800 */
 }
 
 /* States */
 .qr-loading {
-  color: #555;
+  color: #6b7280;                /* Tailwind: gray-500 */
 }
 
 .qr-error {
-  color: red;
+  color: #dc2626;                /* Tailwind: red-600 */
   font-weight: bold;
 }
 
 .qr-active {
-  color: #333;
+  color: #374151;                /* Tailwind: gray-700 */
 }
 
 .qr-expired {
-  color: red;
+  color: #dc2626;                /* Tailwind: red-600 */
   font-weight: bold;
 }

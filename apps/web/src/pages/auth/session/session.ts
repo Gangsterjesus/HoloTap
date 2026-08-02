@@ -1,26 +1,18 @@
-/**
- * ============================================================
- *  HoloTap — Authentication: Session Management
- *  File: src/pages/auth/session/session.ts
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 26 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
- * ============================================================
- *
- *  Purpose:
- *    Provides secure client‑side session handling for authenticated
- *    merchants and admins. Stores session tokens, validates expiry,
- *    refreshes TTL, and supports role‑aware routing.
- *
- *  Responsibilities:
- *    - Create session after successful authentication
- *    - Validate session expiry
- *    - Refresh session TTL (sliding window)
- *    - Destroy session on logout
- *    - Provide merchant/admin route hints
- *    - Attach session token to API requests
- * ============================================================
- */
+/* ============================================================
+   HoloTap — Engineering Build System
+   File: src/pages/auth/session/session.ts
+   Author: Raymond Newton
+   Project: HoloTap Identity & QR Security Platform
+   Layer: auth-core
+   Revision: v2 — Unified Web & Mobile Architecture
+   ------------------------------------------------------------
+   Notes:
+   - Deterministic session architecture
+   - Zero side-effects beyond explicit state transitions
+   - Merchant/admin role isolation
+   - Sliding TTL window for secure session refresh
+   - LocalStorage used as client-side session cache
+   ============================================================ */
 
 import { HoloTapSession } from "./session.types";
 import { now, future } from "./session.utils";
