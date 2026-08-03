@@ -1,84 +1,111 @@
 /**
- * File: PaymentsFeed.jsx
- * Project: HoloTap Web UI
- * Screen: Payments Feed
+ * ============================================================
+ *  HoloTap — Payments Feed (Merchant)
+ *  File: src/pages/merchant/PaymentsFeed.jsx
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
  *
- * Author: Raymond Newton (E5357171)
- * Date: 24 July 2026
+ *  Purpose:
+ *    Displays recent merchant payments, including amount, status,
+ *    reference, and timestamp. Supports merchant‑level inspection.
  *
- * Description:
- *  - Displays a list of recent merchant payments.
- *  - Fetches payment data from HoloTapServer (/payments/list).
- *  - Allows merchants to inspect individual payment entries.
- *
- * Notes:
- *  - Styling is external (styles/paymentsFeed.css).
- *  - Future enhancement: pagination + real-time updates.
+ *  Responsibilities:
+ *    - Fetch payment records from the merchant API
+ *    - Surface payment metadata
+ *    - Provide clean, deterministic v2 UI
+ * ============================================================
  */
 
 import { useEffect, useState } from "react";
-import "../../styles/paymentsFeed.css";
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import DashboardCard from "../../../components/DashboardCard.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
 
 export default function PaymentsFeed() {
-  // -----------------------------------
-  // State
-  // -----------------------------------
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // -----------------------------------
-  // Fetch Payments
-  // -----------------------------------
-  useEffect(() => {
-    async function fetchPayments() {
-      try {
-        const response = await fetch("http://192.168.1.205:3001/payments/list");
-        const data = await response.json();
+  async function loadPayments() {
+    try {
+      const response = await fetch("http://192.168.1.205:3001/payments/list");
+      const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to load payments");
-        }
-
-        setPayments(data.payments || []);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to load payments");
       }
-    }
 
-    fetchPayments();
+      setPayments(data.payments || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadPayments();
   }, []);
 
-  // -----------------------------------
-  // Render
-  // -----------------------------------
   return (
-    <div className="pf-wrapper">
-      <h1 className="pf-title">Payments Feed</h1>
+    <Layout>
+      <PageHeader
+        title="Payments Feed"
+        subtitle="Recent merchant payment activity"
+      />
 
-      {loading && <p className="pf-loading">Loading payments…</p>}
-      {error && <p className="pf-error">{error}</p>}
-
-      {!loading && !error && payments.length === 0 && (
-        <p className="pf-empty">No payments found.</p>
+      {/* Loading */}
+      {loading && (
+        <DashboardCard title="Loading Payments…">
+          <p className="text-gray-600">Fetching payment records…</p>
+        </DashboardCard>
       )}
 
-      <ul className="pf-list">
-        {payments.map((payment) => (
-          <li key={payment.id} className="pf-item">
-            <div className="pf-row">
-              <span className="pf-amount">£{payment.amount}</span>
-              <span className="pf-status">{payment.status}</span>
+      {/* Error */}
+      {error && (
+        <DashboardCard title="Error Loading Payments">
+          <p className="text-red-600">{error}</p>
+        </DashboardCard>
+      )}
+
+      {/* Empty */}
+      {!loading && !error && payments.length === 0 && (
+        <DashboardCard title="No Payments Found">
+          <p className="text-gray-600">No recent payment records available.</p>
+        </DashboardCard>
+      )}
+
+      {/* Payments List */}
+      {!loading && !error && payments.length > 0 && (
+        <div className="mt-6 flex flex-col gap-4">
+          {payments.map((payment) => (
+            <div
+              key={payment.id}
+              className="border rounded-lg p-4 shadow-sm bg-white"
+            >
+              <div className="flex justify-between mb-2">
+                <span className="font-semibold text-lg">
+                  £{payment.amount}
+                </span>
+                <span className="text-sm text-gray-700">{payment.status}</span>
+              </div>
+
+              <div className="flex flex-col text-gray-700 text-sm">
+                <span>Ref: {payment.reference}</span>
+                <span>{payment.timestamp}</span>
+              </div>
             </div>
-            <div className="pf-meta">
-              <span>Ref: {payment.reference}</span>
-              <span>{payment.timestamp}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+          ))}
+        </div>
+      )}
+    </Layout>
   );
 }

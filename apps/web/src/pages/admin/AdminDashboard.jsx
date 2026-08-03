@@ -3,7 +3,9 @@
  *  HoloTap — Admin Dashboard
  *  File: src/pages/admin/AdminDashboard.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 23 July 2026
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -19,20 +21,31 @@
  * ============================================================
  */
 
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import DashboardGrid from "../../../components/DashboardGrid.jsx";
+import DashboardCard from "../../../components/DashboardCard.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
+
 export default function AdminDashboard() {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Admin Dashboard</h1>
-      <p>System overview and operational metrics.</p>
+    <Layout>
+      <PageHeader
+        title="Admin Dashboard"
+        subtitle="System overview and operational metrics"
+      />
 
-      <ul>
-        <li>Live Payments</li>
-        <li>Pending Refunds</li>
-        <li>System Status</li>
-        <li>Audit Logs</li>
-        <li>Merchants</li>
-        <li>Error Rate</li>
-      </ul>
-    </div>
+      <DashboardGrid>
+        <DashboardCard title="Live Payments" value="12" />
+        <DashboardCard title="Pending Refunds" value="4" />
+        <DashboardCard title="System Status" value="Operational" />
+        <DashboardCard title="Audit Logs" value="1,204" />
+        <DashboardCard title="Merchants" value="87" />
+        <DashboardCard title="Error Rate" value="0.3%" />
+      </DashboardGrid>
+    </Layout>
   );
 }

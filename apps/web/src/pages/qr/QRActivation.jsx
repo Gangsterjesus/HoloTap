@@ -1,38 +1,43 @@
 /**
- * File: QRActivation.jsx
- * Project: HoloTap Web UI
- * Screen: QR Activation Screen
+ * ============================================================
+ *  HoloTap — QR Activation Screen (Merchant)
+ *  File: src/pages/merchant/QRActivation.jsx
+ *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
+ *  © 2026 HoloTap Technologies Ltd. All rights reserved.
+ * ============================================================
  *
- * Author: Raymond Newton (E5357171)
- * Date: 24 July 2026
+ *  Purpose:
+ *    Merchant-facing screen for generating secure QR payment sessions.
+ *    Calls /session/create on HoloTapServer and renders QR code,
+ *    session token, and live expiry countdown.
  *
- * Description:
- *  - Merchant-facing screen for generating secure QR payment sessions.
- *  - Calls /session/create on HoloTapServer.
- *  - Renders QR code, session token, and live expiry countdown.
- *  - Provides regeneration flow when QR expires.
- *
- * Notes:
- *  - Styling is external (styles/qrActivation.css).
- *  - Countdown auto-clears and resets on new QR generation.
+ *  Responsibilities:
+ *    - Generate QR session
+ *    - Display QR code + token
+ *    - Show countdown timer
+ *    - Provide regeneration flow
+ * ============================================================
  */
 
 import { useState, useEffect } from "react";
 import QRCode from "react-qrcode-svg";
-import "../../styles/qrActivation.css";
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import DashboardCard from "../../../components/DashboardCard.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
 
 export default function QRActivation() {
-  // -------------------------------
-  // State
-  // -------------------------------
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [expires, setExpires] = useState(null);
   const [error, setError] = useState(null);
 
-  // -------------------------------
-  // Generate QR Session
-  // -------------------------------
   async function generateQR() {
     try {
       setLoading(true);
@@ -60,9 +65,9 @@ export default function QRActivation() {
     }
   }
 
-  // -------------------------------
-  // Countdown Timer
-  // -------------------------------
+  /* ============================
+     Countdown Timer
+     ============================ */
   useEffect(() => {
     if (!token || !expires) return;
 
@@ -79,51 +84,75 @@ export default function QRActivation() {
     return () => clearInterval(interval);
   }, [token, expires]);
 
-  // -------------------------------
-  // Render
-  // -------------------------------
   return (
-    <div className="qr-wrapper">
-      <h1 className="qr-title">QR Activation</h1>
-      <p className="qr-subtitle">Generate a QR code to start a secure payment session.</p>
+    <Layout>
+      <PageHeader
+        title="QR Activation"
+        subtitle="Generate a QR code to start a secure payment session"
+      />
 
-      {loading && <p className="qr-loading">Generating QR…</p>}
-      {error && <p className="qr-error">{error}</p>}
+      {/* Loading */}
+      {loading && (
+        <DashboardCard title="Generating QR…">
+          <p className="text-gray-600">Please wait…</p>
+        </DashboardCard>
+      )}
 
+      {/* Error */}
+      {error && (
+        <DashboardCard title="Error Generating QR">
+          <p className="text-red-600">{error}</p>
+        </DashboardCard>
+      )}
+
+      {/* Generate Button */}
       {!token && !loading && (
-        <button className="qr-button" onClick={generateQR}>
+        <button
+          onClick={generateQR}
+          className="px-5 py-3 bg-black text-white rounded-lg font-medium mt-4"
+        >
           Generate QR
         </button>
       )}
 
+      {/* QR Content */}
       {token && (
-        <div className="qr-content">
-          <div className="qr-code">
+        <DashboardCard title="QR Session">
+          <div className="flex flex-col items-center gap-4">
+
             <QRCode value={token} size={220} />
-          </div>
 
-          <p className="qr-label">Session Token:</p>
-          <code className="qr-token">{token}</code>
+            <p className="text-gray-700 font-medium">Session Token:</p>
+            <code className="bg-gray-100 px-3 py-1 rounded text-sm">
+              {token}
+            </code>
 
-          <p className={expires > 0 ? "qr-active" : "qr-expired"}>
-            {expires > 0
-              ? `Expires in: ${expires}s`
-              : "QR expired — generate a new one"}
-          </p>
-
-          {expires === 0 && (
-            <button
-              className="qr-button"
-              onClick={() => {
-                setToken(null);
-                setExpires(null);
-              }}
+            <p
+              className={
+                expires > 0
+                  ? "text-green-600 font-semibold"
+                  : "text-red-600 font-semibold"
+              }
             >
-              Generate Another
-            </button>
-          )}
-        </div>
+              {expires > 0
+                ? `Expires in: ${expires}s`
+                : "QR expired — generate a new one"}
+            </p>
+
+            {expires === 0 && (
+              <button
+                onClick={() => {
+                  setToken(null);
+                  setExpires(null);
+                }}
+                className="px-5 py-3 bg-black text-white rounded-lg font-medium"
+              >
+                Generate Another
+              </button>
+            )}
+          </div>
+        </DashboardCard>
       )}
-    </div>
+    </Layout>
   );
 }

@@ -4,7 +4,6 @@
  *  File: src/pages/scan.tsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Date: 28 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
@@ -13,10 +12,6 @@
  *
  *  Subsystem:
  *    Flow 6 — QR → Validation → Session Resume
- *
- *  Notes:
- *    - Uses external CSS (scan.css)
- *    - Uses html5-qrcode
  * ============================================================
  */
 
@@ -25,11 +20,13 @@ import { useNavigate } from "react-router-dom";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { validateQR, startSession } from "../lib/api";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import "../styles/scan.css";
+import Layout from "../components/Layout.jsx";
+import PageHeader from "../components/PageHeader.jsx";
+import DashboardCard from "../components/DashboardCard.jsx";
 
 export default function Scan() {
   const navigate = useNavigate();
-  const scannerRef = useRef<any>(null); // html5-qrcode has no TS types
+  const scannerRef = useRef<any>(null);
 
   async function handleScanSuccess(decodedText: string) {
     try {
@@ -78,9 +75,25 @@ export default function Scan() {
   return (
     <ErrorBoundary>
       {() => (
-        <div className="scan-container">
-          <div id="qr-reader" className="scan-reader" />
-        </div>
+        <Layout
+          title="QR Scan"
+          subtitle="Scan a HoloTap QR code to resume or create a session"
+        >
+          <PageHeader
+            title="QR Scan"
+            subtitle="Flow 6 — QR → Validation → Session Resume"
+            actions={null}
+          />
+
+          <DashboardCard title="Scanner" value="">
+            <div className="flex justify-center mt-4">
+              <div
+                id="qr-reader"
+                className="w-[320px] h-[320px] border rounded-lg shadow-md bg-white"
+              />
+            </div>
+          </DashboardCard>
+        </Layout>
       )}
     </ErrorBoundary>
   );

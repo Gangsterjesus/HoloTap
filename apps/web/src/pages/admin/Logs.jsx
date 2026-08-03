@@ -3,7 +3,9 @@
  *  HoloTap — System Logs Page (Admin)
  *  File: src/pages/admin/Logs.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -11,28 +13,35 @@
  *  Displays all system‑level logs including payment events,
  *  badge scans, identity updates, fraud alerts, and admin actions.
  *  This page is restricted to administrators only.
+ *
+ *  Responsibilities:
+ *  - Provide filters for log categories
+ *  - Display system event logs
+ *  - Maintain consistent v2 UI structure
  * ============================================================
  */
 
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import Button from "../../../components/Button.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
+
 export default function Logs() {
   return (
-    <div style={styles.container}>
+    <Layout>
+      <PageHeader
+        title="System Logs"
+        subtitle="View all recorded events across the HoloTap platform"
+      />
 
-      {/* ============================
-          HEADER SECTION
-          ============================ */}
-      <h1 style={styles.title}>System Logs</h1>
-      <p style={styles.subtitle}>
-        View all recorded events across the HoloTap platform.
-      </p>
+      {/* Filters */}
+      <div className="max-w-md mb-10 flex flex-col gap-4">
+        <h2 className="text-xl font-semibold">Filters</h2>
 
-      {/* ============================
-          FILTERS SECTION
-          ============================ */}
-      <div style={styles.filters}>
-        <h2 style={styles.sectionTitle}>Filters</h2>
-
-        <select style={styles.input}>
+        <select className="p-3 border rounded-lg text-[15px]">
           <option>All Events</option>
           <option>Payments</option>
           <option>Badge Scans</option>
@@ -41,74 +50,14 @@ export default function Logs() {
           <option>Admin Actions</option>
         </select>
 
-        <button style={styles.button}>Apply Filter</button>
+        <Button variant="primary">Apply Filter</Button>
       </div>
 
-      {/* ============================
-          LOGS LIST SECTION
-          ============================ */}
-      <div style={styles.logsList}>
-        <h2 style={styles.sectionTitle}>Event Log</h2>
-
-        <p style={styles.placeholder}>No logs available.</p>
+      {/* Logs List */}
+      <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-3">Event Log</h2>
+        <p className="text-gray-600">No logs available.</p>
       </div>
-
-    </div>
+    </Layout>
   );
 }
-
-const styles = {
-  container: {
-    padding: "40px",
-  },
-
-  // Header
-  title: {
-    fontSize: "36px",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    fontSize: "18px",
-    color: "#555",
-    marginBottom: "30px",
-  },
-
-  // Filters
-  filters: {
-    marginBottom: "40px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-    maxWidth: "400px",
-  },
-  input: {
-    padding: "12px",
-    fontSize: "16px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    padding: "14px",
-    backgroundColor: "#111",
-    color: "#fff",
-    borderRadius: "6px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginTop: "10px",
-    width: "fit-content",
-  },
-
-  // Logs list
-  logsList: {
-    marginTop: "20px",
-  },
-  sectionTitle: {
-    fontSize: "22px",
-    marginBottom: "10px",
-  },
-  placeholder: {
-    color: "#777",
-    marginTop: "10px",
-  },
-};

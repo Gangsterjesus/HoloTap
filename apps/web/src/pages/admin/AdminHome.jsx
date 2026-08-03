@@ -3,7 +3,9 @@
  *  HoloTap — Admin Home Page
  *  File: src/pages/admin/AdminHome.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -11,95 +13,53 @@
  *  The central hub for HoloTap administrators. Provides access
  *  to system logs, refund operations, live monitoring, and
  *  platform‑wide oversight tools. Restricted to admin role only.
+ *
+ *  Responsibilities:
+ *  - Display core admin metrics
+ *  - Provide quick access to admin tools
+ *  - Maintain consistent v2 UI structure
  * ============================================================
  */
 
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import DashboardGrid from "../../../components/DashboardGrid.jsx";
+import DashboardCard from "../../../components/DashboardCard.jsx";
+import Button from "../../../components/Button.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
+
 export default function AdminHome() {
   return (
-    <div style={styles.container}>
+    <Layout>
+      <PageHeader
+        title="Admin Home"
+        subtitle="System‑level controls and monitoring tools for HoloTap operations"
+      />
 
-      {/* ============================
-          HEADER SECTION
-          ============================ */}
-      <h1 style={styles.title}>Admin Dashboard</h1>
-      <p style={styles.subtitle}>
-        System‑level controls and monitoring tools for HoloTap operations.
-      </p>
+      {/* Summary Metrics */}
+      <DashboardGrid>
+        <DashboardCard title="Total Creators" value="0" />
+        <DashboardCard title="Active Badges" value="0" />
+        <DashboardCard title="System Alerts" value="None" />
+      </DashboardGrid>
 
-      {/* ============================
-          ADMIN SUMMARY SECTION
-          ============================ */}
-      <div style={styles.summary}>
-        <div style={styles.card}>
-          <h2>Total Creators</h2>
-          <p>0</p>
-        </div>
+      {/* Admin Actions */}
+      <div className="mt-10 flex gap-4 flex-wrap">
+        <Button variant="primary" onClick={() => (window.location.href = "/admin/logs")}>
+          View Logs
+        </Button>
 
-        <div style={styles.card}>
-          <h2>Active Badges</h2>
-          <p>0</p>
-        </div>
+        <Button variant="primary" onClick={() => (window.location.href = "/admin/refunds")}>
+          Refunds
+        </Button>
 
-        <div style={styles.card}>
-          <h2>System Alerts</h2>
-          <p>None</p>
-        </div>
+        <Button variant="primary" onClick={() => (window.location.href = "/admin/live")}>
+          Live Monitoring
+        </Button>
       </div>
-
-      {/* ============================
-          ADMIN ACTIONS SECTION
-          ============================ */}
-      <div style={styles.actions}>
-        <a href="/admin/logs" style={styles.button}>View Logs</a>
-        <a href="/admin/refunds" style={styles.button}>Refunds</a>
-        <a href="/admin/live" style={styles.button}>Live Monitoring</a>
-      </div>
-
-    </div>
+    </Layout>
   );
 }
-
-const styles = {
-  container: {
-    padding: "40px",
-  },
-
-  // Header
-  title: {
-    fontSize: "36px",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    fontSize: "18px",
-    color: "#555",
-    marginBottom: "30px",
-  },
-
-  // Summary cards
-  summary: {
-    display: "flex",
-    gap: "20px",
-    marginBottom: "40px",
-  },
-  card: {
-    flex: 1,
-    padding: "20px",
-    backgroundColor: "#f5f5f5",
-    borderRadius: "8px",
-    textAlign: "center",
-  },
-
-  // Actions
-  actions: {
-    display: "flex",
-    gap: "20px",
-  },
-  button: {
-    padding: "14px 24px",
-    backgroundColor: "#111",
-    color: "#fff",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-};

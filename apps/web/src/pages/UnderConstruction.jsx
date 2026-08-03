@@ -1,6 +1,6 @@
 /* ============================================================
    HoloTap — Engineering Build System
-   File: src/pages/UnderConstruction.jsx
+   File: src/pages/admin/Enquiries.jsx
    Author: Raymond Newton
    Project: HoloTap Identity & QR Security Platform
    Layer: web-ui
@@ -15,30 +15,34 @@
    - Explicit state transitions; no hidden side-effects
    ============================================================ */
 
-export default function UnderConstruction() {
+import Layout from "../../components/Layout.jsx";
+import PageHeader from "../../components/PageHeader.jsx";
+
+export default function Enquiries() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6">
+    <Layout
+      title="Enquiries"
+      subtitle="Official public contact channels for HoloTap"
+    >
+      <PageHeader
+        title="Enquiries"
+        subtitle="Public and founder contact information"
+        actions={null}
+      />
 
-      {/* Title */}
-      <h1 className="text-4xl font-bold text-holotap-primary mb-4 tracking-tight">
-        HoloTap Web UI
-      </h1>
+      <div className="mt-6 text-gray-700 text-lg">
 
-      {/* Message */}
-      <p className="text-gray-600 text-center max-w-lg mb-8">
-        This section of the HoloTap platform is currently under construction.
-        The identity, organisation, and QR‑security modules are being prepared
-        for deployment.
-      </p>
-
-      {/* Status Box */}
-      <div className="bg-white shadow-md rounded-xl p-6 max-w-md w-full text-center">
-        <p className="text-sm text-gray-500 mb-2">System Status</p>
-        <p className="text-holotap-primary font-semibold">
-          Web UI: Initialisation Phase
+        <p>For general enquiries, please contact:</p>
+        <p className="mt-2 font-semibold text-black">
+          enquiries@holotap.co.uk
         </p>
-      </div>
 
-    </div>
+        <p className="mt-8">For founder‑level enquiries, please contact:</p>
+        <p className="mt-2 font-semibold text-black">
+          ray-newton@live.co.uk
+        </p>
+
+      </div>
+    </Layout>
   );
 }

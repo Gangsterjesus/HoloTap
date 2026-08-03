@@ -3,7 +3,9 @@
  *  HoloTap — Live Monitoring Page (Admin)
  *  File: src/pages/admin/Live.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -11,95 +13,49 @@
  *  Provides real‑time monitoring of HoloTap platform activity.
  *  Displays live badge scans, payment attempts, fraud alerts,
  *  and system heartbeat indicators. Restricted to admin role.
+ *
+ *  Responsibilities:
+ *  - Display live system metrics
+ *  - Provide visibility into real‑time platform activity
+ *  - Maintain consistent v2 UI structure
  * ============================================================
  */
 
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import DashboardGrid from "../../../components/DashboardGrid.jsx";
+import DashboardCard from "../../../components/DashboardCard.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
+
 export default function Live() {
   return (
-    <div style={styles.container}>
+    <Layout>
+      <PageHeader
+        title="Live Monitoring"
+        subtitle="Real‑time activity feed for HoloTap badge scans and payments"
+      />
 
-      {/* ============================
-          HEADER SECTION
-          ============================ */}
-      <h1 style={styles.title}>Live Monitoring</h1>
-      <p style={styles.subtitle}>
-        Real‑time activity feed for HoloTap badge scans and payments.
-      </p>
+      <DashboardGrid>
+        <DashboardCard title="System Heartbeat">
+          <p className="text-gray-700">Status: Online</p>
+          <p className="text-gray-700">Last Ping: Just now</p>
+        </DashboardCard>
 
-      {/* ============================
-          SYSTEM HEARTBEAT SECTION
-          ============================ */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>System Heartbeat</h2>
-        <p style={styles.statusText}>Status: Online</p>
-        <p style={styles.statusText}>Last Ping: Just now</p>
-      </div>
+        <DashboardCard title="Live Badge Scans">
+          <p className="text-gray-700">No scans detected.</p>
+        </DashboardCard>
 
-      {/* ============================
-          LIVE SCAN FEED SECTION
-          ============================ */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Live Badge Scans</h2>
-        <p style={styles.placeholder}>No scans detected.</p>
-      </div>
+        <DashboardCard title="Live Payments">
+          <p className="text-gray-700">No payment attempts detected.</p>
+        </DashboardCard>
 
-      {/* ============================
-          LIVE PAYMENT FEED SECTION
-          ============================ */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Live Payments</h2>
-        <p style={styles.placeholder}>No payment attempts detected.</p>
-      </div>
-
-      {/* ============================
-          FRAUD ALERTS SECTION
-          ============================ */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Fraud Alerts</h2>
-        <p style={styles.placeholder}>No fraud alerts at this time.</p>
-      </div>
-
-    </div>
+        <DashboardCard title="Fraud Alerts">
+          <p className="text-gray-700">No fraud alerts at this time.</p>
+        </DashboardCard>
+      </DashboardGrid>
+    </Layout>
   );
 }
-
-const styles = {
-  container: {
-    padding: "40px",
-  },
-
-  // Header
-  title: {
-    fontSize: "36px",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    fontSize: "18px",
-    color: "#555",
-    marginBottom: "30px",
-  },
-
-  // Section wrapper
-  section: {
-    marginBottom: "40px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  sectionTitle: {
-    fontSize: "22px",
-    marginBottom: "10px",
-  },
-
-  // Status text
-  statusText: {
-    fontSize: "16px",
-    color: "#444",
-  },
-
-  // Placeholder text
-  placeholder: {
-    color: "#777",
-    marginTop: "10px",
-  },
-};

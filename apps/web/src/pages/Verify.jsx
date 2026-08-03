@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  HoloTap — Badge Verification Page
+ *  HoloTap Engineering — Badge Verification Page
  *  File: src/pages/Verify.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Date: 22 July 2026
@@ -13,48 +13,64 @@
  *    to confirm authenticity before initiating a payment or identity
  *    check.
  *
- *  Subsystem:
- *    Flow 6P — Public Verification → Badge Authenticity
- *
  *  Notes:
  *    - Inline styles removed
- *    - Uses external CSS (verify.css)
+ *    - Tailwind v4 CSS-first UI pipeline
+ *    - Deterministic architecture only
  * ============================================================
  */
 
-import "../styles/verify.css";
+import Layout from "../components/Layout.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 
 export default function Verify() {
   return (
-    <div className="verify-container">
-      <h1 className="verify-title">Verify a HoloTap Badge</h1>
-      <p className="verify-subtitle">
-        Enter the badge code or scan the hologram to confirm authenticity.
-      </p>
+    <Layout
+      title="Verify Badge"
+      subtitle="Public badge authenticity verification"
+    >
+      <PageHeader
+        title="Verify a HoloTap Badge"
+        subtitle="Enter a badge code or scan the hologram"
+        actions={null}
+      />
 
-      {/* BADGE CODE INPUT */}
-      <div className="verify-section">
-        <label className="verify-label">Badge Code</label>
+      {/* Badge Code Input */}
+      <div className="mt-8 max-w-lg mx-auto">
+        <label className="block text-gray-700 font-medium mb-2">
+          Badge Code
+        </label>
+
         <input
-          className="verify-input"
           type="text"
           placeholder="Enter badge code (e.g., HT-49302)"
+          className="w-full px-4 py-3 border rounded-lg text-gray-800 shadow-sm"
         />
 
-        <button className="verify-button">Verify Badge</button>
+        <button
+          className="mt-4 w-full px-4 py-3 bg-black text-white font-semibold rounded-lg"
+        >
+          Verify Badge
+        </button>
       </div>
 
-      {/* SCAN OPTION */}
-      <div className="verify-scan-section">
-        <h2 className="verify-scan-title">Scan Instead</h2>
-        <p className="verify-scan-text">
+      {/* Scan Instead */}
+      <div className="mt-12 text-center">
+        <h2 className="text-xl font-semibold text-gray-800">
+          Scan Instead
+        </h2>
+
+        <p className="text-gray-600 mt-2">
           Use your mobile device to scan the hologram and verify instantly.
         </p>
 
-        <a href="/scan" className="verify-scan-button">
+        <a
+          href="/scan"
+          className="inline-block mt-4 px-6 py-3 bg-holotap-accent text-black font-semibold rounded-lg shadow-md hover:shadow-xl transition"
+        >
           Open Scanner
         </a>
       </div>
-    </div>
+    </Layout>
   );
 }

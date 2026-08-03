@@ -1,31 +1,29 @@
 /**
  * ============================================================
- *  HoloTap Web — Session Status Page (Flow 7)
+ *  HoloTap Engineering — Session Status Page
  *  File: src/pages/status.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
  *  Date: 28 July 2026
- *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
  *  Purpose:
- *    Displays session status after QR scan (Flow 6).
+ *    Displays session status after QR scan.
  *    Fetches session → shows merchant + QR + hologram status.
- *    Redirects to Flow 8 (payments) when session is ready.
- *
- *  Subsystem:
- *    Flow 7 — Session Status → Payment Readiness
+ *    Redirects to payments when session is ready.
  *
  *  Notes:
- *    - Uses external CSS (status.css)
  *    - Uses ErrorBoundary
+ *    - Deterministic architecture only
  * ============================================================
  */
 
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import Layout from "../components/Layout.jsx";
+import PageHeader from "../components/PageHeader.jsx";
+import DashboardCard from "../components/DashboardCard.jsx";
 import { getSessionStatus } from "../lib/api";
-import "../styles/status.css";
 
 export default function Status() {
   const { sessionId } = useParams();
@@ -65,35 +63,73 @@ export default function Status() {
   return (
     <ErrorBoundary>
       {() => (
-        <div className="status-container">
-          {loading && <p>Loading session…</p>}
-          {error && <p className="status-error">{error}</p>}
+        <Layout
+          title="Session Status"
+          subtitle="Flow 7 — Session Status → Payment Readiness"
+        >
+          <PageHeader
+            title="Session Status"
+            subtitle="Verification and payment readiness"
+            actions={null}
+          />
 
-          {session && (
-            <div className="status-card">
-              <h1>Session Status</h1>
-
-              <p><strong>Session ID:</strong> {session.sessionId}</p>
-              <p><strong>Merchant:</strong> {session.merchantName}</p>
-              <p><strong>QR Token:</strong> {session.qrToken}</p>
-              <p><strong>Hologram:</strong> {session.hologramStatus}</p>
-              <p><strong>Status:</strong> {session.status}</p>
-
-              {session.status !== "READY" && (
-                <p className="pending">Waiting for verification…</p>
-              )}
-
-              {session.status === "READY" && (
-                <button
-                  className="continue-btn"
-                  onClick={() => navigate(`/payments/${sessionId}`)}
-                >
-                  Continue to Payment
-                </button>
-              )}
-            </div>
+          {/* Loading */}
+          {loading && (
+            <DashboardCard title="Loading Session…" value="">
+              <p className="text-gray-600">Fetching session details…</p>
+            </DashboardCard>
           )}
-        </div>
+
+          {/* Error */}
+          {error && (
+            <DashboardCard title="Error" value="">
+              <p className="text-red-600">{error}</p>
+            </DashboardCard>
+          )}
+
+          {/* Session Details */}
+          {session && (
+            <DashboardCard title="Session Details" value="">
+              <div className="flex flex-col gap-2 text-gray-800">
+
+                <p>
+                  <strong>Session ID:</strong> {session.sessionId}
+                </p>
+
+                <p>
+                  <strong>Merchant:</strong> {session.merchantName}
+                </p>
+
+                <p>
+                  <strong>QR Token:</strong> {session.qrToken}
+                </p>
+
+                <p>
+                  <strong>Hologram:</strong> {session.hologramStatus}
+                </p>
+
+                <p>
+                  <strong>Status:</strong> {session.status}
+                </p>
+
+                {session.status !== "READY" && (
+                  <p className="text-yellow-600 font-medium mt-2">
+                    Waiting for verification…
+                  </p>
+                )}
+
+                {session.status === "READY" && (
+                  <button
+                    onClick={() => navigate(`/payments/${sessionId}`)}
+                    className="mt-4 px-5 py-3 bg-black text-white rounded-lg font-medium"
+                  >
+                    Continue to Payment
+                  </button>
+                )}
+              </div>
+            </DashboardCard>
+          )}
+        </Layout>
       )}
     </ErrorBoundary>
   );

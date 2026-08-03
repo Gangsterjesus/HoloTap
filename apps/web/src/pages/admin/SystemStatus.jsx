@@ -3,7 +3,9 @@
  *  HoloTap — Admin Dashboard
  *  File: src/pages/admin/AdminDashboard.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 23 July 2026
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -19,6 +21,14 @@
  */
 
 import { useEffect, useState } from "react";
+import Layout from "../../../components/Layout.jsx";
+import PageHeader from "../../../components/PageHeader.jsx";
+import DashboardGrid from "../../../components/DashboardGrid.jsx";
+import DashboardCard from "../../../components/DashboardCard.jsx";
+
+/* ============================
+   PAGE
+   ============================ */
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -28,7 +38,7 @@ export default function AdminDashboard() {
       const res = await fetch("http://192.168.1.205:3001/admin/dashboard");
       const data = await res.json();
       setStats(data);
-    } catch (err) {
+    } catch {
       setStats({ error: "Unable to load dashboard metrics." });
     }
   }
@@ -38,111 +48,39 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div style={styles.container}>
+    <Layout>
+      <PageHeader
+        title="Admin Dashboard"
+        subtitle="System overview and operational metrics for administrators"
+      />
 
-      {/* ============================
-          HEADER SECTION
-          ============================ */}
-      <h1 style={styles.title}>Admin Dashboard</h1>
-      <p style={styles.subtitle}>
-        System overview and operational metrics for administrators.
-      </p>
+      <DashboardGrid>
+        {/* Error state */}
+        {stats && stats.error && (
+          <DashboardCard title="Error Loading Metrics">
+            <p className="text-red-600">{stats.error}</p>
+          </DashboardCard>
+        )}
 
-      {/* ============================
-          GRID SECTION
-          ============================ */}
-      <div style={styles.grid}>
-        <DashboardCard label="Live Payments" value={stats?.livePayments} />
-        <DashboardCard label="Pending Refunds" value={stats?.pendingRefunds} />
-        <DashboardCard label="System Status" value={stats?.systemStatus} />
-        <DashboardCard label="Audit Logs" value={stats?.auditLogs} />
-        <DashboardCard label="Merchants" value={stats?.merchants} />
-        <DashboardCard label="Error Rate" value={stats?.errorRate} />
-      </div>
+        {/* Loading state */}
+        {!stats && (
+          <DashboardCard title="Loading Metrics…">
+            <p className="text-gray-600">Fetching dashboard data…</p>
+          </DashboardCard>
+        )}
 
-    </div>
+        {/* KPI Cards */}
+        {stats && !stats.error && (
+          <>
+            <DashboardCard title="Live Payments" value={stats.livePayments ?? "—"} />
+            <DashboardCard title="Pending Refunds" value={stats.pendingRefunds ?? "—"} />
+            <DashboardCard title="System Status" value={stats.systemStatus ?? "—"} />
+            <DashboardCard title="Audit Logs" value={stats.auditLogs ?? "—"} />
+            <DashboardCard title="Merchants" value={stats.merchants ?? "—"} />
+            <DashboardCard title="Error Rate" value={stats.errorRate ?? "—"} />
+          </>
+        )}
+      </DashboardGrid>
+    </Layout>
   );
 }
-
-/* ============================
-   ACCESSIBLE + CUTE DASHBOARD CARD
-   ============================ */
-function DashboardCard({ label, value }) {
-  const icon = {
-    "Live Payments": "💳",
-    "Pending Refunds": "↩️",
-    "System Status": "⚙️",
-    "Audit Logs": "📜",
-    "Merchants": "🏪",
-    "Error Rate": "❗",
-  }[label] || "✨";
-
-  return (
-    <div
-      style={styles.cardAccessible}
-      tabIndex={0} // keyboard accessible
-    >
-      <span style={styles.icon}>{icon}</span>
-      <h3 style={styles.cardLabelAccessible}>{label}</h3>
-      <p style={styles.cardValueAccessible}>{value ?? "—"}</p>
-    </div>
-  );
-}
-
-/* ============================
-   STYLES (ACCESSIBLE + COLOUR SAFE)
-   ============================ */
-const styles = {
-  container: {
-    padding: "40px",
-  },
-
-  // Header
-  title: {
-    fontSize: "38px",
-    marginBottom: "10px",
-    color: "#111",
-  },
-  subtitle: {
-    fontSize: "19px",
-    color: "#333",
-    marginBottom: "30px",
-  },
-
-  // Grid
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: "26px",
-    marginTop: "20px",
-  },
-
-  // Accessible Card
-  cardAccessible: {
-    padding: "26px",
-    borderRadius: "16px",
-    backgroundColor: "#F7F7F7",
-    border: "2px solid #D0D0D0",
-    boxShadow: "0 3px 8px rgba(0,0,0,0.08)",
-    transition: "transform 0.15s ease, outline 0.15s ease",
-    outline: "2px solid transparent",
-  },
-
-  icon: {
-    fontSize: "34px",
-    marginBottom: "12px",
-  },
-
-  cardLabelAccessible: {
-    fontSize: "20px",
-    fontWeight: "600",
-    color: "#222",
-    marginBottom: "8px",
-  },
-
-  cardValueAccessible: {
-    fontSize: "28px",
-    fontWeight: "700",
-    color: "#111",
-  },
-};
