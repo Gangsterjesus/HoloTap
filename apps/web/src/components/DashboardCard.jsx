@@ -3,7 +3,9 @@
  *  HoloTap — Dashboard Card Component
  *  File: src/components/DashboardCard.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
+ *  Layer: web-ui
+ *  Revision: v-2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -18,31 +20,29 @@
  * ============================================================
  */
 
-import "./DashboardCard.css";
-
-/* ============================
-   COMPONENT
-   ============================ */
-
 export default function DashboardCard({ title, value, children }) {
   return (
-    <div className="dashboard-card">
+    <div className="bg-white p-6 rounded-xl shadow-md">
 
       {/* ============================
           TITLE
           ============================ */}
-      <h2 className="dashboard-card-title">{title}</h2>
+      <h2 className="text-xl font-semibold mb-3">{title}</h2>
 
       {/* ============================
           VALUE (OPTIONAL)
           ============================ */}
-      {value && <div className="dashboard-card-value">{value}</div>}
+      {value && (
+        <div className="text-3xl font-bold mb-4">
+          {value}
+        </div>
+      )}
 
       {/* ============================
           CONTENT
           ============================ */}
       {children && (
-        <div className="dashboard-card-content">
+        <div className="text-gray-700 text-[15px]">
           {children}
         </div>
       )}

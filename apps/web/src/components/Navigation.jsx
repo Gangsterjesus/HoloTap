@@ -1,19 +1,21 @@
-/* ============================================================
-   HoloTap — Engineering Build System
-   File: src/components/Navigation.jsx
-   Author: Raymond Newton
-   Project: HoloTap Identity & QR Security Platform
-   Layer: web-ui
-   Revision: v2 — Unified Web & Mobile Architecture
-   ------------------------------------------------------------
-   Notes:
-   - Deterministic architecture only
-   - Zero template styling, zero boilerplate
-   - Tailwind v4 CSS-first UI pipeline
-   - Web UI must remain modular and stateless
-   - Identity, QR, and organisation layers isolated
-   - Explicit state transitions; no hidden side-effects
-   ============================================================ */
+/**
+ * ============================================================
+ *  HoloTap — Engineering Build System
+ *  File: src/components/Navigation.jsx
+ *  Author: Raymond Newton
+ *  Project: HoloTap Identity & QR Security Platform
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  ------------------------------------------------------------
+ *  Notes:
+ *  - Deterministic architecture only
+ *  - Zero template styling, zero boilerplate
+ *  - Tailwind v4 CSS-first UI pipeline
+ *  - Web UI must remain modular and stateless
+ *  - Identity, QR, and organisation layers isolated
+ *  - Explicit state transitions; no hidden side-effects
+ * ============================================================
+ */
 
 import { NavLink } from "react-router-dom";
 
@@ -63,14 +65,14 @@ export default function Navigation({ role = "public" }) {
         </div>
 
         {/* Navigation Links */}
-        <ul className="flex gap-6 text-sm">
+        <ul className="flex gap-6 text-sm flex-wrap">
           {links.map((link) => (
             <li key={link.to}>
               <NavLink
                 to={link.to}
                 className={({ isActive }) =>
                   isActive
-                    ? "text-holotap-accent font-semibold transition"
+                    ? "text-holotap-accent font-semibold border-b-2 border-holotap-accent pb-1 transition"
                     : "text-white hover:text-holotap-accent transition"
                 }
               >

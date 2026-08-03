@@ -3,7 +3,9 @@
  *  HoloTap — Dashboard Grid Component
  *  File: src/components/DashboardGrid.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
+ *  Layer: web-ui
+ *  Revision: v2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -17,15 +19,9 @@
  * ============================================================
  */
 
-import "./DashboardGrid.css";
-
-/* ============================
-   COMPONENT
-   ============================ */
-
 export default function DashboardGrid({ children }) {
   return (
-    <div className="dashboard-grid">
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {children}
     </div>
   );

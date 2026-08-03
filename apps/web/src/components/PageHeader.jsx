@@ -3,7 +3,9 @@
  *  HoloTap — Page Header Component
  *  File: src/components/PageHeader.jsx
  *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Date: 22 July 2026
+ *  Layer: web-ui
+ *  Revision: v-2 — Unified Web & Mobile Architecture
+ *  Date: 03 August 2026
  *  © 2026 HoloTap Technologies Ltd. All rights reserved.
  * ============================================================
  *
@@ -18,29 +20,25 @@
  * ============================================================
  */
 
-import "./PageHeader.css";
-
-/* ============================
-   COMPONENT
-   ============================ */
-
 export default function PageHeader({ title, subtitle, actions }) {
   return (
-    <div className="page-header">
+    <div className="flex items-center justify-between mb-8">
 
       {/* ============================
           LEFT SIDE — TITLES
           ============================ */}
-      <div className="page-header-left">
-        <h1 className="page-header-title">{title}</h1>
-        {subtitle && <p className="page-header-subtitle">{subtitle}</p>}
+      <div>
+        <h1 className="text-3xl font-semibold">{title}</h1>
+        {subtitle && (
+          <p className="text-gray-600 text-lg mt-1">{subtitle}</p>
+        )}
       </div>
 
       {/* ============================
           RIGHT SIDE — ACTIONS
           ============================ */}
       {actions && (
-        <div className="page-header-actions">
+        <div className="flex gap-3">
           {actions}
         </div>
       )}
