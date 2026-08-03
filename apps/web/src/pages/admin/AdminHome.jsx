@@ -21,11 +21,12 @@
  * ============================================================
  */
 
-import Layout from "../../../components/Layout.jsx";
-import PageHeader from "../../../components/PageHeader.jsx";
-import DashboardGrid from "../../../components/DashboardGrid.jsx";
-import DashboardCard from "../../../components/DashboardCard.jsx";
-import Button from "../../../components/Button.jsx";
+import Layout from "../../components/Layout.jsx";
+import PageHeader from "../../components/PageHeader.jsx";
+import DashboardGrid from "../../components/DashboardGrid.jsx";
+import DashboardCard from "../../components/DashboardCard.jsx";
+import Button from "../../components/Button.jsx";
+
 
 /* ============================
    PAGE

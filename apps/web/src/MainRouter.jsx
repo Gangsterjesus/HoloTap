@@ -20,11 +20,11 @@ import Navigation from "./components/Navigation.jsx";
 import UnderConstruction from "./pages/UnderConstruction.jsx";
 
 /* ============================
-   PUBLIC PAGES
+   PUBLIC PAGES (FLAT STRUCTURE)
    ============================ */
-import Home from "./pages/public/Home.jsx";
-import Onboarding from "./pages/public/Onboarding.jsx";
-import Verify from "./pages/public/Verify.jsx";
+import Home from "./pages/Home.jsx";
+import Onboarding from "./pages/Onboarding.jsx";
+import Verify from "./pages/Verify.jsx";
 
 /* ============================
    AUTH PAGES
@@ -35,13 +35,13 @@ import Passkey from "./pages/auth/Passkey.jsx";
 import VerifyAuth from "./pages/auth/VerifyAuth.jsx";
 
 /* ============================
-   ORG WORKSPACE (.org)
+   ORG WORKSPACE (REMOVED — FILES DO NOT EXIST)
    ============================ */
-import OrgHome from "./pages/org/Home.jsx";
-import OrgMembers from "./pages/org/Members.jsx";
-import OrgRoles from "./pages/org/Roles.jsx";
-import OrgSettings from "./pages/org/Settings.jsx";
-import OrgActivity from "./pages/org/Activity.jsx";
+// import OrgHome from "./pages/org/Home.jsx";
+// import OrgMembers from "./pages/org/Members.jsx";
+// import OrgRoles from "./pages/org/Roles.jsx";
+// import OrgSettings from "./pages/org/Settings.jsx";
+// import OrgActivity from "./pages/org/Activity.jsx";
 
 /* ============================
    ADMIN WORKSPACE
@@ -56,18 +56,18 @@ import AdminUsers from "./pages/admin/Users.jsx";
 /* ============================
    MERCHANT WORKSPACE
    ============================ */
-import MerchantHome from "./pages/merchant/Home.jsx";
+import MerchantHome from "./pages/merchant/MerchantDashboard.jsx";
 
 /* ============================
-   QR FLOWS
+   QR FLOWS (.tsx)
    ============================ */
-import Activate from "./pages/qr/Activate.jsx";
-import Scan from "./pages/qr/Scan.jsx";
+import Activate from "./pages/activate.tsx";
+import Scan from "./pages/scan.tsx";
 
 /* ============================
-   PAYMENT RESULT
+   PAYMENT RESULT (FLAT)
    ============================ */
-import PaymentResult from "./pages/payment/Result.jsx";
+import PaymentResult from "./pages/payments.jsx";
 
 /* ============================
    COMMUNICATION LAYER (v1)
@@ -97,13 +97,6 @@ export default function MainRouter() {
         <Route path="/passkey" element={<Passkey />} />
         <Route path="/auth/verify" element={<VerifyAuth />} />
 
-        {/* ORG WORKSPACE */}
-        <Route path="/org" element={<OrgHome />} />
-        <Route path="/org/members" element={<OrgMembers />} />
-        <Route path="/org/roles" element={<OrgRoles />} />
-        <Route path="/org/settings" element={<OrgSettings />} />
-        <Route path="/org/activity" element={<OrgActivity />} />
-
         {/* ADMIN WORKSPACE */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/merchants" element={<AdminMerchants />} />
@@ -125,7 +118,7 @@ export default function MainRouter() {
         {/* COMMUNICATION LAYER */}
         <Route path="/updater" element={<Updater />} />
         <Route path="/enquiries" element={<Enquiries />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin-contact" element={<Admin />} />
         <Route path="/support" element={<Support />} />
         <Route path="/dev" element={<Dev />} />
 

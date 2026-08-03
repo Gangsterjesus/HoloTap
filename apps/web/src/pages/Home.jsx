@@ -16,8 +16,8 @@
  * ============================================================
  */
 
-import Layout from "../../components/Layout.jsx";
-import PageHeader from "../../components/PageHeader.jsx";
+import Layout from "../components/Layout.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 
 export default function Home() {
   return (

@@ -1,7 +1,9 @@
-holotap.co.uk {
-    reverse_proxy 127.0.0.1:4000
-}
+holotap.co.uk, www.holotap.co.uk {
 
-www.holotap.co.uk {
-    redir https://holotap.co.uk{uri}
+    root * C:\Holotap.co.uk\apps\web\dist
+    file_server
+
+    handle_path /api/* {
+        reverse_proxy 127.0.0.1:4000
+    }
 }
