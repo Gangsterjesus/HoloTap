@@ -21,10 +21,12 @@
  * ============================================================
  */
 
-import Layout from "../../../components/Layout.jsx";
-import PageHeader from "../../../components/PageHeader.jsx";
-import Input from "../../../components/Input.jsx";
-import Button from "../../../components/Button.jsx";
+import Layout from "../../components/Layout.jsx";
+import PageHeader from "../../components/PageHeader.jsx";
+import Input from "../../components/Input.jsx";
+import Button from "../../components/Button.jsx";
+
+
 
 /* ============================
    PAGE

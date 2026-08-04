@@ -21,10 +21,11 @@
  */
 
 import { useEffect, useState } from "react";
-import Layout from "../../../components/Layout.jsx";
-import PageHeader from "../../../components/PageHeader.jsx";
-import DashboardGrid from "../../../components/DashboardGrid.jsx";
-import DashboardCard from "../../../components/DashboardCard.jsx";
+import Layout from "../../components/Layout.jsx";
+import PageHeader from "../../components/PageHeader.jsx";
+import DashboardGrid from "../../components/DashboardGrid.jsx";
+import DashboardCard from "../../components/DashboardCard.jsx";
+
 
 /* ============================
    PAGE

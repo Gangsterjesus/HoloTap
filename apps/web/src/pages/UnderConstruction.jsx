@@ -1,6 +1,6 @@
 /* ============================================================
    HoloTap — Engineering Build System
-   File: src/pages/admin/Enquiries.jsx
+   File: src/pages/UnderConstruction.jsx
    Author: Raymond Newton
    Project: HoloTap Identity & QR Security Platform
    Layer: web-ui
@@ -15,34 +15,36 @@
    - Explicit state transitions; no hidden side-effects
    ============================================================ */
 
-import Layout from "../../components/Layout.jsx";
-import PageHeader from "../../components/PageHeader.jsx";
+import Layout from "../components/Layout.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 
-export default function Enquiries() {
+export default function UnderConstruction() {
   return (
     <Layout
-      title="Enquiries"
-      subtitle="Official public contact channels for HoloTap"
+      title="Under Construction"
+      subtitle="This section of the HoloTap platform is being prepared"
     >
       <PageHeader
-        title="Enquiries"
-        subtitle="Public and founder contact information"
+        title="Under Construction"
+        subtitle="Web UI initialisation phase"
         actions={null}
       />
 
-      <div className="mt-6 text-gray-700 text-lg">
-
-        <p>For general enquiries, please contact:</p>
-        <p className="mt-2 font-semibold text-black">
-          enquiries@holotap.co.uk
+      <div className="mt-6 flex flex-col items-center text-center">
+        <p className="text-gray-600 max-w-lg mb-8">
+          This section of the HoloTap platform is currently under construction.
+          The identity, organisation, and QR‑security modules are being prepared
+          for deployment.
         </p>
 
-        <p className="mt-8">For founder‑level enquiries, please contact:</p>
-        <p className="mt-2 font-semibold text-black">
-          ray-newton@live.co.uk
-        </p>
-
+        <div className="bg-white shadow-md rounded-xl p-6 max-w-md w-full">
+          <p className="text-sm text-gray-500 mb-2">System Status</p>
+          <p className="text-holotap-primary font-semibold">
+            Web UI: Initialisation Phase
+          </p>
+        </div>
       </div>
     </Layout>
   );
 }
+

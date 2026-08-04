@@ -15,9 +15,10 @@
  *    - Stateless public-facing admin surface
  * ============================================================
  */
+import Layout from "../components/Layout.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 
-import Layout from "../../components/Layout.jsx";
-import PageHeader from "../../components/PageHeader.jsx";
+
 
 export default function Support() {
   return (

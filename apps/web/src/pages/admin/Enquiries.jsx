@@ -1,12 +1,11 @@
-/**
- * ============================================================
- *  HoloTap — Enquiries Contact Surface (Admin)
- *  File: src/pages/admin/Enquiries.jsx
- *  Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
- *  Layer: web-ui
- *  Revision: v2 — Unified Architecture
- *  Date: 03 August 2026
- * ============================================================
+/* ============================================================
+   HoloTap — Enquiries Contact Surface (Admin)
+   File: src/pages/admin/Enquiries.jsx
+   Engineers: Raymond Newton (E5357171), Copilot Engineering Assistant
+   Layer: web-ui
+   Revision: v2 — Unified Architecture
+   Date: 03 August 2026
+   ============================================================
  *
  *  Purpose:
  *    Provides administrators with the official public contact
@@ -34,9 +33,7 @@ export default function Enquiries() {
       />
 
       <div className="mt-6 text-gray-700 text-lg">
-        <p>
-          For general enquiries, please contact:
-        </p>
+        <p>For general enquiries, please contact:</p>
 
         <p className="mt-2 font-semibold text-black">
           enquiries@holotap.co.uk
