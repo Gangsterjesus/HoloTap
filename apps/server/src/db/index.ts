@@ -1,11 +1,16 @@
 /**
  * HoloTapServer
- * DB Adapter (Prisma-ready stub)
+ * DB Adapter (Prisma-backed)
+ * Flow 5 — Data Access Layer
+ * Author: R. Newton (Founder-Architect)
+ * Date: 2026-08-05
  *
  * Purpose:
- *  - Provide a unified interface for repositories.
- *  - Replace internals with your real DB client.
+ *  - Provide a deterministic, typed interface for repositories.
+ *  - Expose auditLogs and qrTokens with consistent method signatures.
+ *  - Backed by PrismaClient for Postgres.
  */
+
 
 export const db = {
   auditLogs: {

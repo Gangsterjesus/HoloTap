@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model org_tenants {
+  id         String       @id @default(uuid())
+  name       String
+  created_at DateTime     @default(now())
+
+  users      org_users[]
+}
+
+model org_users {
+  id         String       @id @default(uuid())
+  tenant_id  String
+  email      String
+  role       String
+  created_at DateTime     @default(now())
+
+  tenant     org_tenants  @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+}
+
+model mobile_users {
+  id            String    @id @default(uuid())
+  mobile_number String
+  country_code  String
+  created_at    DateTime  @default(now())
+}
+
+model qr_codes {
+  id          String    @id @default(uuid())
+  owner_type  String
+  owner_id    String
+  payload     Json
+  signature   String
+  created_at  DateTime  @default(now())
+  expires_at  DateTime?
+}
+
+model audit_logs {
+  id         String    @id @default(uuid())
+  actor_id   String?
+  actor_type String?
+  action     String
+  metadata   Json?
+  created_at DateTime  @default(now())
+}
+
+model sessions {
+  id         String    @id @default(uuid())
+  user_id    String
+  user_type  String
+  token      String
+  created_at DateTime  @default(now())
+  expires_at DateTime?
+}

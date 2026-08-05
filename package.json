@@ -6,6 +6,7 @@
     "apps/web"
   ],
   "dependencies": {
+    "@prisma/client": "^7.9.1",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
     "@typescript-eslint/parser": "^8.65.0",
     "eslint": "^10.8.0"
