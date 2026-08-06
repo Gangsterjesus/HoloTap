@@ -23,6 +23,9 @@ model org_users {
   created_at DateTime     @default(now())
 
   tenant     org_tenants  @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  // ADD THIS
+  sessions   sessions[]
 }
 
 model mobile_users {
@@ -53,9 +56,13 @@ model audit_logs {
 
 model sessions {
   id         String    @id @default(uuid())
-  user_id    String
-  user_type  String
-  token      String
+  actor_id   String
+  role       String
+  state      String
+  metadata   Json?
   created_at DateTime  @default(now())
   expires_at DateTime?
+
+  // Relation to identity layer (Flow 6)
+  actor      org_users @relation(fields: [actor_id], references: [id], onDelete: Cascade)
 }
